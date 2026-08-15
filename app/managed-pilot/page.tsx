@@ -19,13 +19,15 @@ export default function ManagedPilotPage() {
       </header>
       <section className="request-layout">
         <div className="request-intro">
-          <p className="eyebrow">Managed pilot • Free 30 day trial</p>
+          <p className="eyebrow">Managed pilot • $10 monthly allowance</p>
           <h1>Bring managed coordination<br /><em>to your team.</em></h1>
           <p>
             Provide your organization&apos;s details and we&apos;ll follow up about
             onboarding, expected field use, and whether the managed pilot fits
-            your needs. The trial includes a maximum $10 credit, and afterward
-            your organization pays only for the services it uses.
+            your needs. During the open-ended beta, each organization receives
+            a platform-funded $10 usage allowance that resets every calendar
+            month. The beta has no fixed end date, and R2C Tracker does not accept
+            payments during the beta.
           </p>
         </div>
         <RequestForm kind="managed-pilot" />

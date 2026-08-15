@@ -339,9 +339,9 @@ export default async function Home({ searchParams }: PageProps) {
               <span className="cap-adds">STARTER</span>
             </div>
             <p className="cap-summary">
-              The managed tracker provides a free 30 day trial, followed by
-              pay-as-you-go billing for the cost of services your team uses.
-              An expanding list of features includes:
+              During the open-ended beta, each organization receives a
+              platform-funded $10 usage allowance that resets each calendar
+              month. An expanding list of features includes:
             </p>
             <ol className="managed-feature-list">
               {managedCapabilities.map((capability) => (
@@ -405,7 +405,7 @@ export default async function Home({ searchParams }: PageProps) {
           <article className={isManaged ? "featured managed-plan" : "managed-plan"}>
             <div className="choice-top">
               <span className="choice-label">MANAGED PILOT</span>
-              <span className="price">Free 30 day trial <small>after trial, only pay for what your team uses</small></span>
+              <span className="price">$10 monthly allowance <small>resets each calendar month during beta</small></span>
             </div>
             <h3>Let us handle the tracker.</h3>
             <p>
@@ -425,10 +425,11 @@ export default async function Home({ searchParams }: PageProps) {
               Request a managed pilot <ArrowIcon />
             </a>
             <p className="fine-print">
-              Try the managed service for free for 30 days with a max $10
-              credit. The administrative panel lets you monitor actual costs
-              incurred by your team during the trial so you can determine if
-              the services provide reasonable value.
+              The managed service is an open-ended beta with no fixed end date,
+              and R2C Tracker does not accept payments. Each organization
+              receives a platform-funded $10 usage allowance every calendar
+              month. The administrative panel lets you monitor your team&apos;s
+              actual usage costs.
             </p>
           </article>
         </div>

@@ -248,9 +248,11 @@ test("keeps public copy drone-specific and ships correctly sized artwork", async
   assert.doesNotMatch(publicCopy, /Know where the drones have searched/i);
   assert.doesNotMatch(publicCopy, /\$100|100\/year/i);
   assert.doesNotMatch(publicCopy, /\$TBD|after pilot usage review/);
-  assert.match(publicCopy, /Free 30 day trial/);
-  assert.match(publicCopy, /after trial, only pay for what your team uses/);
-  assert.match(publicCopy, /max \$10/);
+  assert.doesNotMatch(publicCopy, /\btrial\b|30[ -]?day/i);
+  assert.match(publicCopy, /open-ended beta/);
+  assert.match(publicCopy, /\$10 monthly allowance/);
+  assert.match(publicCopy, /resets each calendar month during beta/);
+  assert.match(publicCopy, /does not accept payments/);
   assert.match(publicCopy, /Lots of capabilities included\./);
   assert.match(publicCopy, /title: "Flight record support"/);
   assert.match(publicCopy, /support FAA waiver compliance\./);
