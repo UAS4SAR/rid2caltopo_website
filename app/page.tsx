@@ -339,9 +339,9 @@ export default async function Home({ searchParams }: PageProps) {
               <span className="cap-adds">STARTER</span>
             </div>
             <p className="cap-summary">
-              During the open-ended beta, each organization receives a
-              platform-funded $10 usage allowance that resets each calendar
-              month. An expanding list of features includes:
+              During beta testing, each organization receives a generous
+              platform-funded usage allowance. An expanding list of features
+              includes:
             </p>
             <ol className="managed-feature-list">
               {managedCapabilities.map((capability) => (
@@ -405,7 +405,7 @@ export default async function Home({ searchParams }: PageProps) {
           <article className={isManaged ? "featured managed-plan" : "managed-plan"}>
             <div className="choice-top">
               <span className="choice-label">MANAGED PILOT</span>
-              <span className="price">$10 monthly allowance <small>resets each calendar month during beta</small></span>
+              <span className="price">Generous usage allowance <small>platform-funded during beta testing</small></span>
             </div>
             <h3>Let us handle the tracker.</h3>
             <p>
@@ -426,10 +426,9 @@ export default async function Home({ searchParams }: PageProps) {
             </a>
             <p className="fine-print">
               The managed service is an open-ended beta with no fixed end date,
-              and R2C Tracker does not accept payments. Each organization
-              receives a platform-funded $10 usage allowance every calendar
-              month. The administrative panel lets you monitor your team&apos;s
-              actual usage costs.
+              and R2C Tracker does not accept payments. Site administrators can
+              monitor their team&apos;s attributed usage and decide who may request
+              streams and when, based on the organization&apos;s priorities.
             </p>
           </article>
         </div>
@@ -447,7 +446,7 @@ export default async function Home({ searchParams }: PageProps) {
             controller video stream for squinter-assisted clue searching, then
             continue with advanced Mutual Aid package preparation. Managed
             organizations can also follow the site-administration guide for
-            activation, policy, roles, enrollment, funding, and records.
+            activation, policy, roles, enrollment, usage oversight, and records.
           </p>
         </div>
         <div className="tutorial-grid">

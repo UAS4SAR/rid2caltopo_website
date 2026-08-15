@@ -64,11 +64,11 @@ export default function TrackerPage() {
           </article>
           <article className="featured-price">
             <span className="choice-label">MANAGED PILOT</span>
-            <p className="tracker-price">$10 monthly allowance <small>resets each calendar month during beta</small></p>
+            <p className="tracker-price">Generous usage allowance <small>platform-funded during beta testing</small></p>
             <h3>Managed for your team.</h3>
-            <p>We host and administer the tracker for volunteer organizations, provide onboarding, and fund a monthly usage allowance during the open-ended beta.</p>
+            <p>We host and administer the tracker for volunteer organizations, provide onboarding, and fund a generous usage allowance during beta testing.</p>
             <a className="button button-primary" href="/managed-pilot">Request the managed pilot <span aria-hidden="true">→</span></a>
-            <p className="fine-print">The beta has no fixed end date, and R2C Tracker does not accept payments during the beta. Each organization receives a platform-funded $10 usage allowance every calendar month. The allowance resets at the start of the next calendar month. To protect the allowance, remote video streaming pauses at $9 through month end while flight logs and R2C coordination continue.</p>
+            <p className="fine-print">The beta has no fixed end date, and R2C Tracker does not accept payments during the beta. Site administrators can monitor attributed usage, choose who receives the video requester role, and coordinate when their team uses streaming based on operational priorities and the available allowance. Each pilot still approves every stream request on the field device.</p>
           </article>
         </div>
         <p className="pricing-note">
