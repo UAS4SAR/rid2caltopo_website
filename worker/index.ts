@@ -1,6 +1,10 @@
 /** Cloudflare Worker entry point for the vinext-starter template. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
+import {
+  managedAccessTermsText,
+  managedAccessTermsVersion,
+} from "../app/managedAccessTerms";
 
 interface Env {
   ASSETS: Fetcher;
@@ -25,7 +29,6 @@ interface Env {
 }
 
 const notificationAddress = "kjtsar@kjt.us";
-const managedAccessTermsVersion = "2026-08-08";
 const indexablePaths = [
   "/",
   "/capabilities",
@@ -137,29 +140,19 @@ async function handleRequestForm(request: Request, env: Env): Promise<Response> 
     ? `Request managed pilot: ${designator}`
     : `request early app release: ${email}`;
   const body = [
-    managed ? "Managed r2c-tracker pilot request" : "RID2Caltopo early app access request",
+    "RID2Caltopo early app access request",
     "",
     `Name: ${name}`,
     `Email: ${email}`,
     `Phone: ${phone || "Not provided"}`,
     `Organization: ${organization || "Not provided"}`,
     `Organization designator: ${designator || "Not provided"}`,
-    ...(managed
-      ? [`Best-effort safety terms acknowledged: ${termsVersion}`]
-      : []),
     "",
     `Submitted: ${new Date().toISOString()}`,
     `Site: ${new URL(request.url).host}`,
   ].join("\n");
 
   try {
-    await env.EMAIL.send({
-      from: "RID2Caltopo Requests <requests@rid2caltopo.com>",
-      to: notificationAddress,
-      replyTo: email,
-      subject,
-      text: body,
-    });
     if (managed) {
       const intakeBody = new URLSearchParams({
         requester_name: name,
@@ -170,6 +163,7 @@ async function handleRequestForm(request: Request, env: Env): Promise<Response> 
         source_host: new URL(request.url).host,
         terms_acknowledged: "yes",
         terms_version: termsVersion,
+        terms_text: managedAccessTermsText,
       });
       const intakeResponse = await fetch(
         "https://r2c-tracker.com/managed-access-requests",
@@ -185,9 +179,17 @@ async function handleRequestForm(request: Request, env: Env): Promise<Response> 
       if (!intakeResponse.ok) {
         throw new Error(`Managed request storage failed (${intakeResponse.status})`);
       }
+    } else {
+      await env.EMAIL.send({
+        from: "RID2Caltopo Requests <requests@rid2caltopo.com>",
+        to: notificationAddress,
+        replyTo: email,
+        subject,
+        text: body,
+      });
     }
   } catch (error) {
-    console.error("Request email delivery failed", error);
+    console.error("Request delivery failed", error);
     return Response.redirect(new URL("/request-error", request.url), 303);
   }
 

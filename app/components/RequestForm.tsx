@@ -1,10 +1,12 @@
-import { CalTopoLink, CalTopoTeamsLink } from "./CalTopoTeamsLink";
+import {
+  managedAccessTermsText,
+  managedAccessTermsVersion,
+} from "../managedAccessTerms";
+import { CalTopoText } from "./CalTopoTeamsLink";
 
 type RequestFormProps = {
   kind: "early-access" | "managed-pilot";
 };
-
-const managedAccessTermsVersion = "2026-08-08";
 
 export default function RequestForm({ kind }: RequestFormProps) {
   const managed = kind === "managed-pilot";
@@ -89,28 +91,16 @@ export default function RequestForm({ kind }: RequestFormProps) {
       </div>
       <p className="form-privacy">
         This information is emailed to the RID2Caltopo project contact
-        {managed ? " and retained in the managed-pilot administration system" : ""}
+        {managed
+          ? ", copied to the requester, and retained in the managed-pilot administration system"
+          : ""}
         {" "}only to respond to your request. Do not include passwords, API keys,
         or active-incident details.
       </p>
       {managed && (
         <label className="form-acknowledgement">
           <input type="checkbox" name="termsAcknowledged" value="yes" required />
-          <span>
-            I am authorized to request access for this organization. I understand
-            that RID2Caltopo and r2c-tracker are provided on a best-effort,
-            &quot;as is,&quot; and &quot;as available&quot; basis, with no express
-            or implied warranties or guarantees, including merchantability, fitness
-            for a particular purpose, non-infringement, suitability, reliability,
-            availability, accuracy, or completeness. Features and information may be
-            unavailable, inaccurate, incomplete, or delayed. These tools provide
-            supplemental situational awareness only and must not be used as the sole
-            source for navigation, flight safety, communications, or incident-command
-            decisions. My organization remains responsible for its operations and for
-            independently verifying safety-critical information. RID2Caltopo is an
-            independent project and is not affiliated with or endorsed by{" "}
-            <CalTopoLink />; it uses the <CalTopoTeamsLink /> API.
-          </span>
+          <span><CalTopoText text={managedAccessTermsText} /></span>
         </label>
       )}
       <button className="button button-primary" type="submit">

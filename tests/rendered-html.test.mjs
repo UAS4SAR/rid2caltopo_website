@@ -172,9 +172,10 @@ test("collects managed-pilot phone contact information for tracker administratio
   assert.match(html, /<input[^>]*name="phone"[^>]*>/);
   assert.match(html, /type="tel"/);
   assert.match(html, /Phone number/);
+  assert.match(html, /copied to the requester/);
   assert.match(html, /retained in the managed-pilot administration system/);
   assert.match(html, /name="termsAcknowledged"/);
-  assert.match(html, /name="termsVersion" value="2026-08-08"/);
+  assert.match(html, /name="termsVersion" value="2026-08-25"/);
   assert.match(html, /placeholder="For example, mySAR"/);
   assert.doesNotMatch(html, /NCSSAR|Nevada County Sheriff/i);
   assert.match(html, /best-effort/);
@@ -186,6 +187,12 @@ test("collects managed-pilot phone contact information for tracker administratio
   assert.match(html, /supplemental situational awareness/);
   assert.match(html, /must not be used as the sole source/);
   assert.match(html, /independently verifying safety-critical information/);
+  assert.match(html, /accept full responsibility/);
+  assert.match(html, /release, waive, discharge, indemnify, defend, and hold harmless/);
+  assert.match(html, /Ken Taylor/);
+  assert.match(html, /California Civil Code section 1542/);
+  assert.match(html, /expressly waive all rights and benefits under section 1542/);
+  assert.match(html, /unknown or unsuspected/);
   assert.match(html, /independent project/);
   assert.match(html, /not affiliated with, sponsored by, or endorsed by CalTopo/);
   assert.match(html, /through the CalTopo Teams/);
@@ -201,9 +208,17 @@ test("collects managed-pilot phone contact information for tracker administratio
   assert.match(workerSource, /requester_phone: phone/);
   assert.match(workerSource, /terms_acknowledged: "yes"/);
   assert.match(workerSource, /terms_version: termsVersion/);
+  assert.match(workerSource, /terms_text: managedAccessTermsText/);
   assert.match(workerSource, /termsVersion !== managedAccessTermsVersion/);
-  assert.match(workerSource, /managedAccessTermsVersion = "2026-08-08"/);
-  assert.match(workerSource, /Best-effort safety terms acknowledged/);
+  assert.match(workerSource, /managedAccessTermsText/);
+
+  const termsSource = await readFile(
+    new URL("../app/managedAccessTerms.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(termsSource, /managedAccessTermsVersion = "2026-08-25"/);
+  assert.match(termsSource, /California Civil Code section 1542/);
+  assert.match(termsSource, /hold harmless Ken Taylor/);
 });
 
 test("opens the relationship disclosure for every visible CalTopo mention on the capabilities page", async () => {

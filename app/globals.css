@@ -1322,6 +1322,10 @@ footer {
   width: 18px;
 }
 
+.form-acknowledgement span {
+  white-space: pre-line;
+}
+
 .request-form .button {
   width: 100%;
 }
