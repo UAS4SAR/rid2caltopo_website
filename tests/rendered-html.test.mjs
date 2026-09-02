@@ -77,7 +77,13 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   assert.match(html, /RID2Caltopo is not a CalTopo product\./);
   assert.match(html, /not affiliated with, sponsored by, or endorsed by CalTopo/);
   assert.match(html, /thankful to the CalTopo developers/);
-  assert.match(html, /src="\/configure-team-drones-caltopo-teams\.mp4"/);
+  assert.match(
+    html,
+    /src="\/configure-team-drones-caltopo-teams\.mp4\?rev=20260901-connect-key-walkthrough"/,
+  );
+  assert.match(html, /Create a CalTopo tracking Access URL and Connect Key/);
+  assert.match(html, /verify Shared Locations and a team map/);
+  assert.match(html, /protect ORG access with the device screen lock/);
   assert.match(html, /Stream drone video to RID2Caltopo/);
   assert.match(html, /Administer an organization site/);
   assert.match(html, /organization-site-administration\.mp4/);
