@@ -14,7 +14,7 @@ type PageProps = {
   searchParams?: Promise<{ view?: string }>;
 };
 
-const contactEmail = "kjtsar@kjt.us";
+const contactEmail = "info@uas4sar.com";
 
 const testerLink = (platform: "Android" | "Apple") =>
   `mailto:${contactEmail}?subject=${encodeURIComponent(

@@ -99,7 +99,7 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   assert.match(html, /rel="canonical" href="https:\/\/rid2caltopo\.org\/"/);
   assert.match(html, /"@type":"WebSite","name":"RID2Caltopo"/);
   assert.match(html, /"@type":"SoftwareApplication","name":"RID2Caltopo"/);
-  assert.match(html, /href="mailto:kjtsar@kjt\.us">kjtsar@kjt\.us<\/a>/);
+  assert.match(html, /href="mailto:info@uas4sar\.com">info@uas4sar\.com<\/a>/);
   assert.match(html, />Copy address<\/button>/);
   assert.doesNotMatch(html, /kjtstar@kjt\.us/);
   assert.doesNotMatch(html, /\baircraft\b/i);
@@ -137,6 +137,22 @@ test("publishes host-specific robots and sitemap discovery", async () => {
   assert.match(comXml, /<loc>https:\/\/rid2caltopo\.com\/tips<\/loc>/);
   assert.doesNotMatch(comXml, /\/donations<\/loc>/);
   assert.doesNotMatch(comXml, /rid2caltopo\.org/);
+});
+
+test("uses the organization public mailbox across every web contact surface", async () => {
+  const sources = await Promise.all(
+    [
+      "../app/page.tsx",
+      "../app/tracker/page.tsx",
+      "../app/request-error/page.tsx",
+      "../worker/index.ts",
+      "../vite.config.ts",
+    ].map((path) => readFile(new URL(path, import.meta.url), "utf8")),
+  );
+  const publicWebSource = sources.join("\n");
+
+  assert.doesNotMatch(publicWebSource, /kjtsar@kjt\.us|kjt@uas4sar\.com/i);
+  assert.match(publicWebSource, /info@uas4sar\.com/);
 });
 
 test("explains project history while personal contributions are paused", async () => {
@@ -282,7 +298,7 @@ test("keeps public copy drone-specific and ships correctly sized artwork", async
   assert.match(publicCopy, /support FAA waiver compliance\./);
   assert.doesNotMatch(publicCopy, /planned-extension|MANAGED PILOT • AVAILABLE/);
   assert.match(publicCopy, /mailto:\$\{contactEmail\}/);
-  assert.match(publicCopy, /const contactEmail = "kjtsar@kjt\.us"/);
+  assert.match(publicCopy, /const contactEmail = "info@uas4sar\.com"/);
   assert.doesNotMatch(publicCopy, /kjtstar@kjt\.us|Founding pilot|Android support is in progress|Built honestly/i);
   assert.doesNotMatch(
     publicCopy,
