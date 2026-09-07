@@ -77,7 +77,13 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   assert.match(html, /RID2Caltopo is not a CalTopo product\./);
   assert.match(html, /not affiliated with, sponsored by, or endorsed by CalTopo/);
   assert.match(html, /thankful to the CalTopo developers/);
-  assert.match(html, /src="\/configure-team-drones-caltopo-teams\.mp4"/);
+  assert.match(
+    html,
+    /src="\/configure-team-drones-caltopo-teams\.mp4\?rev=20260901-connect-key-walkthrough"/,
+  );
+  assert.match(html, /Create a CalTopo tracking Access URL and Connect Key/);
+  assert.match(html, /verify Shared Locations and a team map/);
+  assert.match(html, /protect ORG access with the device screen lock/);
   assert.match(html, /Stream drone video to RID2Caltopo/);
   assert.match(html, /Administer an organization site/);
   assert.match(html, /organization-site-administration\.mp4/);
@@ -93,7 +99,11 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   assert.match(html, /rel="canonical" href="https:\/\/rid2caltopo\.org\/"/);
   assert.match(html, /"@type":"WebSite","name":"RID2Caltopo"/);
   assert.match(html, /"@type":"SoftwareApplication","name":"RID2Caltopo"/);
-  assert.match(html, /href="mailto:kjtsar@kjt\.us">kjtsar@kjt\.us<\/a>/);
+  assert.match(
+    html,
+    /UAS4SAR LLC\. RID2Caltopo is developed and operated by UAS4SAR LLC\./,
+  );
+  assert.match(html, /href="mailto:info@uas4sar\.com">info@uas4sar\.com<\/a>/);
   assert.match(html, />Copy address<\/button>/);
   assert.doesNotMatch(html, /kjtstar@kjt\.us/);
   assert.doesNotMatch(html, /\baircraft\b/i);
@@ -131,6 +141,22 @@ test("publishes host-specific robots and sitemap discovery", async () => {
   assert.match(comXml, /<loc>https:\/\/rid2caltopo\.com\/tips<\/loc>/);
   assert.doesNotMatch(comXml, /\/donations<\/loc>/);
   assert.doesNotMatch(comXml, /rid2caltopo\.org/);
+});
+
+test("uses the organization public mailbox across every web contact surface", async () => {
+  const sources = await Promise.all(
+    [
+      "../app/page.tsx",
+      "../app/tracker/page.tsx",
+      "../app/request-error/page.tsx",
+      "../worker/index.ts",
+      "../vite.config.ts",
+    ].map((path) => readFile(new URL(path, import.meta.url), "utf8")),
+  );
+  const publicWebSource = sources.join("\n");
+
+  assert.doesNotMatch(publicWebSource, /kjtsar@kjt\.us|kjt@uas4sar\.com/i);
+  assert.match(publicWebSource, /info@uas4sar\.com/);
 });
 
 test("explains project history while personal contributions are paused", async () => {
@@ -175,7 +201,7 @@ test("collects managed-pilot phone contact information for tracker administratio
   assert.match(html, /copied to the requester/);
   assert.match(html, /retained in the managed-pilot administration system/);
   assert.match(html, /name="termsAcknowledged"/);
-  assert.match(html, /name="termsVersion" value="2026-08-25"/);
+  assert.match(html, /name="termsVersion" value="2026-08-31"/);
   assert.match(html, /placeholder="For example, mySAR"/);
   assert.doesNotMatch(html, /NCSSAR|Nevada County Sheriff/i);
   assert.match(html, /best-effort/);
@@ -189,7 +215,7 @@ test("collects managed-pilot phone contact information for tracker administratio
   assert.match(html, /independently verifying safety-critical information/);
   assert.match(html, /accept full responsibility/);
   assert.match(html, /release, waive, discharge, indemnify, defend, and hold harmless/);
-  assert.match(html, /Ken Taylor/);
+  assert.match(html, /UAS4SAR LLC/);
   assert.match(html, /California Civil Code section 1542/);
   assert.match(html, /expressly waive all rights and benefits under section 1542/);
   assert.match(html, /unknown or unsuspected/);
@@ -216,9 +242,9 @@ test("collects managed-pilot phone contact information for tracker administratio
     new URL("../app/managedAccessTerms.ts", import.meta.url),
     "utf8",
   );
-  assert.match(termsSource, /managedAccessTermsVersion = "2026-08-25"/);
+  assert.match(termsSource, /managedAccessTermsVersion = "2026-08-31"/);
   assert.match(termsSource, /California Civil Code section 1542/);
-  assert.match(termsSource, /hold harmless Ken Taylor/);
+  assert.match(termsSource, /hold harmless UAS4SAR LLC/);
 });
 
 test("opens the relationship disclosure for every visible CalTopo mention on the capabilities page", async () => {
@@ -276,7 +302,7 @@ test("keeps public copy drone-specific and ships correctly sized artwork", async
   assert.match(publicCopy, /support FAA waiver compliance\./);
   assert.doesNotMatch(publicCopy, /planned-extension|MANAGED PILOT • AVAILABLE/);
   assert.match(publicCopy, /mailto:\$\{contactEmail\}/);
-  assert.match(publicCopy, /const contactEmail = "kjtsar@kjt\.us"/);
+  assert.match(publicCopy, /const contactEmail = "info@uas4sar\.com"/);
   assert.doesNotMatch(publicCopy, /kjtstar@kjt\.us|Founding pilot|Android support is in progress|Built honestly/i);
   assert.doesNotMatch(
     publicCopy,

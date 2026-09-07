@@ -12,7 +12,7 @@ export default function RequestErrorPage() {
       <h1>Your request wasn&apos;t sent.</h1>
       <p>
         Please return to the form and check the required fields, or email{" "}
-        <a className="inline-link" href="mailto:kjtsar@kjt.us">kjtsar@kjt.us</a>.
+        <a className="inline-link" href="mailto:info@uas4sar.com">info@uas4sar.com</a>.
       </p>
       <a className="button button-secondary" href="/capabilities">Return to capabilities</a>
     </main>

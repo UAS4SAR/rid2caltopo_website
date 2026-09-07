@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { EmailContact } from "../components/EmailContact";
 
-const contactEmail = "kjtsar@kjt.us";
+const contactEmail = "info@uas4sar.com";
 
 export const metadata: Metadata = {
   title: "r2c-tracker service",

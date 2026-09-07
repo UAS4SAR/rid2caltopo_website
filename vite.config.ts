@@ -26,7 +26,7 @@ const localBindingConfig = {
   send_email: [
     {
       name: "EMAIL",
-      destination_address: "kjtsar@kjt.us",
+      destination_address: "info@uas4sar.com",
       allowed_sender_addresses: ["requests@rid2caltopo.com"],
     },
   ],

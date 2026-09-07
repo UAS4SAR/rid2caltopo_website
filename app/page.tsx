@@ -14,7 +14,7 @@ type PageProps = {
   searchParams?: Promise<{ view?: string }>;
 };
 
-const contactEmail = "kjtsar@kjt.us";
+const contactEmail = "info@uas4sar.com";
 
 const testerLink = (platform: "Android" | "Apple") =>
   `mailto:${contactEmail}?subject=${encodeURIComponent(
@@ -70,10 +70,10 @@ const tutorials = [
     posterSrc: "/dronescout-bridge-setup-poster.jpg",
   },
   {
-    duration: "4 min • Configuration",
+    duration: "6 min • Configuration",
     title: "Configure team drones and CalTopo Teams account",
-    copy: "Add your organization’s drones, connect its CalTopo Teams account, verify a team map, and securely share the configuration.",
-    videoSrc: "/configure-team-drones-caltopo-teams.mp4",
+    copy: "Create a CalTopo tracking Access URL and Connect Key, add your organization’s drones and API tuple, verify Shared Locations and a team map, and protect ORG access with the device screen lock.",
+    videoSrc: "/configure-team-drones-caltopo-teams.mp4?rev=20260901-connect-key-walkthrough",
     posterSrc: "/configure-team-drones-caltopo-teams-poster.jpg",
   },
   {
@@ -555,7 +555,10 @@ export default async function Home({ searchParams }: PageProps) {
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} RID2Caltopo</span>
+          <span>
+            © {new Date().getFullYear()} UAS4SAR LLC. RID2Caltopo is developed
+            and operated by UAS4SAR LLC.
+          </span>
           <span>
             RID2Caltopo is an operational aid—not a sole source for aviation,
             navigation, or safety decisions.

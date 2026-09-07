@@ -28,7 +28,7 @@ interface Env {
   MANAGED_REQUEST_INGEST_KEY: string;
 }
 
-const notificationAddress = "kjtsar@kjt.us";
+const notificationAddress = "info@uas4sar.com";
 const indexablePaths = [
   "/",
   "/capabilities",
