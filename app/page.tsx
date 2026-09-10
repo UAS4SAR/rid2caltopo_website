@@ -17,11 +17,7 @@ type PageProps = {
 const contactEmail = "info@uas4sar.com";
 
 const testerLink = (platform: "Android" | "Apple") =>
-  `mailto:${contactEmail}?subject=${encodeURIComponent(
-    `RID2Caltopo ${platform} tester request`,
-  )}&body=${encodeURIComponent(
-    `G'day,\n\nI'd like to help test RID2Caltopo on ${platform}.\n\nName:\nOrganization:\nDevice model:\nHow we use drones:\n\nThanks!`,
-  )}`;
+  `/contact?topic=${platform.toLowerCase()}-testing`;
 
 export const metadata: Metadata = {
   title: "RID2Caltopo — Track drone assignments and search coverage in real time",

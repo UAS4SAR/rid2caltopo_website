@@ -1270,7 +1270,8 @@ footer {
   text-transform: uppercase;
 }
 
-.form-field input {
+.form-field input,
+.form-field textarea {
   background: white;
   border: 1px solid rgba(21, 35, 29, 0.35);
   border-radius: 0;
@@ -1281,7 +1282,13 @@ footer {
   width: 100%;
 }
 
-.form-field input:focus {
+.form-field textarea {
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
   border-color: var(--orange-dark);
   outline: 2px solid rgba(242, 106, 46, 0.25);
   outline-offset: 1px;

@@ -32,6 +32,7 @@ const notificationAddress = "info@uas4sar.com";
 const indexablePaths = [
   "/",
   "/capabilities",
+  "/contact",
   "/tracker",
   "/tips",
   "/early-access",
@@ -90,6 +91,12 @@ function sitemapResponse(url: URL): Response {
 function cleanField(value: FormDataEntryValue | null, maxLength: number): string {
   return typeof value === "string"
     ? value.replace(/[\r\n\t]+/g, " ").trim().slice(0, maxLength)
+    : "";
+}
+
+function cleanMessage(value: FormDataEntryValue | null, maxLength: number): string {
+  return typeof value === "string"
+    ? value.replace(/\r\n?/g, "\n").trim().slice(0, maxLength)
     : "";
 }
 
@@ -199,6 +206,56 @@ async function handleRequestForm(request: Request, env: Env): Promise<Response> 
   );
 }
 
+async function handleContactForm(request: Request, env: Env): Promise<Response> {
+  const contentLength = Number(request.headers.get("content-length") ?? "0");
+  if (contentLength > 16_384) {
+    return Response.redirect(new URL("/contact-error", request.url), 303);
+  }
+
+  const form = await request.formData();
+  const name = cleanField(form.get("name"), 100);
+  const email = cleanField(form.get("email"), 254);
+  const subject = cleanField(form.get("subject"), 140);
+  const message = cleanMessage(form.get("message"), 4000);
+  const honeypot = cleanField(form.get("website"), 200);
+
+  if (honeypot) {
+    return Response.redirect(new URL("/contact-received", request.url), 303);
+  }
+
+  if (!name || !validEmail(email) || !subject || !message) {
+    return Response.redirect(new URL("/contact-error", request.url), 303);
+  }
+
+  const body = [
+    "RID2Caltopo website message",
+    "",
+    `Name: ${name}`,
+    `Email: ${email}`,
+    `Subject: ${subject}`,
+    "",
+    message,
+    "",
+    `Submitted: ${new Date().toISOString()}`,
+    `Site: ${new URL(request.url).host}`,
+  ].join("\n");
+
+  try {
+    await env.EMAIL.send({
+      from: "RID2Caltopo Website <requests@rid2caltopo.com>",
+      to: notificationAddress,
+      replyTo: email,
+      subject: `Website message: ${subject}`,
+      text: body,
+    });
+  } catch (error) {
+    console.error("Contact delivery failed", error);
+    return Response.redirect(new URL("/contact-error", request.url), 303);
+  }
+
+  return Response.redirect(new URL("/contact-received", request.url), 303);
+}
+
 interface ExecutionContext {
   waitUntil(promise: Promise<unknown>): void;
   passThroughOnException(): void;
@@ -246,6 +303,16 @@ const worker = {
         });
       }
       return handleRequestForm(request, env);
+    }
+
+    if (url.pathname === "/api/contact") {
+      if (request.method !== "POST") {
+        return new Response("Method not allowed", {
+          status: 405,
+          headers: { Allow: "POST" },
+        });
+      }
+      return handleContactForm(request, env);
     }
 
     return handler.fetch(request, env, ctx);

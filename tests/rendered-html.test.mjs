@@ -103,8 +103,11 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
     html,
     /UAS4SAR LLC\. RID2Caltopo is developed and operated by UAS4SAR LLC\./,
   );
-  assert.match(html, /href="mailto:info@uas4sar\.com">info@uas4sar\.com<\/a>/);
+  assert.match(html, /href="\/contact">info@uas4sar\.com<\/a>/);
   assert.match(html, />Copy address<\/button>/);
+  assert.match(html, /href="\/contact\?topic=android-testing"/);
+  assert.match(html, /href="\/contact\?topic=apple-testing"/);
+  assert.doesNotMatch(html, /mailto:/);
   assert.doesNotMatch(html, /kjtstar@kjt\.us/);
   assert.doesNotMatch(html, /\baircraft\b/i);
   assert.doesNotMatch(html, /Know where the drones have searched/i);
@@ -157,6 +160,66 @@ test("uses the organization public mailbox across every web contact surface", as
 
   assert.doesNotMatch(publicWebSource, /kjtsar@kjt\.us|kjt@uas4sar\.com/i);
   assert.match(publicWebSource, /info@uas4sar\.com/);
+  assert.doesNotMatch(publicWebSource, /mailto:/);
+});
+
+test("renders a prefilled contact form for tester requests", async () => {
+  const response = await render(
+    "rid2caltopo.com",
+    "/contact?topic=android-testing",
+  );
+  assert.equal(response.status, 200);
+  const html = await response.text();
+
+  assert.match(html, /action="\/api\/contact" method="post"/);
+  assert.match(html, /name="name"/);
+  assert.match(html, /name="email"/);
+  assert.match(html, /name="subject"/);
+  assert.match(html, /RID2Caltopo Android tester request/);
+  assert.match(html, /name="message"/);
+  assert.match(html, /I&#x27;d like to help test RID2Caltopo on Android/);
+  assert.match(html, /Send message/);
+});
+
+test("sends contact forms through the website email binding", async () => {
+  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
+  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
+  const { default: worker } = await import(workerUrl.href);
+  const sent = [];
+  const form = new FormData();
+  form.set("name", "Taylor Tester");
+  form.set("email", "taylor@example.org");
+  form.set("subject", "Android field test");
+  form.set("message", "Please add our team to the next field test.");
+
+  const response = await worker.fetch(
+    new Request("https://rid2caltopo.com/api/contact", {
+      method: "POST",
+      body: form,
+    }),
+    {
+      EMAIL: {
+        async send(message) {
+          sent.push(message);
+        },
+      },
+    },
+    {
+      waitUntil() {},
+      passThroughOnException() {},
+    },
+  );
+
+  assert.equal(response.status, 303);
+  assert.equal(
+    response.headers.get("location"),
+    "https://rid2caltopo.com/contact-received",
+  );
+  assert.equal(sent.length, 1);
+  assert.equal(sent[0].to, "info@uas4sar.com");
+  assert.equal(sent[0].replyTo, "taylor@example.org");
+  assert.match(sent[0].subject, /Android field test/);
+  assert.match(sent[0].text, /Please add our team to the next field test\./);
 });
 
 test("explains project history while personal contributions are paused", async () => {
@@ -257,6 +320,9 @@ test("uses the disclosure control for CalTopo references on every public page", 
   const paths = [
     "/",
     "/capabilities",
+    "/contact",
+    "/contact-error",
+    "/contact-received",
     "/donations",
     "/early-access",
     "/managed-pilot",
@@ -301,7 +367,8 @@ test("keeps public copy drone-specific and ships correctly sized artwork", async
   assert.match(publicCopy, /title: "Flight record support"/);
   assert.match(publicCopy, /support FAA waiver compliance\./);
   assert.doesNotMatch(publicCopy, /planned-extension|MANAGED PILOT • AVAILABLE/);
-  assert.match(publicCopy, /mailto:\$\{contactEmail\}/);
+  assert.doesNotMatch(publicCopy, /mailto:/);
+  assert.match(publicCopy, /\/contact\?topic=\$\{platform\.toLowerCase\(\)\}-testing/);
   assert.match(publicCopy, /const contactEmail = "info@uas4sar\.com"/);
   assert.doesNotMatch(publicCopy, /kjtstar@kjt\.us|Founding pilot|Android support is in progress|Built honestly/i);
   assert.doesNotMatch(

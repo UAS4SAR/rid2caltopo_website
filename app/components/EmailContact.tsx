@@ -12,7 +12,7 @@ export function EmailContact({ email }: { email: string }) {
 
   return (
     <span className="email-contact">
-      <a href={`mailto:${email}`}>{email}</a>
+      <a href="/contact">{email}</a>
       <button type="button" onClick={copyAddress}>
         {copied ? "Copied" : "Copy address"}
       </button>
