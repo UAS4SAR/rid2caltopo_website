@@ -140,6 +140,7 @@ export default async function Home({ searchParams }: PageProps) {
           <a href="#capabilities">Capabilities</a>
           <a href="#tutorials">Tutorials</a>
           <Link href="/tips">Tips &amp; tricks</Link>
+          <a href="https://rid2caltopo.discourse.group/">Community</a>
           <a href="#get-started">Get started</a>
         </nav>
         <div className="edition-switch" aria-label="Website edition">
@@ -545,6 +546,7 @@ export default async function Home({ searchParams }: PageProps) {
           </div>
           <div>
             <strong>CONNECT</strong>
+            <a href="https://rid2caltopo.discourse.group/">Community forum</a>
             <EmailContact email={contactEmail} />
             <Link href="/managed-pilot">Managed pilot</Link>
             <a href="#testing">Become a tester</a>
