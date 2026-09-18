@@ -15,6 +15,8 @@ type PageProps = {
 };
 
 const contactEmail = "info@uas4sar.com";
+const playStoreUrl =
+  "https://play.google.com/store/apps/details?id=org.ncssar.rid2caltopo";
 
 const testerLink = (platform: "Android" | "Apple") =>
   `/contact?topic=${platform.toLowerCase()}-testing`;
@@ -202,8 +204,8 @@ export default async function Home({ searchParams }: PageProps) {
           </div>
           <p className="availability-note">
             <span aria-hidden="true" />
-            Android and Apple test invitations are provided by email while the
-            latest release completes field testing.
+            Android is available on Google Play. Apple test invitations are
+            provided by email while the latest release completes field testing.
           </p>
         </div>
 
@@ -494,13 +496,18 @@ export default async function Home({ searchParams }: PageProps) {
           </p>
         </div>
         <div className="tester-actions">
-          <a className="button button-light" href={testerLink("Android")}>
-            Request Android test access <ArrowIcon />
+          <a
+            className="button button-light"
+            href={playStoreUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Get RID2Caltopo on Google Play <ArrowIcon />
           </a>
           <a className="button button-outline-light" href={testerLink("Apple")}>
             Request Apple test access <ArrowIcon />
           </a>
-          <span>Store invitation links will replace email after release testing.</span>
+          <span>Android is available now; Apple test access remains invitation-only.</span>
         </div>
       </section>
 

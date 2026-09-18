@@ -105,7 +105,12 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   );
   assert.match(html, /href="\/contact">info@uas4sar\.com<\/a>/);
   assert.match(html, />Copy address<\/button>/);
-  assert.match(html, /href="\/contact\?topic=android-testing"/);
+  assert.match(
+    html,
+    /href="https:\/\/play\.google\.com\/store\/apps\/details\?id=org\.ncssar\.rid2caltopo"[^>]*target="_blank"/,
+  );
+  assert.match(html, /Get RID2Caltopo on Google Play/);
+  assert.doesNotMatch(html, /Request Android test access/);
   assert.match(html, /href="\/contact\?topic=apple-testing"/);
   assert.doesNotMatch(html, /mailto:/);
   assert.doesNotMatch(html, /kjtstar@kjt\.us/);
