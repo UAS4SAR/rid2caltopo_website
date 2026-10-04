@@ -6,6 +6,7 @@ import {
   CalTopoTeamsLink,
   CalTopoText,
 } from "./components/CalTopoTeamsLink";
+import { ReceiverOptions } from "./components/ReceiverOptions";
 import { EmailContact } from "./components/EmailContact";
 
 type SiteMode = "community" | "managed";
@@ -256,14 +257,7 @@ export default async function Home({ searchParams }: PageProps) {
                 thousands of feet when terrain, line of sight, and radio
                 conditions cooperate.
               </p>
-              <a
-                className="bridge-resource-link"
-                href="https://gearfocus.com/products/drone-detector-bluemark-ds100-dronescout-retail-bridge-faa-r-79np1"
-                target="_blank"
-                rel="noreferrer"
-              >
-                DS100 details and purchase options <ArrowIcon />
-              </a>
+              <ReceiverOptions />
             </div>
           </article>
           <div className="flow-line" aria-hidden="true"><span>BRIDGE LINK</span></div>

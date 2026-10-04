@@ -64,11 +64,15 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
     /class="brand-mark" src="\/app-icon-orange\.png"/,
   );
   assert.match(html, /src="\/dronescout-ds100-anker-field\.jpg"/);
-  assert.match(
-    html,
-    /href="https:\/\/gearfocus\.com\/products\/drone-detector-bluemark-ds100-dronescout-retail-bridge-faa-r-79np1"/,
-  );
-  assert.match(html, /DS100 details and purchase options/);
+  assert.match(html, /aria-haspopup="dialog" aria-controls="receiver-options"/);
+  assert.match(html, /Compare receivers and purchase options/);
+  assert.match(html, /<dialog[^>]*id="receiver-options"[^>]*aria-labelledby="receiver-options-title"/);
+  assert.match(html, /href="https:\/\/dronescout\.co\/product\/dronescout-bridge-ds100-retail\/"/);
+  assert.match(html, /href="https:\/\/dronescout\.co\/product\/dronescout-bridge-triple-band-ds110-retail-remoteid-receiver-for-ios-android-and-drone\/"/);
+  assert.match(html, /Skydio X10/);
+  assert.match(html, /Wi-Fi NAN alone does not require DS110/);
+  assert.match(html, /DS100 supports NAN at 2.4 GHz with updated firmware/);
+  assert.doesNotMatch(html, /gearfocus\.com/);
   assert.match(
     html,
     /class="caltopo-disclosure-link"[^>]+aria-haspopup="dialog"[^>]*>CalTopo Teams<\/button>/,
