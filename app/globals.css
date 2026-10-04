@@ -927,6 +927,61 @@ h1 em {
   color: var(--ink);
 }
 
+.store-option {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  display: grid;
+  gap: 20px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 18px;
+}
+
+.store-option .button {
+  width: 100%;
+}
+
+.test-cta .store-platform {
+  color: #ffd6c2;
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+
+.test-cta .store-note {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 10px 0 0;
+}
+
+.store-note a,
+.tester-actions > span a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.store-qr {
+  background: white;
+  display: block;
+  height: 132px;
+  padding: 6px;
+  width: 132px;
+}
+
+@media (max-width: 520px) {
+  .store-option {
+    grid-template-columns: 1fr;
+  }
+
+  .store-qr {
+    justify-self: center;
+  }
+}
+
 .tester-actions > span {
   color: #ffd6c2;
   font-family: var(--font-plex-mono), monospace;

@@ -17,6 +17,8 @@ type PageProps = {
 const contactEmail = "info@uas4sar.com";
 const playStoreUrl =
   "https://play.google.com/store/apps/details?id=org.ncssar.rid2caltopo";
+const testFlightUrl = "https://testflight.apple.com/join/QhyVpGDh";
+const testFlightAppUrl = "https://apps.apple.com/app/testflight/id899247664";
 
 const testerLink = (platform: "Android" | "Apple") =>
   `/contact?topic=${platform.toLowerCase()}-testing`;
@@ -204,8 +206,8 @@ export default async function Home({ searchParams }: PageProps) {
           </div>
           <p className="availability-note">
             <span aria-hidden="true" />
-            Android is available on Google Play. Apple test invitations are
-            provided by email while the latest release completes field testing.
+            Android is available on Google Play. The iPhone and iPad beta is
+            open to everyone through Apple&apos;s TestFlight app.
           </p>
         </div>
 
@@ -496,18 +498,63 @@ export default async function Home({ searchParams }: PageProps) {
           </p>
         </div>
         <div className="tester-actions">
-          <a
-            className="button button-light"
-            href={playStoreUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Get RID2Caltopo on Google Play <ArrowIcon />
-          </a>
-          <a className="button button-outline-light" href={testerLink("Apple")}>
-            Request Apple test access <ArrowIcon />
-          </a>
-          <span>Android is available now; Apple test access remains invitation-only.</span>
+          <article className="store-option">
+            <div>
+              <p className="store-platform">Android • Google Play</p>
+              <a
+                className="button button-light"
+                href={playStoreUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Get RID2Caltopo on Google Play <ArrowIcon />
+              </a>
+              <p className="store-note">
+                Current release for Android phones and tablets.
+              </p>
+            </div>
+            <img
+              className="store-qr"
+              src="/qr-google-play.svg"
+              width="132"
+              height="132"
+              loading="lazy"
+              alt="QR code that opens RID2Caltopo on Google Play"
+            />
+          </article>
+          <article className="store-option">
+            <div>
+              <p className="store-platform">iPhone &amp; iPad • TestFlight beta</p>
+              <a
+                className="button button-light"
+                href={testFlightUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Get the iOS beta on TestFlight <ArrowIcon />
+              </a>
+              <p className="store-note">
+                Install Apple&apos;s free{" "}
+                <a href={testFlightAppUrl} target="_blank" rel="noreferrer">
+                  TestFlight app
+                </a>{" "}
+                from the App Store first, then open this link or scan the code
+                on your iPhone or iPad. Requires iOS 17 or later.
+              </p>
+            </div>
+            <img
+              className="store-qr"
+              src="/qr-testflight.svg"
+              width="132"
+              height="132"
+              loading="lazy"
+              alt="QR code that opens the RID2Caltopo TestFlight beta invitation"
+            />
+          </article>
+          <span>
+            Questions about joining?{" "}
+            <a href={testerLink("Apple")}>Contact the test team</a>
+          </span>
         </div>
       </section>
 

@@ -112,6 +112,17 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   assert.match(html, /Get RID2Caltopo on Google Play/);
   assert.doesNotMatch(html, /Request Android test access/);
   assert.match(html, /href="\/contact\?topic=apple-testing"/);
+  assert.match(
+    html,
+    /href="https:\/\/testflight\.apple\.com\/join\/QhyVpGDh"[^>]*target="_blank"/,
+  );
+  assert.match(html, /Get the iOS beta on TestFlight/);
+  assert.match(html, /href="https:\/\/apps\.apple\.com\/app\/testflight\/id899247664"/);
+  assert.match(html, /free(?:<!-- -->)? ?(?:<!-- -->)?<a[^>]*>TestFlight app<\/a>/);
+  assert.match(html, /src="\/qr-testflight\.svg"/);
+  assert.match(html, /src="\/qr-google-play\.svg"/);
+  assert.doesNotMatch(html, /Apple test invitations are provided by email/);
+  assert.doesNotMatch(html, /Request Apple test access/);
   assert.doesNotMatch(html, /mailto:/);
   assert.doesNotMatch(html, /kjtstar@kjt\.us/);
   assert.doesNotMatch(html, /\baircraft\b/i);
@@ -389,4 +400,16 @@ test("keeps public copy drone-specific and ships correctly sized artwork", async
   assert.equal(icon.readUInt32BE(20), 1024);
   assert.equal(socialCard.readUInt32BE(16), 1792);
   assert.equal(socialCard.readUInt32BE(20), 907);
+
+  const [testFlightQr, playQr] = await Promise.all([
+    readFile(new URL("../public/qr-testflight.svg", import.meta.url), "utf8"),
+    readFile(new URL("../public/qr-google-play.svg", import.meta.url), "utf8"),
+  ]);
+  assert.match(testFlightQr, /<svg viewBox="0 0 \d+ \d+"/);
+  assert.match(testFlightQr, /QR code: https:\/\/testflight\.apple\.com\/join\/QhyVpGDh</);
+  assert.match(playQr, /<svg viewBox="0 0 \d+ \d+"/);
+  assert.match(
+    playQr,
+    /QR code: https:\/\/play\.google\.com\/store\/apps\/details\?id=org\.ncssar\.rid2caltopo</,
+  );
 });
