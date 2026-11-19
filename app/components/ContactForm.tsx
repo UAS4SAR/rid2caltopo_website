@@ -9,6 +9,7 @@ export default function ContactForm({
 }: ContactFormProps) {
   return (
     <form className="request-form" action="/api/contact" method="post">
+      <p>All fields are required.</p>
       <div className="form-field">
         <label htmlFor="contact-name">Your name</label>
         <input

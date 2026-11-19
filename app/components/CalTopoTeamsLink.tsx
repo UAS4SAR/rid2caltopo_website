@@ -8,7 +8,7 @@ function openDisclosure() {
   window.dispatchEvent(new Event(disclosureEvent));
 }
 
-export function CalTopoLink({ teams = false }: { teams?: boolean }) {
+export function CalTopoLink() {
   return (
     <button
       className="caltopo-disclosure-link"
@@ -16,25 +16,19 @@ export function CalTopoLink({ teams = false }: { teams?: boolean }) {
       aria-haspopup="dialog"
       onClick={openDisclosure}
     >
-      {teams ? "CalTopo Teams" : "CalTopo"}
+      CalTopo
     </button>
   );
 }
 
-export function CalTopoTeamsLink() {
-  return <CalTopoLink teams />;
-}
-
 export function CalTopoText({ text }: { text: string }) {
-  const parts = text.split(/(CalTopo Teams|CalTopo)/g);
+  const parts = text.split(/(CalTopo)/g);
 
   return (
     <>
       {parts.map((part, index) => (
         <Fragment key={`${part}-${index}`}>
-          {part === "CalTopo Teams" ? (
-            <CalTopoTeamsLink />
-          ) : part === "CalTopo" ? (
+          {part === "CalTopo" ? (
             <CalTopoLink />
           ) : (
             part

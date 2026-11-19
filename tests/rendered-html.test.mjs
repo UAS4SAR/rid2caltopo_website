@@ -75,19 +75,17 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   assert.doesNotMatch(html, /gearfocus\.com/);
   assert.match(
     html,
-    /class="caltopo-disclosure-link"[^>]+aria-haspopup="dialog"[^>]*>CalTopo Teams<\/button>/,
+    /class="caltopo-disclosure-link"[^>]+aria-haspopup="dialog"[^>]*>CalTopo<\/button>/,
   );
   assertEveryVisibleCalTopoMentionOpensDisclosure(html);
   assert.match(html, /RID2Caltopo is not a CalTopo product\./);
   assert.match(html, /not affiliated with, sponsored by, or endorsed by CalTopo/);
   assert.match(html, /thankful to the CalTopo developers/);
-  assert.match(
-    html,
-    /src="\/configure-team-drones-caltopo-teams\.mp4\?rev=20260901-connect-key-walkthrough"/,
-  );
-  assert.match(html, /Create a CalTopo tracking Access URL and Connect Key/);
-  assert.match(html, /verify Shared Locations and a team map/);
-  assert.match(html, /protect ORG access with the device screen lock/);
+  assert.match(html, /configure-team-drones-caltopo-teams\.mp4/);
+  assert.doesNotMatch(html, /prepare-mutual-aid-package\.mp4/);
+  assert.match(html, /Connect your [\s\S]*?CalTopo[\s\S]*? account/);
+  assert.match(html, /Download and share maps before the mission/);
+  assert.doesNotMatch(html, /cost-sharing/i);
   assert.match(html, /Stream drone video to RID2Caltopo/);
   assert.match(html, /Administer an organization site/);
   assert.match(html, /organization-site-administration\.mp4/);
@@ -107,7 +105,8 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
     html,
     /UAS4SAR LLC\. RID2Caltopo is developed and operated by UAS4SAR LLC\./,
   );
-  assert.match(html, /href="\/contact">info@uas4sar\.com<\/a>/);
+  assert.match(html, /href="\/contact">Contact form<\/a>/);
+  assert.match(html, /or email (?:<!-- -->)?info@uas4sar\.com/);
   assert.match(html, />Copy address<\/button>/);
   assert.match(
     html,
@@ -199,6 +198,7 @@ test("renders a prefilled contact form for tester requests", async () => {
   assert.match(html, /name="message"/);
   assert.match(html, /I&#x27;d like to help test RID2Caltopo on Android/);
   assert.match(html, /Send message/);
+  assert.match(html, /email us directly at info@uas4sar\.com/);
 });
 
 test("sends contact forms through the website email binding", async () => {
@@ -236,6 +236,7 @@ test("sends contact forms through the website email binding", async () => {
     "https://rid2caltopo.com/contact-received",
   );
   assert.equal(sent.length, 1);
+  assert.equal(sent[0].from, "requests@rid2caltopo.com");
   assert.equal(sent[0].to, "info@uas4sar.com");
   assert.equal(sent[0].replyTo, "taylor@example.org");
   assert.match(sent[0].subject, /Android field test/);
@@ -283,7 +284,9 @@ test("collects managed-pilot phone contact information for tracker administratio
   assert.match(html, /Phone number/);
   assert.match(html, /copied to the requester/);
   assert.match(html, /retained in the managed-pilot administration system/);
-  assert.match(html, /name="termsAcknowledged"/);
+  assert.match(html, /All fields are required unless marked optional/);
+  assert.match(html, /Required acknowledgment/);
+  assert.match(html, /<input(?=[^>]*name="termsAcknowledged")(?=[^>]*required)[^>]*>/);
   assert.match(html, /name="termsVersion" value="2026-08-31"/);
   assert.match(html, /placeholder="For example, mySAR"/);
   assert.doesNotMatch(html, /NCSSAR|Nevada County Sheriff/i);
@@ -330,6 +333,17 @@ test("collects managed-pilot phone contact information for tracker administratio
   assert.match(termsSource, /hold harmless UAS4SAR LLC/);
 });
 
+test("sends new visitors and old early-access links to the download section", async () => {
+  const capabilities = await render("rid2caltopo.com", "/capabilities");
+  assert.match(await capabilities.text(), /href="\/#testing"[^>]*>Download the app/);
+  const home = await render("rid2caltopo.com");
+  assert.match(await home.text(), /<section[^>]*id="testing"/);
+  const oldLink = await render("rid2caltopo.com", "/early-access");
+  assert.ok([301, 302, 303, 307, 308].includes(oldLink.status));
+  assert.equal(new URL(oldLink.headers.get("location"), "https://rid2caltopo.com").href,
+    "https://rid2caltopo.com/#testing");
+});
+
 test("opens the relationship disclosure for every visible CalTopo mention on the capabilities page", async () => {
   const response = await render("rid2caltopo.com", "/capabilities");
   assert.equal(response.status, 200);
@@ -344,7 +358,6 @@ test("uses the disclosure control for CalTopo references on every public page", 
     "/contact-error",
     "/contact-received",
     "/donations",
-    "/early-access",
     "/managed-pilot",
     "/request-error",
     "/request-received",

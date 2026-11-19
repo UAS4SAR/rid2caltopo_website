@@ -13,6 +13,7 @@ export default function RequestForm({ kind }: RequestFormProps) {
 
   return (
     <form className="request-form" action="/api/request" method="post">
+      <p>All fields are required unless marked optional.{managed && " You must also check the acknowledgment box before submitting."}</p>
       <input type="hidden" name="requestType" value={kind} />
       {managed && (
         <input type="hidden" name="termsVersion" value={managedAccessTermsVersion} />
@@ -100,7 +101,7 @@ export default function RequestForm({ kind }: RequestFormProps) {
       {managed && (
         <label className="form-acknowledgement">
           <input type="checkbox" name="termsAcknowledged" value="yes" required />
-          <span><CalTopoText text={managedAccessTermsText} /></span>
+          <span><strong>Required acknowledgment: </strong><CalTopoText text={managedAccessTermsText} /></span>
         </label>
       )}
       <button className="button button-primary" type="submit">

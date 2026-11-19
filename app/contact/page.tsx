@@ -43,7 +43,7 @@ export default async function ContactPage({ searchParams }: PageProps) {
           <h1>Send us a message.</h1>
           <p>
             Ask a question, request test access, or tell us what happened in
-            the field. Your reply will come to the email address you provide.
+            the field. You can also email us directly at info@uas4sar.com.
           </p>
         </section>
         <ContactForm

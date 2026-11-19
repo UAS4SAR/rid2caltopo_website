@@ -117,7 +117,7 @@ export default async function RootLayout({
         {children}
         <aside className="site-affiliation-notice" aria-label="CalTopo relationship">
           <strong>Independent project.</strong>{" "}
-          <CalTopoLink /> relationship and Teams API disclosure
+          <CalTopoLink /> relationship disclosure
         </aside>
         <CalTopoDisclosurePanel />
       </body>

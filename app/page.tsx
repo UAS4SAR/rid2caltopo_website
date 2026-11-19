@@ -3,7 +3,6 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import {
   CalTopoLink,
-  CalTopoTeamsLink,
   CalTopoText,
 } from "./components/CalTopoTeamsLink";
 import { ReceiverOptions } from "./components/ReceiverOptions";
@@ -34,7 +33,7 @@ export const metadata: Metadata = {
 const freeCapabilities = [
   "Receive and display ASTM F3411 Remote ID broadcasts",
   "Record drone tracks locally on the phone or tablet",
-  "Publish tracks directly to CalTopo Teams incident maps",
+  "Publish tracks to CalTopo maps you can edit",
   "Stream controller video locally for squinter review",
   "Capture potential clues and use on-device anomaly assist",
 ];
@@ -64,6 +63,13 @@ const managedCapabilities = [
 
 const tutorials = [
   {
+    duration: "Getting started",
+    title: "Connect your CalTopo account",
+    copy: "Sign in with your personal CalTopo account to work with maps you can access. Teams credentials remain an option for organizations.",
+    videoSrc: null,
+    posterSrc: null,
+  },
+  {
     duration: "3 min • Field setup",
     title: "Set up the DroneScout Bridge",
     copy: "Enable Relay ping, place the Bridge for useful line of sight, and verify power and live Remote ID reception before operations.",
@@ -71,8 +77,8 @@ const tutorials = [
     posterSrc: "/dronescout-bridge-setup-poster.jpg",
   },
   {
-    duration: "6 min • Configuration",
-    title: "Configure team drones and CalTopo Teams account",
+    duration: "6 min • Teams configuration",
+    title: "Configure team drones and organization access",
     copy: "Create a CalTopo tracking Access URL and Connect Key, add your organization’s drones and API tuple, verify Shared Locations and a team map, and protect ORG access with the device screen lock.",
     videoSrc: "/configure-team-drones-caltopo-teams.mp4?rev=20260901-connect-key-walkthrough",
     posterSrc: "/configure-team-drones-caltopo-teams-poster.jpg",
@@ -85,11 +91,11 @@ const tutorials = [
     posterSrc: "/stream-drone-video-to-rid2caltopo-poster.jpg",
   },
   {
-    duration: "5 min • Advanced Mutual Aid",
-    title: "Prepare and export a Mutual Aid package",
-    copy: "Prepare early, cache the operational map, set the expiration, and transfer locally by peer-to-peer wireless or a USB-C storage device to minimize Starlink and cellular traffic.",
-    videoSrc: "/prepare-mutual-aid-package.mp4?rev=20260804-dem-device",
-    posterSrc: "/prepare-mutual-aid-package-poster.jpg?rev=20260804-dem-device",
+    duration: "Offline maps",
+    title: "Download and share maps before the mission",
+    copy: "Prepare USGS and USFS maps for offline use and share map packages with other devices. Packages contain map data, not CalTopo credentials.",
+    videoSrc: null,
+    posterSrc: null,
   },
   {
     duration: "5 min • Site administration",
@@ -200,7 +206,7 @@ export default async function Home({ searchParams }: PageProps) {
                   Explore the source <ArrowIcon />
                 </a>
                 <a className="button button-secondary" href="#testing">
-                  Join the test team
+                  Download the app
                 </a>
               </>
             )}
@@ -239,8 +245,7 @@ export default async function Home({ searchParams }: PageProps) {
             <p className="step">STEP 01</p>
             <h3>Drone broadcasts</h3>
             <p>
-              Drones used in a SAR mission are required to broadcast ASTM F3411
-              Remote ID.
+              Drones used in SAR should advertise Remote ID.
             </p>
           </article>
           <div className="flow-line" aria-hidden="true"><span>RADIO</span></div>
@@ -267,8 +272,7 @@ export default async function Home({ searchParams }: PageProps) {
             <h3>RID2Caltopo records</h3>
             <p>
               RID2Caltopo records tracks locally and directly to{" "}
-              <CalTopoTeamsLink />{" "}
-              incident maps.
+              <CalTopoLink /> maps you can edit.
             </p>
           </article>
           <div className="flow-line" aria-hidden="true"><span>LOCAL VIDEO</span></div>
@@ -308,7 +312,7 @@ export default async function Home({ searchParams }: PageProps) {
             <p className="cap-summary">
               Install the app, deploy a DroneScout Bridge for reliable
               Remote ID reception, and connect directly to your{" "}
-              <CalTopoTeamsLink /> incident map.
+              <CalTopoLink /> map.
             </p>
             <ul className="capability-list">
               {freeCapabilities.map((capability) => (
@@ -404,7 +408,7 @@ export default async function Home({ searchParams }: PageProps) {
             </div>
             <h3>Let us handle the tracker.</h3>
             <p>
-              A cost-sharing pilot for volunteer organizations that want
+              A managed pilot for volunteer organizations that want
               compliance awareness and incident-wide coordination without
               administering cloud infrastructure.
             </p>
@@ -436,12 +440,11 @@ export default async function Home({ searchParams }: PageProps) {
             <h2>Short tutorials. Real workflows.</h2>
           </div>
           <p>
-            Start with the DroneScout Bridge field setup, then configure your
-            team drones and <CalTopoTeamsLink /> account. Next, connect a
-            controller video stream for squinter-assisted clue searching, then
-            continue with advanced Mutual Aid package preparation. Managed
-            organizations can also follow the site-administration guide for
-            activation, policy, roles, enrollment, usage oversight, and records.
+            Start by connecting your personal <CalTopoLink /> account, then set up the
+            DroneScout Bridge and controller video. Organizations can also use
+            Teams credentials and follow the Teams configuration video. Download and share USGS and
+            USFS maps ahead of time for offline use. Managed organizations can
+            also follow the site-administration guide.
           </p>
         </div>
         <div className="tutorial-grid">
@@ -483,13 +486,8 @@ export default async function Home({ searchParams }: PageProps) {
 
       <section className="test-cta section" id="testing">
         <div>
-          <p className="eyebrow">Field testers wanted</p>
-          <h2>Help make the next release dependable.</h2>
-          <p>
-            We’re looking for SAR drone teams, pilots, communications
-            specialists, and technically curious volunteers willing to test
-            real equipment and report what happens.
-          </p>
+          <h2>Download the app</h2>
+          <p>Choose your platform to get RID2Caltopo.</p>
         </div>
         <div className="tester-actions">
           <article className="store-option">
@@ -547,7 +545,7 @@ export default async function Home({ searchParams }: PageProps) {
           </article>
           <span>
             Questions about joining?{" "}
-            <a href={testerLink("Apple")}>Contact the test team</a>
+            <a href={testerLink("Apple")}>Contact the test team</a> or email {contactEmail}.
           </span>
         </div>
       </section>
@@ -597,7 +595,7 @@ export default async function Home({ searchParams }: PageProps) {
             <a href="https://rid2caltopo.discourse.group/">Community forum</a>
             <EmailContact email={contactEmail} />
             <Link href="/managed-pilot">Managed pilot</Link>
-            <a href="#testing">Become a tester</a>
+            <a href="#testing">Download the app</a>
           </div>
         </div>
         <div className="footer-bottom">

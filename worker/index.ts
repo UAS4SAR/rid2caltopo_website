@@ -35,7 +35,6 @@ const indexablePaths = [
   "/contact",
   "/tracker",
   "/tips",
-  "/early-access",
   "/managed-pilot",
 ];
 
@@ -120,7 +119,9 @@ async function handleRequestForm(request: Request, env: Env): Promise<Response> 
   const termsVersion = cleanField(form.get("termsVersion"), 32);
   const termsAcknowledged = cleanField(form.get("termsAcknowledged"), 8);
   const honeypot = cleanField(form.get("website"), 200);
-  const managed = requestType === "managed-pilot";
+  if (requestType === "early-access") {
+    return Response.redirect(new URL("/#testing", request.url), 303);
+  }
 
   if (honeypot) {
     return Response.redirect(
@@ -132,68 +133,40 @@ async function handleRequestForm(request: Request, env: Env): Promise<Response> 
   if (
     !name ||
     !validEmail(email) ||
-    (requestType !== "early-access" && !managed) ||
-    (managed && (
-      !organization ||
-      !designator ||
-      termsAcknowledged !== "yes" ||
-      termsVersion !== managedAccessTermsVersion
-    ))
+    requestType !== "managed-pilot" ||
+    !organization ||
+    !designator ||
+    termsAcknowledged !== "yes" ||
+    termsVersion !== managedAccessTermsVersion
   ) {
     return Response.redirect(new URL("/request-error", request.url), 303);
   }
 
-  const subject = managed
-    ? `Request managed pilot: ${designator}`
-    : `request early app release: ${email}`;
-  const body = [
-    "RID2Caltopo early app access request",
-    "",
-    `Name: ${name}`,
-    `Email: ${email}`,
-    `Phone: ${phone || "Not provided"}`,
-    `Organization: ${organization || "Not provided"}`,
-    `Organization designator: ${designator || "Not provided"}`,
-    "",
-    `Submitted: ${new Date().toISOString()}`,
-    `Site: ${new URL(request.url).host}`,
-  ].join("\n");
-
   try {
-    if (managed) {
-      const intakeBody = new URLSearchParams({
-        requester_name: name,
-        requester_email: email,
-        requester_phone: phone,
-        organization_name: organization,
-        designator,
-        source_host: new URL(request.url).host,
-        terms_acknowledged: "yes",
-        terms_version: termsVersion,
-        terms_text: managedAccessTermsText,
-      });
-      const intakeResponse = await fetch(
-        "https://r2c-tracker.com/managed-access-requests",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${env.MANAGED_REQUEST_INGEST_KEY}`,
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: intakeBody,
+    const intakeBody = new URLSearchParams({
+      requester_name: name,
+      requester_email: email,
+      requester_phone: phone,
+      organization_name: organization,
+      designator,
+      source_host: new URL(request.url).host,
+      terms_acknowledged: "yes",
+      terms_version: termsVersion,
+      terms_text: managedAccessTermsText,
+    });
+    const intakeResponse = await fetch(
+      "https://r2c-tracker.com/managed-access-requests",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${env.MANAGED_REQUEST_INGEST_KEY}`,
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-      );
-      if (!intakeResponse.ok) {
-        throw new Error(`Managed request storage failed (${intakeResponse.status})`);
-      }
-    } else {
-      await env.EMAIL.send({
-        from: "RID2Caltopo Requests <requests@rid2caltopo.com>",
-        to: notificationAddress,
-        replyTo: email,
-        subject,
-        text: body,
-      });
+        body: intakeBody,
+      },
+    );
+    if (!intakeResponse.ok) {
+      throw new Error(`Managed request storage failed (${intakeResponse.status})`);
     }
   } catch (error) {
     console.error("Request delivery failed", error);
@@ -242,7 +215,7 @@ async function handleContactForm(request: Request, env: Env): Promise<Response> 
 
   try {
     await env.EMAIL.send({
-      from: "RID2Caltopo Website <requests@rid2caltopo.com>",
+      from: "requests@rid2caltopo.com",
       to: notificationAddress,
       replyTo: email,
       subject: `Website message: ${subject}`,

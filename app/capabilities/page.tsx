@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const fieldCapabilities = [
   "Reliable ASTM F3411 Remote ID reception through a DroneScout Bridge",
   "Android or iOS devices",
-  "Direct track publishing to CalTopo Teams incident maps",
+  "Direct track publishing to CalTopo maps you can edit",
   "Local controller-video streaming for squinter review",
   "Potential-clue capture and on-device anomaly assistance",
 ];
@@ -60,15 +60,15 @@ export default function CapabilitiesPage() {
           <p>
             A DroneScout Bridge is required for reliable Remote ID
             reception. The RID2Caltopo app records what it receives and can
-            publish directly to the team&apos;s <CalTopoLink /> incident map.
+            publish to <CalTopoLink /> maps you can edit.
           </p>
           <ul className="info-list">
             {fieldCapabilities.map((capability) => (
               <li key={capability}><CalTopoText text={capability} /></li>
             ))}
           </ul>
-          <Link className="button button-secondary" href="/early-access">
-            Request early access to the app <span aria-hidden="true">→</span>
+          <Link className="button button-secondary" href="/#testing">
+            Download the app <span aria-hidden="true">→</span>
           </Link>
         </article>
 

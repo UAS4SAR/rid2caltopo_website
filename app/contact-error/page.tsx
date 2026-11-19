@@ -11,10 +11,7 @@ export default function ContactErrorPage() {
     <main className="response-shell error-response-shell">
       <p className="eyebrow">Delivery problem</p>
       <h1>Your message wasn&apos;t sent.</h1>
-      <p>
-        Please return to the contact form, check each required field, and try
-        again.
-      </p>
+      <p>You can email your message directly to info@uas4sar.com.</p>
       <Link className="button button-secondary" href="/contact">
         Return to the contact form
       </Link>
