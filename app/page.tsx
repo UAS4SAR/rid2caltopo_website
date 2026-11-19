@@ -18,7 +18,7 @@ const contactEmail = "info@uas4sar.com";
 const playStoreUrl =
   "https://play.google.com/store/apps/details?id=org.ncssar.rid2caltopo";
 const testFlightUrl = "https://testflight.apple.com/join/QhyVpGDh";
-const testFlightAppUrl = "https://apps.apple.com/app/testflight/id899247664";
+const appStoreUrl = "https://apps.apple.com/us/app/rid2caltopo/id6792518823";
 
 const testerLink = (platform: "Android" | "Apple") =>
   `/contact?topic=${platform.toLowerCase()}-testing`;
@@ -213,8 +213,7 @@ export default async function Home({ searchParams }: PageProps) {
           </div>
           <p className="availability-note">
             <span aria-hidden="true" />
-            Android is available on Google Play. The iPhone and iPad beta is
-            open to everyone through Apple&apos;s TestFlight app.
+            Get RID2Caltopo on Google Play for Android or the App Store for iPhone and iPad.
           </p>
         </div>
 
@@ -516,31 +515,27 @@ export default async function Home({ searchParams }: PageProps) {
           </article>
           <article className="store-option">
             <div>
-              <p className="store-platform">iPhone &amp; iPad • TestFlight beta</p>
+              <p className="store-platform">iPhone &amp; iPad • App Store</p>
               <a
                 className="button button-light"
-                href={testFlightUrl}
+                href={appStoreUrl}
                 target="_blank"
                 rel="noreferrer"
               >
-                Get the iOS beta on TestFlight <ArrowIcon />
+                Download on the App Store <ArrowIcon />
               </a>
               <p className="store-note">
-                Install Apple&apos;s free{" "}
-                <a href={testFlightAppUrl} target="_blank" rel="noreferrer">
-                  TestFlight app
-                </a>{" "}
-                from the App Store first, then open this link or scan the code
-                on your iPhone or iPad. Requires iOS 17 or later.
+                Requires iOS or iPadOS 17 or later. To test upcoming releases,{" "}
+                <a href={testFlightUrl} target="_blank" rel="noreferrer">join the TestFlight beta</a>.
               </p>
             </div>
             <img
               className="store-qr"
-              src="/qr-testflight.svg"
+              src="/qr-app-store.svg"
               width="132"
               height="132"
               loading="lazy"
-              alt="QR code that opens the RID2Caltopo TestFlight beta invitation"
+              alt="QR code that opens RID2Caltopo on the App Store"
             />
           </article>
           <span>

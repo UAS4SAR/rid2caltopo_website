@@ -119,10 +119,8 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
     html,
     /href="https:\/\/testflight\.apple\.com\/join\/QhyVpGDh"[^>]*target="_blank"/,
   );
-  assert.match(html, /Get the iOS beta on TestFlight/);
-  assert.match(html, /href="https:\/\/apps\.apple\.com\/app\/testflight\/id899247664"/);
-  assert.match(html, /free(?:<!-- -->)? ?(?:<!-- -->)?<a[^>]*>TestFlight app<\/a>/);
-  assert.match(html, /src="\/qr-testflight\.svg"/);
+  assert.match(html, /href="https:\/\/apps\.apple\.com\/us\/app\/rid2caltopo\/id6792518823"/);
+  assert.match(html, /src="\/qr-app-store\.svg"/);
   assert.match(html, /src="\/qr-google-play\.svg"/);
   assert.doesNotMatch(html, /Apple test invitations are provided by email/);
   assert.doesNotMatch(html, /Request Apple test access/);
@@ -418,12 +416,12 @@ test("keeps public copy drone-specific and ships correctly sized artwork", async
   assert.equal(socialCard.readUInt32BE(16), 1792);
   assert.equal(socialCard.readUInt32BE(20), 907);
 
-  const [testFlightQr, playQr] = await Promise.all([
-    readFile(new URL("../public/qr-testflight.svg", import.meta.url), "utf8"),
+  const [appStoreQr, playQr] = await Promise.all([
+    readFile(new URL("../public/qr-app-store.svg", import.meta.url), "utf8"),
     readFile(new URL("../public/qr-google-play.svg", import.meta.url), "utf8"),
   ]);
-  assert.match(testFlightQr, /<svg viewBox="0 0 \d+ \d+"/);
-  assert.match(testFlightQr, /QR code: https:\/\/testflight\.apple\.com\/join\/QhyVpGDh</);
+  assert.match(appStoreQr, /<svg viewBox="0 0 \d+ \d+"/);
+  assert.match(appStoreQr, /QR code: https:\/\/apps\.apple\.com\/us\/app\/rid2caltopo\/id6792518823</);
   assert.match(playQr, /<svg viewBox="0 0 \d+ \d+"/);
   assert.match(
     playQr,
