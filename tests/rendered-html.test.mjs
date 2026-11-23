@@ -84,7 +84,15 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   assert.match(html, /configure-team-drones-caltopo-teams\.mp4/);
   assert.doesNotMatch(html, /prepare-mutual-aid-package\.mp4/);
   assert.match(html, /Connect your [\s\S]*?CalTopo[\s\S]*? account/);
+  assert.match(html, /src="\/connect-personal-caltopo-account\.mp4"/);
+  assert.match(html, /kind="captions"[^>]*src="\/connect-personal-caltopo-account\.vtt"/);
+  assert.match(html, /Read the tutorial/);
+  assert.match(html, /check the confirmation box and tap Sync Account/);
   assert.match(html, /Download and share maps before the mission/);
+  assert.match(html, /src="\/download-share-offline-maps\.mp4"/);
+  assert.match(html, /kind="captions"[^>]*src="\/download-share-offline-maps\.vtt"/);
+  assert.match(html, /packages include available cached USGS and USFS basemaps/);
+  assert.match(html, /Map Management &gt; Export Map Package/);
   assert.doesNotMatch(html, /cost-sharing/i);
   assert.match(html, /Stream drone video to RID2Caltopo/);
   assert.match(html, /Administer an organization site/);

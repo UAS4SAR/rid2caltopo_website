@@ -2134,3 +2134,19 @@ footer {
 @media (max-width: 640px) {
   .receiver-options-grid { grid-template-columns: 1fr; }
 }
+
+.tutorial-transcript {
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 16px 0;
+}
+
+.tutorial-transcript summary {
+  color: var(--ink);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.tutorial-transcript li {
+  margin: 0.5em 0;
+}

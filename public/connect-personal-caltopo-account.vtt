@@ -1,0 +1,58 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.518
+Connect your personal CalTopo account to choose maps you can access in RID2Caltopo.
+
+00:00:05.518 --> 00:00:09.108
+This walkthrough applies to Android and Apple devices.
+
+00:00:09.108 --> 00:00:11.900
+Before you begin, connect to the internet.
+
+00:00:12.200 --> 00:00:14.877
+Open the main menu and choose Settings.
+
+00:00:14.877 --> 00:00:19.338
+Find Personal Login Support, select Credentials, and tap Sign in.
+
+00:00:19.338 --> 00:00:22.564
+New personal logins use Credentials by default.
+
+00:00:22.564 --> 00:00:27.300
+If you previously used Session Cookies, choose Credentials to switch.
+
+00:00:27.600 --> 00:00:30.762
+Read the CalTopo sign-in prompt and tap Continue.
+
+00:00:30.762 --> 00:00:36.570
+In the authentication window, sign in to the CalTopo account that has access to your maps.
+
+00:00:36.570 --> 00:00:40.700
+Use the same sign-in provider you normally use for that account.
+
+00:00:41.000 --> 00:00:46.190
+On the CalTopo activation page, check the confirmation box and tap Sync Account.
+
+00:00:46.190 --> 00:00:50.278
+Wait for RID2Caltopo to return and finish loading your account.
+
+00:00:50.278 --> 00:00:54.300
+The sign-in can be cancelled if you do not want to approve it.
+
+00:00:54.600 --> 00:01:00.615
+Open Select Map, choose your Personal credentials if needed, then browse to a map and select it.
+
+00:01:00.615 --> 00:01:03.874
+Connecting the account does not itself select a map.
+
+00:01:03.874 --> 00:01:09.200
+To publish, choose a map you can edit and enable live CalTopo publishing in Settings.
+
+00:01:09.500 --> 00:01:16.758
+To remove the personal credential from this device, open Settings, find Personal Login Support, and choose Log out.
+
+00:01:16.758 --> 00:01:21.934
+The credential may still appear in your CalTopo account until you remove it there.
+
+00:01:21.934 --> 00:01:24.900
+Organization Teams credentials remain separate.

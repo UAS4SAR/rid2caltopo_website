@@ -66,8 +66,8 @@ const tutorials = [
     duration: "Getting started",
     title: "Connect your CalTopo account",
     copy: "Sign in with your personal CalTopo account to work with maps you can access. Teams credentials remain an option for organizations.",
-    videoSrc: null,
-    posterSrc: null,
+    videoSrc: "/connect-personal-caltopo-account.mp4",
+    posterSrc: "/connect-personal-caltopo-account-poster.jpg",
   },
   {
     duration: "3 min • Field setup",
@@ -93,9 +93,9 @@ const tutorials = [
   {
     duration: "Offline maps",
     title: "Download and share maps before the mission",
-    copy: "Prepare USGS and USFS maps for offline use and share map packages with other devices. Packages contain map data, not CalTopo credentials.",
-    videoSrc: null,
-    posterSrc: null,
+    copy: "Download USGS and USFS basemaps for offline use, then share available cached maps, terrain, and mapping layers in a map package. Sharing USGS and USFS basemaps requires version 2.6.1 or later.",
+    videoSrc: "/download-share-offline-maps.mp4",
+    posterSrc: "/download-share-offline-maps-poster.jpg",
   },
   {
     duration: "5 min • Site administration",
@@ -459,6 +459,12 @@ export default async function Home({ searchParams }: PageProps) {
                   aria-label={`${tutorial.title} video`}
                 >
                   <source src={tutorial.videoSrc} type="video/mp4" />
+                  {tutorial.videoSrc === "/connect-personal-caltopo-account.mp4" && (
+                    <track kind="captions" src="/connect-personal-caltopo-account.vtt" srcLang="en" label="English" default />
+                  )}
+                  {tutorial.videoSrc === "/download-share-offline-maps.mp4" && (
+                    <track kind="captions" src="/download-share-offline-maps.vtt" srcLang="en" label="English" default />
+                  )}
                   Your browser does not support embedded video. You can download
                   the tutorial from the video controls instead.
                 </video>
@@ -471,6 +477,33 @@ export default async function Home({ searchParams }: PageProps) {
               <p className="step">{tutorial.duration}</p>
               <h3><CalTopoText text={tutorial.title} /></h3>
               <p><CalTopoText text={tutorial.copy} /></p>
+              {tutorial.videoSrc === "/connect-personal-caltopo-account.mp4" && (
+                <details className="tutorial-transcript">
+                  <summary>Read the tutorial</summary>
+                  <ol>
+                    <li>Connect to the internet. In RID2Caltopo, open the main menu and choose Settings.</li>
+                    <li>Under Personal Login Support, select Credentials and tap Sign in. If you previously used Session Cookies, choose Credentials to switch.</li>
+                    <li>Read the sign-in prompt and tap Continue. Sign in to the <CalTopoLink /> account that has access to your maps, using your usual sign-in provider.</li>
+                    <li>On the activation page, check the confirmation box and tap Sync Account. Wait for the app to return and load your account.</li>
+                    <li>Open Select Map, choose your Personal credentials if needed, and select a map. To publish, choose a map you can edit and enable live <CalTopoLink /> publishing in Settings.</li>
+                  </ol>
+                  <p>To remove the personal credential from this device, choose Log out under Personal Login Support in Settings. It may still appear in your <CalTopoLink /> account until you remove it there. Organization Teams credentials remain separate.</p>
+                </details>
+              )}
+              {tutorial.videoSrc === "/download-share-offline-maps.mp4" && (
+                <details className="tutorial-transcript">
+                  <summary>Read the tutorial</summary>
+                  <ol>
+                    <li>While connected to the internet, open the operational map and frame the area you need. Open the map settings gear and choose Download Map.</li>
+                    <li>Choose Current Visible Map or an available boundary. Select USGS Scanned Topo or USFS Topo and the zoom levels you need. You can also select Contours, DEM elevation data, and AOL obstacle tiles.</li>
+                    <li>Review the estimate and available storage. Reduce the area or detail, or adjust the map cache limit in Manage Storage if needed. Tap Start and wait for completion; retry any failures.</li>
+                    <li>To share eligible cached data, frame the area on the map. Open map settings, then Map Management &gt; Export Map Package. Select the data and tap Prepare Map Package. Export uses the current visible region and does not download additional data.</li>
+                    <li>By default, packages include available cached USGS and USFS basemaps, contours, DEM, AOL, and available R2C mapping layers. Review the selected contents before preparing the package. OSM and Esri basemaps and credentials are not included.</li>
+                    <li>On Android, connect both devices to the same Wi-Fi or hotspot, keep the package QR panel open, and scan it from Import Config on the receiving device. On Apple, use Share Map Package to send the ZIP; the receiver chooses the file in Import Config. Wait for the import to complete.</li>
+                    <li>Before departure, select the downloaded map layer and verify the area and required detail offline. On each receiving device, confirm the imported map and terrain data are present.</li>
+                  </ol>
+                </details>
+              )}
               {tutorial.videoSrc ? (
                 <a className="watch-now" href={tutorial.videoSrc}>
                   Watch or download video <ArrowIcon />
