@@ -656,3 +656,16 @@ test("links to the UAS4SAR GitHub organization for source repositories", async (
   const pkg = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
   assert.equal(pkg.name, "rid2caltopo-website");
 });
+
+test("serves a styled 404 page inside the shared site shell", async () => {
+  const response = await render("rid2caltopo.com", "/this-page-does-not-exist");
+  assert.equal(response.status, 404);
+  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
+  const html = await response.text();
+  assert.match(html, /<header class="site-header"/);
+  assert.match(html, /<main[^>]*id="main"[^>]*class="response-shell not-found-shell"/);
+  assert.match(html, /That page isn(?:'|&#x27;)t here\./);
+  assert.match(html, /href="\/#testing"[^>]*>Download the app/);
+  // vinext adds noindex to its 404 responses; keep that guarantee.
+  assert.match(html, /<meta content="noindex" name="robots"\/>/);
+});

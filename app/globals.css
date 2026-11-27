@@ -1599,6 +1599,16 @@ footer {
   width: fit-content;
 }
 
+.response-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 12px;
+}
+
+.not-found-shell {
+  min-height: calc(100vh - 78px);
+}
+
 @media (max-width: 800px) {
   .request-layout {
     grid-template-columns: 1fr;
