@@ -110,7 +110,9 @@ function BrandMark() {
   return (
     <img
       className="brand-mark"
-      src="/app-icon-orange.png"
+      src="/icon-64.png"
+      width={28}
+      height={28}
       alt=""
       aria-hidden="true"
     />
@@ -223,8 +225,14 @@ export default async function Home({ searchParams }: PageProps) {
         <div className="hero-visual">
           <div className="hero-art-frame">
             <img
-              src="/og-assignment-coverage.png"
-              alt="RID2CalTopo illustration showing drone assignments and search coverage in real time on a topographic field map"
+              src="/app-live-map-800.webp"
+              srcSet="/app-live-map-480.webp 480w, /app-live-map-800.webp 800w, /app-live-map-1200.webp 1200w"
+              sizes="(max-width: 560px) 80vw, 420px"
+              width={800}
+              height={1067}
+              fetchPriority="high"
+              decoding="async"
+              alt="RID2Caltopo on an iPad: the Remote ID Tracks screen showing two active demo drones, DEMOALPHA01 and DEMOBRAVO02, with their recent track lines on a map"
             />
           </div>
         </div>
@@ -254,6 +262,12 @@ export default async function Home({ searchParams }: PageProps) {
           <article className="bridge-card">
             <img
               src="/dronescout-ds100-anker-field.jpg"
+              srcSet="/dronescout-ds100-anker-field-480.jpg 480w, /dronescout-ds100-anker-field-800.jpg 800w, /dronescout-ds100-anker-field.jpg 1400w"
+              sizes="(max-width: 560px) 100vw, (max-width: 1100px) 50vw, 400px"
+              width={1400}
+              height={919}
+              loading="lazy"
+              decoding="async"
               alt="BlueMark DroneScout DS100 Remote ID bridge connected to an Anker USB power bank"
             />
             <div>
@@ -457,7 +471,7 @@ export default async function Home({ searchParams }: PageProps) {
                   className="tutorial-video"
                   controls
                   playsInline
-                  preload="metadata"
+                  preload="none"
                   poster={tutorial.posterSrc ?? undefined}
                   aria-label={`${tutorial.title} video`}
                 >
