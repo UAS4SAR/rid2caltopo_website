@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import test from "node:test";
 
 async function render(host = "rid2caltopo.com", path = "/") {
@@ -181,15 +181,24 @@ test("301-redirects rid2caltopo.org and every www variant to the same path on ri
   assert.equal((await render("rid2caltopo.com", "/tips")).status, 200);
 });
 
-test("serves the same default homepage on every host, with rid2caltopo.com as the only canonical", async () => {
+test("serves one unified homepage on every host, with rid2caltopo.com as the only canonical", async () => {
   for (const host of ["rid2caltopo.com", "localhost"]) {
     const html = await (await render(host)).text();
-    assert.match(html, /<main[^>]*class="site-shell mode-managed"/, host);
+    assert.match(html, /<main[^>]*class="site-shell"/, host);
     assert.match(html, /rel="canonical" href="https:\/\/rid2caltopo\.com\/"/, host);
     assert.doesNotMatch(html, /rid2caltopo\.org/, host);
   }
-  const free = await (await render("rid2caltopo.com", "/?view=community")).text();
-  assert.match(free, /mode-community/);
+  // The old edition toggle and its query parameter are gone: ?view= is ignored.
+  const mainOf = (html) => html.match(/<main[\s\S]*?<\/main>/)?.[0] ?? "";
+  const plain = await (await render("rid2caltopo.com", "/")).text();
+  for (const path of ["/?view=community", "/?view=managed"]) {
+    assert.equal(mainOf(await (await render("rid2caltopo.com", path)).text()), mainOf(plain), path);
+  }
+  assert.doesNotMatch(plain, /edition-switch|Choose homepage view|mode-community|mode-managed/);
+  assert.doesNotMatch(plain, /Free app<\/a>|Free app view/);
+  assert.doesNotMatch(plain, /Managed coordination for SAR organizations|Free • Open source • Built for SAR/);
+  assert.doesNotMatch(plain, /RECOMMENDED HERE|class="featured/);
+  assert.match(plain, /href="\/managed-pilot"/);
 });
 
 test("uses the organization public mailbox across every web contact surface", async () => {
@@ -508,25 +517,47 @@ test("renders the same site header with Download and a mobile menu on every page
   }
 });
 
-test("leads with Download and linked store badges in the hero on both editions", async () => {
-  for (const path of ["/", "/?view=community", "/?view=managed"]) {
-    const response = await render("rid2caltopo.com", path);
-    const html = await response.text();
-    const hero = html.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0] ?? "";
-    assert.match(
-      hero,
-      /<a class="button button-primary" href="#download">Download the app/,
-      path,
-    );
-    assert.match(
-      hero,
-      /<p class="availability-note">[\s\S]*href="https:\/\/play\.google\.com\/store\/apps\/details\?id=org\.ncssar\.rid2caltopo"[\s\S]*href="https:\/\/apps\.apple\.com\/us\/app\/rid2caltopo\/id6792518823"/,
-      path,
-    );
-    assert.match(hero, />Free app<\/a>/, path);
-    assert.match(hero, />Managed pilot<\/a>/, path);
-    assert.doesNotMatch(hero, />Community<\/a>/, path);
+test("hero: headline and paragraph kept, one source button, 'Download:' store chips with icons", async () => {
+  const html = await (await render("rid2caltopo.com")).text();
+  const hero = html.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.match(hero, /<h1>Track <em>drone assignments and search coverage<\/em> in real time\.<\/h1>/);
+  assert.match(hero, /RID2Caltopo turns broadcast Remote ID into shared field awareness/);
+  assert.doesNotMatch(hero, /Download the app/);
+  assert.doesNotMatch(hero, /href="#download"/);
+  assert.match(hero, /Explore the source/);
+  assert.match(hero, /<span class="availability-label">Download:<\/span>/);
+  assert.doesNotMatch(hero, /Free on/i);
+  const chips = [...hero.matchAll(/<a class="store-badge" href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
+  assert.equal(chips.length, 2);
+  assert.equal(chips[0][1], "https://play.google.com/store/apps/details?id=org.ncssar.rid2caltopo");
+  assert.equal(chips[1][1], "https://apps.apple.com/us/app/rid2caltopo/id6792518823");
+  for (const [, , inner] of chips) {
+    assert.match(inner, /<svg class="store-icon"[^>]*aria-hidden="true"/);
+    assert.match(inner, /class="sr-only">Download RID2Caltopo on/);
   }
+  assert.match(chips[0][2], /Google Play/);
+  assert.match(chips[1][2], /App Store/);
+  // The shared header still carries the one Download button.
+  assert.match(html, /class="button button-primary header-download"[^>]*href="\/#download"|href="\/#download"[^>]*class="button button-primary header-download"/);
+});
+
+test("hero screenshot: landscape split view in an accessible, focusable scroll region", async () => {
+  const html = await (await render("rid2caltopo.com")).text();
+  const hero = html.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.match(hero, /<div class="hero-shot-scroller" role="region" aria-label="[^"]+" tabindex="0"/i);
+  assert.match(hero, /src="\/hero-split-view-1280\.webp"/);
+  assert.match(hero, /srcSet="[^"]*hero-split-view-800\.webp 800w[^"]*hero-split-view-2560\.webp 2560w"/i);
+  assert.match(hero, /<img[^>]*width="2960"[^>]*height="1848"/);
+  assert.match(hero, /alt="RID2Caltopo split view on a tablet\./);
+  assert.match(hero, /Swipe to see the map/);
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.hero-shot-scroller \{[^}]*overflow-x: auto/);
+  assert.match(css, /scroll-snap-type: x/);
+  assert.match(css, /\.hero-shot-track img \{[^}]*height: 400px/);
+  const { size } = await stat(new URL("../public/hero-split-view-1280.webp", import.meta.url));
+  assert.ok(size > 10_000);
+  const files = await readdir(new URL("../public/", import.meta.url));
+  assert.ok(!files.some((f) => f.startsWith("app-live-map") || f === "rid2caltopo-live-map.png"), "old hero art removed");
 });
 
 test("ships a small 1200x630 social card, favicon set and responsive hero artwork", async () => {
@@ -562,9 +593,8 @@ test("ships a small 1200x630 social card, favicon set and responsive hero artwor
   assert.match(html, /property="og:image:height" content="630"/);
   assert.match(html, /name="twitter:image" content="https:\/\/rid2caltopo\.com\/og-image\.jpg"/);
   const hero = html.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0] ?? "";
-  assert.match(hero, /src="\/app-live-map-800\.webp"/);
-  assert.match(hero, /srcSet="[^"]*app-live-map-480\.webp 480w[^"]*app-live-map-1200\.webp 1200w"/i);
-  assert.match(hero, /<img[^>]*width="800"[^>]*height="1067"/);
+  assert.match(hero, /src="\/hero-split-view-1280\.webp"/);
+  assert.match(hero, /<img[^>]*fetchPriority="high"/);
   assert.doesNotMatch(html, /og-assignment-coverage/);
   // Below-the-fold photo is lazy and responsive; tutorial videos do not preload.
   assert.match(html, /<img[^>]*dronescout-ds100-anker-field-480\.jpg 480w[^>]*loading="lazy"/i);

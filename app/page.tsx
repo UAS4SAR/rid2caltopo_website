@@ -8,12 +8,8 @@ import { ReceiverOptions } from "./components/ReceiverOptions";
 import { EmailContact } from "./components/EmailContact";
 import { homeTitle, pageMetadata } from "./seo";
 import { tutorialTranscripts } from "./tutorialTranscripts";
-
-type SiteMode = "community" | "managed";
-
-type PageProps = {
-  searchParams?: Promise<{ view?: string }>;
-};
+import { HeroShot } from "./components/HeroShot";
+import { AppleIcon, GooglePlayIcon } from "./components/StoreIcons";
 
 const contactEmail = "info@uas4sar.com";
 const playStoreUrl =
@@ -127,46 +123,11 @@ function ArrowIcon() {
   return <span aria-hidden="true">↗</span>;
 }
 
-export default async function Home({ searchParams }: PageProps) {
-  const params = (await searchParams) ?? {};
-  const forcedMode =
-    params.view === "managed"
-      ? "managed"
-      : params.view === "community"
-        ? "community"
-        : null;
-  const mode: SiteMode = forcedMode ?? "managed";
-  const isManaged = mode === "managed";
-
+export default function Home() {
   return (
-    <main id="main" tabIndex={-1} className={`site-shell mode-${mode}`}>
+    <main id="main" tabIndex={-1} className="site-shell">
       <section className="hero" id="top">
         <div className="hero-copy">
-          <div className="edition-switch" role="group" aria-label="Choose homepage view">
-            <span className="edition-switch-label" aria-hidden="true">
-              View
-            </span>
-            <Link
-              className={!isManaged ? "active" : ""}
-              href="/?view=community"
-              aria-current={!isManaged ? "page" : undefined}
-            >
-              Free app
-            </Link>
-            <Link
-              className={isManaged ? "active" : ""}
-              href="/?view=managed"
-              aria-current={isManaged ? "page" : undefined}
-            >
-              Managed pilot
-            </Link>
-          </div>
-
-          <p className="eyebrow">
-            {isManaged
-              ? "Managed coordination for SAR organizations"
-              : "Free • Open source • Built for SAR"}
-          </p>
           <h1>
             Track <em>drone assignments and search coverage</em> in real time.
           </h1>
@@ -176,33 +137,27 @@ export default async function Home({ searchParams }: PageProps) {
             operations from Android, iPhone, and iPad.
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#download">
-              Download the app <ArrowIcon />
+            <a
+              className="button button-secondary"
+              href="https://github.com/UAS4SAR/RID2Caltopo"
+            >
+              Explore the source <ArrowIcon />
             </a>
-            {isManaged ? (
-              <a className="button button-secondary" href="/capabilities">
-                See what&apos;s available
-              </a>
-            ) : (
-              <a
-                className="button button-secondary"
-                href="https://github.com/UAS4SAR/RID2Caltopo"
-              >
-                Explore the source <ArrowIcon />
-              </a>
-            )}
           </div>
           <p className="availability-note">
-            <span className="availability-dot" aria-hidden="true" />
-            <span>Free on</span>
+            <span className="availability-label">Download:</span>
             <a
               className="store-badge"
               href={playStoreUrl}
               target="_blank"
               rel="noreferrer"
             >
-              <small>Android</small>
-              Google Play
+              <GooglePlayIcon />
+              <span className="store-badge-text">
+                <span className="sr-only">Download RID2Caltopo on </span>
+                <small>Android</small>
+                Google Play
+              </span>
             </a>
             <a
               className="store-badge"
@@ -210,26 +165,17 @@ export default async function Home({ searchParams }: PageProps) {
               target="_blank"
               rel="noreferrer"
             >
-              <small>iPhone &amp; iPad</small>
-              App Store
+              <AppleIcon />
+              <span className="store-badge-text">
+                <span className="sr-only">Download RID2Caltopo on the </span>
+                <small>iPhone &amp; iPad</small>
+                App Store
+              </span>
             </a>
           </p>
         </div>
 
-        <div className="hero-visual">
-          <div className="hero-art-frame">
-            <img
-              src="/app-live-map-800.webp"
-              srcSet="/app-live-map-480.webp 480w, /app-live-map-800.webp 800w, /app-live-map-1200.webp 1200w"
-              sizes="(max-width: 560px) 80vw, 420px"
-              width={800}
-              height={1067}
-              fetchPriority="high"
-              decoding="async"
-              alt="RID2Caltopo on an iPad: the Remote ID Tracks screen showing two active demo drones, DEMOALPHA01 and DEMOBRAVO02, with their recent track lines on a map"
-            />
-          </div>
-        </div>
+        <HeroShot />
       </section>
 
       <section className="trust-strip" aria-label="Project principles">
@@ -387,7 +333,7 @@ export default async function Home({ searchParams }: PageProps) {
           </p>
         </div>
         <div className="choice-grid" id="plans">
-          <article className={!isManaged ? "featured" : ""}>
+          <article>
             <div className="choice-top">
               <span className="choice-label">COMMUNITY</span>
               <span className="price">$0 <small>forever</small></span>
@@ -411,7 +357,7 @@ export default async function Home({ searchParams }: PageProps) {
             </a>
           </article>
 
-          <article className={isManaged ? "featured managed-plan" : "managed-plan"}>
+          <article className="managed-plan">
             <div className="choice-top">
               <span className="choice-label">MANAGED PILOT</span>
               <span className="price">Usage allowance included <small>platform-funded during the pilot</small></span>
@@ -632,7 +578,6 @@ export default async function Home({ searchParams }: PageProps) {
             <a href="https://github.com/UAS4SAR/RID2Caltopo">App source</a>
             <a href="https://github.com/UAS4SAR/r2c-tracker">Tracker source</a>
             <Link href="/tips">Tips &amp; tricks</Link>
-            <Link href="/?view=community">Free app view</Link>
           </div>
           <div>
             <strong>CONNECT</strong>
