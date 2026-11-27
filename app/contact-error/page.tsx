@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ContactErrorPage() {
   return (
-    <main className="response-shell error-response-shell">
+    <main id="main" tabIndex={-1} className="response-shell error-response-shell">
       <p className="eyebrow">Delivery problem</p>
       <h1>Your message wasn&apos;t sent.</h1>
       <p>You can email your message directly to info@uas4sar.com.</p>

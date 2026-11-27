@@ -27,7 +27,7 @@ const trackerCapabilities = [
 
 export default function CapabilitiesPage() {
   return (
-    <main className="info-shell">
+    <main id="main" tabIndex={-1} className="info-shell">
       <section className="info-hero">
         <p className="eyebrow">What&apos;s available</p>
         <h1>Field awareness first.<br /><em>Coordination when you need it.</em></h1>

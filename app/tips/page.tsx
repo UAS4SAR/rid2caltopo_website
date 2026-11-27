@@ -61,7 +61,7 @@ const tips = [
 
 export default function TipsPage() {
   return (
-    <main className="info-shell tips-shell">
+    <main id="main" tabIndex={-1} className="info-shell tips-shell">
       <section className="info-hero tips-hero">
         <p className="eyebrow">Tips &amp; tricks</p>
         <h1>Small controls.<br /><em>Faster field work.</em></h1>

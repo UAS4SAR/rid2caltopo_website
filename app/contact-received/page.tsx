@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ContactReceivedPage() {
   return (
-    <main className="response-shell">
+    <main id="main" tabIndex={-1} className="response-shell">
       <p className="eyebrow">Message received</p>
       <h1>Thank you.</h1>
       <p>

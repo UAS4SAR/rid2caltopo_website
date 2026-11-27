@@ -143,7 +143,7 @@ export default async function Home({ searchParams }: PageProps) {
   const isManaged = mode === "managed";
 
   return (
-    <main className={`site-shell mode-${mode}`}>
+    <main id="main" tabIndex={-1} className={`site-shell mode-${mode}`}>
       <section className="hero" id="top">
         <div className="hero-copy">
           <div className="edition-switch" role="group" aria-label="Choose homepage view">
@@ -204,7 +204,6 @@ export default async function Home({ searchParams }: PageProps) {
               href={playStoreUrl}
               target="_blank"
               rel="noreferrer"
-              aria-label="Get RID2Caltopo on Google Play for Android"
             >
               <small>Android</small>
               Google Play
@@ -214,7 +213,6 @@ export default async function Home({ searchParams }: PageProps) {
               href={appStoreUrl}
               target="_blank"
               rel="noreferrer"
-              aria-label="Download RID2Caltopo on the App Store for iPhone and iPad"
             >
               <small>iPhone &amp; iPad</small>
               App Store

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function TrackerPage() {
   return (
-    <main className="info-shell tracker-info-shell">
+    <main id="main" tabIndex={-1} className="info-shell tracker-info-shell">
       <section className="info-hero tracker-info-hero">
         <p className="eyebrow">The coordination service</p>
         <h1>One incident.<br /><em>Multiple field teams.</em></h1>
