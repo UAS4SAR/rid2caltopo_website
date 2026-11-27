@@ -83,7 +83,7 @@ export function SiteHeader() {
       </nav>
 
       <div className="site-header-actions">
-        <Link className="button button-primary header-download" href="/#testing">
+        <Link className="button button-primary header-download" href="/#download">
           Download
         </Link>
         <button

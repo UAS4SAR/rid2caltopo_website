@@ -20,7 +20,7 @@ export default async function RequestReceivedPage({ searchParams }: PageProps) {
       <p>
         {managed
           ? "Your managed-pilot request has been sent. A copy of the request and exact acknowledgment was sent to the email address you provided."
-          : "Your early-access request has been sent. We’ll use the email address you provided when arranging test access."}
+          : "Your request has been sent. We’ll reply to the email address you provided."}
       </p>
       <a className="button button-primary" href={managed ? "/tracker" : "/capabilities"}>
         Return to {managed ? "r2c-tracker" : "capabilities"}

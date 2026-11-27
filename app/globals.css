@@ -1022,7 +1022,7 @@ h1 em {
   text-transform: uppercase;
 }
 
-.test-cta {
+.download-cta {
   align-items: center;
   background:
     linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
@@ -1034,24 +1034,24 @@ h1 em {
   grid-template-columns: 1.15fr 0.85fr;
 }
 
-.test-cta .eyebrow {
+.download-cta .eyebrow {
   color: #ffffff;
 }
 
-.test-cta h2 {
+.download-cta h2 {
   font-size: clamp(42px, 5vw, 72px);
   letter-spacing: -0.05em;
   line-height: 0.98;
   margin-bottom: 24px;
 }
 
-.test-cta p {
+.download-cta p {
   font-size: 18px;
   line-height: 1.55;
   max-width: 660px;
 }
 
-.tester-actions {
+.download-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -1085,7 +1085,7 @@ h1 em {
   width: 100%;
 }
 
-.test-cta .store-platform {
+.download-cta .store-platform {
   color: #ffffff;
   font-family: var(--font-plex-mono), monospace;
   font-size: 12px;
@@ -1095,14 +1095,14 @@ h1 em {
   text-transform: uppercase;
 }
 
-.test-cta .store-note {
+.download-cta .store-note {
   font-size: 14px;
   line-height: 1.5;
   margin: 10px 0 0;
 }
 
 .store-note a,
-.tester-actions > span a {
+.download-actions > span a {
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -1126,7 +1126,7 @@ h1 em {
   }
 }
 
-.tester-actions > span {
+.download-actions > span {
   color: #ffffff;
   font-family: var(--font-plex-mono), monospace;
   font-size: 12px;
@@ -1340,7 +1340,7 @@ footer {
   .capability-split,
   .choice-grid,
   .tutorial-grid,
-  .test-cta {
+  .download-cta {
     grid-template-columns: 1fr;
   }
 
@@ -2318,7 +2318,7 @@ footer .brand-two {
 }
 
 /* The orange download band uses a darker orange so white text passes AA. */
-.test-cta {
+.download-cta {
   --accent-text: #ffffff;
   --focus-ring: #ffffff;
 }

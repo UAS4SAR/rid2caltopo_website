@@ -13,7 +13,7 @@ export default function NotFound() {
         <Link className="button button-primary" href="/">
           Back to the homepage
         </Link>
-        <Link className="button button-secondary" href="/#testing">
+        <Link className="button button-secondary" href="/#download">
           Download the app
         </Link>
         <Link className="button button-secondary" href="/contact">

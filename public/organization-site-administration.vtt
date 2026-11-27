@@ -1,0 +1,161 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.900
+This field guide introduces an organization's r2c-tracker administration page and the setup process for a new site administrator.
+
+00:00:07.900 --> 00:00:17.600
+It covers account activation, privacy and retention, service status, usage oversight, member roles, device enrollment, and flight records.
+
+00:00:17.700 --> 00:00:22.700
+Use demonstration information during training and keep real credentials and invitation links private.
+
+00:00:24.000 --> 00:00:32.000
+The r2c-tracker platform administrator creates the organization and identifies its primary site administrator.
+
+00:00:32.100 --> 00:00:36.600
+The administrator receives an activation email at the approved organization address.
+
+00:00:37.000 --> 00:00:38.600
+Open the invitation promptly.
+
+00:00:38.700 --> 00:00:42.800
+Activation links are single-use and normally expire after seven days.
+
+00:00:43.000 --> 00:00:50.900
+If the name, organization designator, or email address is wrong, stop and contact the platform administrator before activating.
+
+00:00:52.500 --> 00:00:58.000
+The activation page displays the organization designator and the exact invited email address.
+
+00:00:58.100 --> 00:01:04.000
+Continue with that Google account, or create an r2c-tracker password of at least 12 characters.
+
+00:01:04.300 --> 00:01:09.600
+Activation confirms that you are authorized to enable the organization's account in the open-ended beta.
+
+00:01:09.800 --> 00:01:15.000
+During beta testing, each organization receives a generous platform-funded usage allowance.
+
+00:01:19.500 --> 00:01:26.100
+After activation, sign in at r2c-tracker.com, slash, your organization designator.
+
+00:01:26.500 --> 00:01:29.500
+The organization directory can also take you there.
+
+00:01:29.600 --> 00:01:32.800
+Use the same approved Google identity or your R2C password.
+
+00:01:32.900 --> 00:01:42.900
+The administration page shows the organization name, designator, and signed-in administrator so you can verify that you are working in the correct tenant before making changes.
+
+00:01:44.500 --> 00:01:47.600
+Begin with privacy and retention.
+
+00:01:47.600 --> 00:01:58.400
+The organization owner chooses whether flight records are restricted to authenticated users or publicly visible, sets the notification email, and defines retention periods for flight records and raw logs.
+
+00:01:58.500 --> 00:02:01.000
+Restricted visibility is the safer default.
+
+00:02:01.100 --> 00:02:08.100
+These are organization-owned policies, and the platform administrator cannot view the organization's flight records or logs.
+
+00:02:09.000 --> 00:02:16.900
+The service status panel shows the organization's beta status, provisioning, usage allowance, and attributed usage.
+
+00:02:16.900 --> 00:02:21.000
+R2C tracker does not accept payments during beta testing.
+
+00:02:21.000 --> 00:02:26.000
+Organization owners and billing administrators should review usage before and during an operational period.
+
+00:02:26.000 --> 00:02:35.900
+Then decide who receives the video requester role and coordinate when streaming is appropriate for the team's priorities and available allowance.
+
+00:02:36.000 --> 00:02:39.000
+Use members and delegated roles to add approved personnel.
+
+00:02:39.100 --> 00:02:41.900
+Enter the member's name and exact email address.
+
+00:02:42.000 --> 00:02:44.400
+Then grant only the roles required for the job.
+
+00:02:44.500 --> 00:02:47.500
+Billing administrators monitor usage and service status.
+
+00:02:47.800 --> 00:02:51.100
+User administrators manage members and enrollment campaigns.
+
+00:02:51.500 --> 00:02:54.500
+Records administrators manage flight records.
+
+00:02:54.500 --> 00:02:56.400
+Records viewers have read access,
+
+00:02:56.500 --> 00:03:00.200
+and video requesters may request pilot-authorized streams.
+
+00:03:00.300 --> 00:03:04.500
+Pending members activate by signing in with the exact invited Google address.
+
+00:03:06.100 --> 00:03:10.100
+Create an enrollment campaign when RID2Caltopo field devices need organization access.
+
+00:03:10.200 --> 00:03:13.800
+Give the campaign a clear operational label.
+
+00:03:14.000 --> 00:03:18.100
+Choose a short validity period and limit the number of device enrollments.
+
+00:03:18.300 --> 00:03:23.500
+The resulting QR code contains a signed, expiring, and revocable enrollment capability.
+
+00:03:23.800 --> 00:03:31.100
+It does not contain administrator passwords, FAA credentials, or an unrestricted tracker upload secret.
+
+00:03:31.300 --> 00:03:36.200
+Revoke the campaign when distribution is complete or if the code may have escaped your control.
+
+00:03:37.400 --> 00:03:42.000
+Organization owners and records administrators can open Flight Records and Migration.
+
+00:03:42.300 --> 00:03:51.500
+Use it to review incident and training flights, export organization records, import a legacy archive, or backfill weather and metadata from a CSV.
+
+00:03:52.400 --> 00:03:55.500
+Treat exports as organization records.
+
+00:03:55.600 --> 00:04:01.400
+Store them according to policy, and verify the organization and date range before importing or sharing them.
+
+00:04:02.500 --> 00:04:09.500
+The administration page controls who can manage the organization, but field authority stays with the field team.
+
+00:04:09.600 --> 00:04:20.400
+Site administrators decide who receives the video requester role and should coordinate when streaming serves the operation and fits the team's available allowance.
+
+00:04:20.500 --> 00:04:27.500
+A requester may ask to view an active stream, but video does not leave the field device until the pilot approves that request in RID2Caltopo.
+
+00:04:27.600 --> 00:04:31.800
+Review roles before each operational period and remove access that is no longer needed.
+
+00:04:32.300 --> 00:04:37.700
+Before the first operation, confirm the organization identity and notification email.
+
+00:04:37.900 --> 00:04:44.500
+Review privacy and retention. Check beta status, allowance usage, and recent activity.
+
+00:04:44.500 --> 00:04:51.384
+Add named members with least-privilege roles and give the video requester role only to people responsible for coordinating streams.
+
+00:04:51.384 --> 00:04:54.800
+Create a short-lived enrollment campaign for the correct devices,
+
+00:04:55.200 --> 00:05:00.300
+then revoke it when enrollment is complete. Finally, verify that flight record and video
+
+00:05:00.300 --> 00:05:06.600
+access match your organization's policy. Your r2c-tracker site is now ready for controlled field use.
+

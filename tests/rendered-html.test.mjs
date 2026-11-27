@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 
-async function render(host = "rid2caltopo.org", path = "/") {
+async function render(host = "rid2caltopo.com", path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
@@ -104,10 +104,10 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   assert.doesNotMatch(html, /Support the project/);
   assert.doesNotMatch(html, /href="https:\/\/paypal\.me\/kjtgv"/);
   assert.doesNotMatch(html, /tax[- ]deductible/i);
-  assert.match(html, /rel="icon" href="https:\/\/rid2caltopo\.org\/favicon\.ico"/);
-  assert.match(html, /rel="icon" href="https:\/\/rid2caltopo\.org\/icon-32\.png"[^>]*sizes="32x32"/);
-  assert.match(html, /rel="apple-touch-icon" href="https:\/\/rid2caltopo\.org\/apple-touch-icon\.png"[^>]*sizes="180x180"/);
-  assert.match(html, /rel="canonical" href="https:\/\/rid2caltopo\.org\/"/);
+  assert.match(html, /rel="icon" href="https:\/\/rid2caltopo\.com\/favicon\.ico"/);
+  assert.match(html, /rel="icon" href="https:\/\/rid2caltopo\.com\/icon-32\.png"[^>]*sizes="32x32"/);
+  assert.match(html, /rel="apple-touch-icon" href="https:\/\/rid2caltopo\.com\/apple-touch-icon\.png"[^>]*sizes="180x180"/);
+  assert.match(html, /rel="canonical" href="https:\/\/rid2caltopo\.com\/"/);
   assert.match(html, /"@type":"WebSite","name":"RID2Caltopo"/);
   assert.match(html, /"@type":"SoftwareApplication","name":"RID2Caltopo"/);
   assert.match(
@@ -123,11 +123,8 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   );
   assert.match(html, /Get RID2Caltopo on Google Play/);
   assert.doesNotMatch(html, /Request Android test access/);
-  assert.match(html, /href="\/contact\?topic=apple-testing"/);
-  assert.match(
-    html,
-    /href="https:\/\/testflight\.apple\.com\/join\/QhyVpGDh"[^>]*target="_blank"/,
-  );
+  assert.doesNotMatch(html, /testflight|test team|tester|\bbeta\b/i);
+  assert.doesNotMatch(html, /\/contact\?topic=/);
   assert.match(html, /href="https:\/\/apps\.apple\.com\/us\/app\/rid2caltopo\/id6792518823"/);
   assert.match(html, /src="\/qr-app-store\.svg"/);
   assert.match(html, /src="\/qr-google-play\.svg"/);
@@ -139,10 +136,9 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   assert.doesNotMatch(html, /Know where the drones have searched/i);
 });
 
-test("publishes host-specific robots and sitemap discovery", async () => {
-  const [comRobots, orgSitemap, comSitemap] = await Promise.all([
+test("publishes robots and sitemap discovery for the canonical host", async () => {
+  const [comRobots, comSitemap] = await Promise.all([
     render("rid2caltopo.com", "/robots.txt"),
-    render("rid2caltopo.org", "/sitemap.xml"),
     render("rid2caltopo.com", "/sitemap.xml"),
   ]);
 
@@ -153,23 +149,47 @@ test("publishes host-specific robots and sitemap discovery", async () => {
     /Sitemap: https:\/\/rid2caltopo\.com\/sitemap\.xml/,
   );
 
-  assert.equal(orgSitemap.status, 200);
+  assert.equal(comSitemap.status, 200);
   assert.match(
-    orgSitemap.headers.get("content-type") ?? "",
+    comSitemap.headers.get("content-type") ?? "",
     /^application\/xml\b/i,
   );
-  const orgXml = await orgSitemap.text();
-  assert.match(orgXml, /<loc>https:\/\/rid2caltopo\.org\/<\/loc>/);
-  assert.match(orgXml, /<loc>https:\/\/rid2caltopo\.org\/tips<\/loc>/);
-  assert.doesNotMatch(orgXml, /\/donations<\/loc>/);
-  assert.doesNotMatch(orgXml, /rid2caltopo\.com/);
-
-  assert.equal(comSitemap.status, 200);
   const comXml = await comSitemap.text();
   assert.match(comXml, /<loc>https:\/\/rid2caltopo\.com\/tracker<\/loc>/);
   assert.match(comXml, /<loc>https:\/\/rid2caltopo\.com\/tips<\/loc>/);
   assert.doesNotMatch(comXml, /\/donations<\/loc>/);
   assert.doesNotMatch(comXml, /rid2caltopo\.org/);
+});
+
+test("301-redirects rid2caltopo.org and every www variant to the same path on rid2caltopo.com", async () => {
+  const cases = [
+    ["rid2caltopo.org", "/", "https://rid2caltopo.com/"],
+    ["www.rid2caltopo.org", "/", "https://rid2caltopo.com/"],
+    ["www.rid2caltopo.com", "/", "https://rid2caltopo.com/"],
+    ["rid2caltopo.org", "/tips", "https://rid2caltopo.com/tips"],
+    ["rid2caltopo.org", "/contact?x=1&y=2", "https://rid2caltopo.com/contact?x=1&y=2"],
+    ["www.rid2caltopo.org", "/sitemap.xml", "https://rid2caltopo.com/sitemap.xml"],
+    ["rid2caltopo.org", "/robots.txt", "https://rid2caltopo.com/robots.txt"],
+    ["rid2caltopo.org", "/managed-pilot", "https://rid2caltopo.com/managed-pilot"],
+  ];
+  for (const [host, path, location] of cases) {
+    const response = await render(host, path);
+    assert.equal(response.status, 301, `${host}${path} status`);
+    assert.equal(response.headers.get("location"), location, `${host}${path} location`);
+  }
+  // The canonical host itself is never redirected.
+  assert.equal((await render("rid2caltopo.com", "/tips")).status, 200);
+});
+
+test("serves the same default homepage on every host, with rid2caltopo.com as the only canonical", async () => {
+  for (const host of ["rid2caltopo.com", "localhost"]) {
+    const html = await (await render(host)).text();
+    assert.match(html, /<main[^>]*class="site-shell mode-managed"/, host);
+    assert.match(html, /rel="canonical" href="https:\/\/rid2caltopo\.com\/"/, host);
+    assert.doesNotMatch(html, /rid2caltopo\.org/, host);
+  }
+  const free = await (await render("rid2caltopo.com", "/?view=community")).text();
+  assert.match(free, /mode-community/);
 });
 
 test("uses the organization public mailbox across every web contact surface", async () => {
@@ -189,11 +209,8 @@ test("uses the organization public mailbox across every web contact surface", as
   assert.doesNotMatch(publicWebSource, /mailto:/);
 });
 
-test("renders a prefilled contact form for tester requests", async () => {
-  const response = await render(
-    "rid2caltopo.com",
-    "/contact?topic=android-testing",
-  );
+test("renders the contact form with a data-use note next to the submit button", async () => {
+  const response = await render("rid2caltopo.com", "/contact");
   assert.equal(response.status, 200);
   const html = await response.text();
 
@@ -201,11 +218,19 @@ test("renders a prefilled contact form for tester requests", async () => {
   assert.match(html, /name="name"/);
   assert.match(html, /name="email"/);
   assert.match(html, /name="subject"/);
-  assert.match(html, /RID2Caltopo Android tester request/);
   assert.match(html, /name="message"/);
-  assert.match(html, /I&#x27;d like to help test RID2Caltopo on Android/);
   assert.match(html, /Send message/);
   assert.match(html, /email us directly at info@uas4sar\.com/);
+  assert.doesNotMatch(html, /test access|tester/i);
+  assert.match(
+    html,
+    /only to respond to your message\. Your information is never shared with any external organization\.<\/p><button[^>]*type="submit"/,
+  );
+});
+
+test("old topic links no longer prefill tester requests", async () => {
+  const html = await (await render("rid2caltopo.com", "/contact?topic=android-testing")).text();
+  assert.doesNotMatch(html, /tester request|help test RID2Caltopo/i);
 });
 
 test("sends contact forms through the website email binding", async () => {
@@ -282,15 +307,20 @@ test("publishes field tips for the shared Android and iOS workflow", async () =>
 });
 
 test("collects managed-pilot phone contact information for tracker administration", async () => {
-  const response = await render("rid2caltopo.org", "/managed-pilot");
+  const response = await render("rid2caltopo.com", "/managed-pilot");
   assert.equal(response.status, 200);
   const html = await response.text();
 
   assert.match(html, /<input[^>]*name="phone"[^>]*>/);
   assert.match(html, /type="tel"/);
   assert.match(html, /Phone number/);
-  assert.match(html, /copied to the requester/);
-  assert.match(html, /retained in the managed-pilot administration system/);
+  assert.match(html, /copied to you/);
+  assert.match(html, /kept in the managed-pilot administration system/);
+  assert.match(
+    html,
+    /only to respond to your request\. It is never(?:<!-- -->)? shared with any external organization\.[^<]*<\/p><button[^>]*type="submit"/,
+  );
+  assert.doesNotMatch(html, /\bbeta\b/i);
   assert.match(html, /All fields are required unless marked optional/);
   assert.match(html, /Required acknowledgment/);
   assert.match(html, /<input(?=[^>]*name="termsAcknowledged")(?=[^>]*required)[^>]*>/);
@@ -342,13 +372,13 @@ test("collects managed-pilot phone contact information for tracker administratio
 
 test("sends new visitors and old early-access links to the download section", async () => {
   const capabilities = await render("rid2caltopo.com", "/capabilities");
-  assert.match(await capabilities.text(), /href="\/#testing"[^>]*>Download the app/);
+  assert.match(await capabilities.text(), /href="\/#download"[^>]*>Download the app/);
   const home = await render("rid2caltopo.com");
-  assert.match(await home.text(), /<section[^>]*id="testing"/);
+  assert.match(await home.text(), /<section[^>]*id="download"/);
   const oldLink = await render("rid2caltopo.com", "/early-access");
   assert.ok([301, 302, 303, 307, 308].includes(oldLink.status));
   assert.equal(new URL(oldLink.headers.get("location"), "https://rid2caltopo.com").href,
-    "https://rid2caltopo.com/#testing");
+    "https://rid2caltopo.com/#download");
 });
 
 test("opens the relationship disclosure for every visible CalTopo mention on the capabilities page", async () => {
@@ -397,18 +427,19 @@ test("keeps public copy drone-specific and ships correctly sized artwork", async
   assert.doesNotMatch(publicCopy, /\$TBD|after pilot usage review/);
   assert.doesNotMatch(publicCopy, /\btrial\b|30[ -]?day/i);
   assert.doesNotMatch(publicCopy, /\$10|\$9|monthly allowance/i);
-  assert.match(publicCopy, /open-ended beta/);
-  assert.match(publicCopy, /generous usage allowance during beta testing/);
-  assert.match(publicCopy, /platform-funded during beta testing/);
+  assert.doesNotMatch(publicCopy, /\bbeta\b|testflight|tester|test team|test access/i);
+  assert.match(publicCopy, /Usage allowance included/);
+  assert.match(publicCopy, /platform-funded during the pilot/);
+  assert.match(publicCopy, /The managed pilot has no fixed end date/);
   assert.match(publicCopy, /Site administrators can monitor/);
   assert.match(publicCopy, /who receives the video requester role/);
-  assert.match(publicCopy, /does not accept payments/);
+  assert.match(publicCopy, /does not\s+currently\s+accept payments/);
   assert.match(publicCopy, /Lots of capabilities included\./);
   assert.match(publicCopy, /title: "Flight record support"/);
   assert.match(publicCopy, /support FAA waiver compliance\./);
   assert.doesNotMatch(publicCopy, /planned-extension|MANAGED PILOT • AVAILABLE/);
   assert.doesNotMatch(publicCopy, /mailto:/);
-  assert.match(publicCopy, /\/contact\?topic=\$\{platform\.toLowerCase\(\)\}-testing/);
+  assert.doesNotMatch(publicCopy, /testFlightUrl|testerLink|\?topic=/);
   assert.match(publicCopy, /const contactEmail = "info@uas4sar\.com"/);
   assert.doesNotMatch(publicCopy, /kjtstar@kjt\.us|Founding pilot|Android support is in progress|Built honestly/i);
   assert.doesNotMatch(
@@ -468,7 +499,7 @@ test("renders the same site header with Download and a mobile menu on every page
     assert.ok(header, `${path} has the shared header`);
     assert.equal(html.match(/<header/g)?.length, 1, `${path} has a single header`);
     assert.match(header, /class="brand-mark" src="\/icon-64\.png"/, path);
-    assert.match(header, /href="\/#testing"[^>]*>Download<\/a>/, path);
+    assert.match(header, /href="\/#download"[^>]*>Download<\/a>/, path);
     assert.match(header, /<button[^>]*class="menu-toggle"[^>]*aria-expanded="false"[^>]*aria-controls="site-nav"/, path);
     assert.match(header, /<nav[^>]*id="site-nav"[^>]*aria-label="Primary navigation"/, path);
     for (const destination of destinations) {
@@ -484,7 +515,7 @@ test("leads with Download and linked store badges in the hero on both editions",
     const hero = html.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0] ?? "";
     assert.match(
       hero,
-      /<a class="button button-primary" href="#testing">Download the app/,
+      /<a class="button button-primary" href="#download">Download the app/,
       path,
     );
     assert.match(
@@ -603,7 +634,7 @@ test("publishes per-page social cards with og:url and an absolute homepage title
   };
   const seenDescriptions = new Set();
 
-  for (const host of ["rid2caltopo.com", "rid2caltopo.org"]) {
+  for (const host of ["rid2caltopo.com"]) {
     for (const [path, { title }] of Object.entries(pages)) {
       const html = await (await render(host, path)).text();
       const origin = `https://${host}`;
@@ -665,7 +696,7 @@ test("serves a styled 404 page inside the shared site shell", async () => {
   assert.match(html, /<header class="site-header"/);
   assert.match(html, /<main[^>]*id="main"[^>]*class="response-shell not-found-shell"/);
   assert.match(html, /That page isn(?:'|&#x27;)t here\./);
-  assert.match(html, /href="\/#testing"[^>]*>Download the app/);
+  assert.match(html, /href="\/#download"[^>]*>Download the app/);
   // vinext adds noindex to its 404 responses; keep that guarantee.
   assert.match(html, /<meta content="noindex" name="robots"\/>/);
 });
@@ -674,4 +705,69 @@ test("README documents this site rather than the starter template", async () => 
   const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
   assert.match(readme, /^# RID2Caltopo website/m);
   assert.doesNotMatch(readme, /vinext-starter|Drizzle|chatgpt-auth/i);
+});
+
+test("every tutorial video has an English WebVTT caption track and well-formed cues", async () => {
+  const html = await (await render("rid2caltopo.com")).text();
+  const videos = [...html.matchAll(/<source src="\/([a-z0-9-]+)\.mp4/g)].map((m) => m[1]);
+  assert.equal(videos.length, 6);
+  for (const name of videos) {
+    assert.match(
+      html,
+      new RegExp(`<track[^>]*src="/${name}\\.vtt"[^>]*srcLang="en"|<track[^>]*src="/${name}\\.vtt"[^>]*srclang="en"`, "i"),
+      `${name} has a caption track`,
+    );
+    const vtt = await readFile(new URL(`../public/${name}.vtt`, import.meta.url), "utf8");
+    assert.ok(vtt.startsWith("WEBVTT\n"), `${name}.vtt header`);
+    const cues = [...vtt.matchAll(/(\d\d:\d\d:\d\d\.\d{3}) --> (\d\d:\d\d:\d\d\.\d{3})\n([^\n]+)/g)];
+    assert.ok(cues.length >= 10, `${name}.vtt has cues`);
+    let prev = -1;
+    for (const [, a, b, text] of cues) {
+      const sec = (t) => t.split(":").reduce((n, x) => n * 60 + Number(x), 0);
+      assert.ok(sec(b) > sec(a), `${name}: cue ends after it starts (${a})`);
+      assert.ok(sec(a) >= prev - 0.01, `${name}: cues do not overlap (${a})`);
+      assert.ok(text.trim().length > 3);
+      prev = sec(b);
+    }
+  }
+});
+
+test("shows written tutorials for the newly captioned videos and withholds the one that still says beta", async () => {
+  const html = await (await render("rid2caltopo.com")).text();
+  assert.equal((html.match(/<summary>Read the tutorial<\/summary>/g) ?? []).length, 5);
+  assert.match(html, /DS-100 bridge and antenna/);
+  assert.match(html, /known Remote ID drone for the pre-flight check/);
+  assert.match(html, /RTMP ingest address/);
+  assert.match(html, /service account tuple/);
+  assert.doesNotMatch(html, /\bbeta\b/i);
+});
+
+test("describes 2.6.1 as an upcoming release rather than a requirement", async () => {
+  const html = await (await render("rid2caltopo.com")).text();
+  assert.match(html, /coming in an upcoming release \(2\.6\.1\)/);
+  assert.doesNotMatch(html, /requires version 2\.6\.1/i);
+  assert.doesNotMatch(html, /2\.6\.1 or later/i);
+});
+
+test("ships no TestFlight QR code, link, or tester language anywhere in the site source", async () => {
+  const files = await readdir(new URL("../public/", import.meta.url));
+  assert.ok(!files.includes("qr-testflight.svg"));
+  const roots = ["../app/", "../worker/"];
+  for (const root of roots) {
+    const entries = await readdir(new URL(root, import.meta.url), { recursive: true });
+    for (const entry of entries.filter((e) => /\.(tsx?|css)$/.test(e))) {
+      const src = await readFile(new URL(root + entry, import.meta.url), "utf8");
+      assert.doesNotMatch(src, /testflight|tester|\bbeta\b/i, `${root}${entry}`);
+    }
+  }
+});
+
+test("every download link goes straight to the store listings", async () => {
+  const html = await (await render("rid2caltopo.com")).text();
+  const play = "https://play.google.com/store/apps/details?id=org.ncssar.rid2caltopo";
+  const apple = "https://apps.apple.com/us/app/rid2caltopo/id6792518823";
+  const storeLinks = [...html.matchAll(/href="(https:\/\/(?:play\.google\.com|apps\.apple\.com|itunes\.apple\.com|testflight\.apple\.com)[^"]*)"/g)].map((m) => m[1].replaceAll("&amp;", "&"));
+  assert.ok(storeLinks.length >= 4, "badges plus download section");
+  for (const link of storeLinks) assert.ok([play, apple].includes(link), `unexpected store link ${link}`);
+  assert.ok(storeLinks.includes(play) && storeLinks.includes(apple));
 });

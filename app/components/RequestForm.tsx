@@ -5,11 +5,12 @@ import {
 import { CalTopoText } from "./CalTopoTeamsLink";
 
 type RequestFormProps = {
-  kind: "early-access" | "managed-pilot";
+  kind: "managed-pilot";
 };
 
 export default function RequestForm({ kind }: RequestFormProps) {
   const managed = kind === "managed-pilot";
+
 
   return (
     <form className="request-form" action="/api/request" method="post">
@@ -90,22 +91,21 @@ export default function RequestForm({ kind }: RequestFormProps) {
           autoComplete="off"
         />
       </div>
-      <p className="form-privacy">
-        This information is emailed to the RID2Caltopo project contact
-        {managed
-          ? ", copied to the requester, and retained in the managed-pilot administration system"
-          : ""}
-        {" "}only to respond to your request. Do not include passwords, API keys,
-        or active-incident details.
-      </p>
       {managed && (
         <label className="form-acknowledgement">
           <input type="checkbox" name="termsAcknowledged" value="yes" required />
           <span><strong>Required acknowledgment: </strong><CalTopoText text={managedAccessTermsText} /></span>
         </label>
       )}
+      <p className="form-privacy">
+        We use this information only to respond to your request. It is never
+        shared with any external organization. It is emailed to the RID2Caltopo
+        project team, copied to you, and kept in the managed-pilot
+        administration system. Do not include passwords, API keys, or
+        active-incident details.
+      </p>
       <button className="button button-primary" type="submit">
-        {managed ? "Request the managed pilot" : "Request early app access"}
+        Request the managed pilot
         <span aria-hidden="true">→</span>
       </button>
     </form>

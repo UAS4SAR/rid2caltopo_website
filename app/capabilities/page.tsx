@@ -56,7 +56,7 @@ export default function CapabilitiesPage() {
               <li key={capability}><CalTopoText text={capability} /></li>
             ))}
           </ul>
-          <Link className="button button-secondary" href="/#testing">
+          <Link className="button button-secondary" href="/#download">
             Download the app <span aria-hidden="true">→</span>
           </Link>
         </article>
