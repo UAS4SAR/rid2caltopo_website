@@ -59,8 +59,9 @@ same path and query on `rid2caltopo.com` (see `canonicalRedirect()` in
 `worker/index.ts`; the custom domains are listed in `vite.config.ts`). Canonical URLs,
 Open Graph tags, the sitemap and `robots.txt` all use that origin.
 
-The homepage defaults to the managed-pilot view for everyone. `/?view=community`
-shows the free-app view and is linked from the page footer.
+There is one homepage for everyone (the old `?view=` edition toggle was removed);
+the managed pilot is reached from the header (Tracker), the "Choose your path" cards and
+the footer.
 
 ### Secrets and bindings
 
@@ -75,8 +76,9 @@ Set these in Cloudflare; never commit their values.
 
 - **Images**: Open Graph card is `public/og-image.jpg` (1200×630, under 300 KB).
   Icons are `favicon.ico`, `icon-32.png`, `icon-64.png`, `apple-touch-icon.png`.
-  Responsive hero images come in `-480/-800/-1200` widths – add all sizes when
-  replacing one.
+  The hero screenshot (`hero-split-view-{800,1280,1920,2560}.webp`, source 2960×1848)
+  is shown by `app/components/HeroShot.tsx`: full width on desktop, a 400 px-tall
+  swipeable strip on phones. Regenerate all sizes (and the OG card) when replacing it.
 - **Videos** in `public/*.mp4` have a matching `-poster.jpg` and an English WebVTT
   caption track (`.vtt`, wired through `captionsSrc` in `app/page.tsx`) plus a "Read the
   tutorial/transcript" panel. Videos load with `preload="none"`. When you replace a video,
