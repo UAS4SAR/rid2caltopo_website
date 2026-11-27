@@ -28,7 +28,7 @@ const freeCapabilities = [
   "Receive and display ASTM F3411 Remote ID broadcasts",
   "Record drone tracks locally on the phone or tablet",
   "Publish tracks to CalTopo maps you can edit",
-  "Stream controller video locally for squinter review",
+  "Review controller video in real time as a squinter, and coordinate clues with IC",
   "Capture potential clues and use on-device anomaly assist",
 ];
 
@@ -83,7 +83,7 @@ const tutorials = [
   {
     duration: "5 min • Field video",
     title: "Stream drone video to RID2Caltopo",
-    copy: "Give a squinter a larger live view, bind video to Remote ID telemetry with the drone designator, and submit picture waypoints to the incident map.",
+    copy: "Give a squinter a larger live view to review in real time, bind video to Remote ID telemetry with the drone designator, and submit picture waypoints to the incident map.",
     videoSrc: "/stream-drone-video-to-rid2caltopo.mp4",
     captionsSrc: "/stream-drone-video-to-rid2caltopo.vtt",
     posterSrc: "/stream-drone-video-to-rid2caltopo-poster.jpg",
@@ -136,16 +136,7 @@ export default function Home() {
             helping search teams see drones, preserve coverage, and coordinate
             operations from Android, iPhone, and iPad.
           </p>
-          <div className="hero-actions">
-            <a
-              className="button button-secondary"
-              href="https://github.com/UAS4SAR/RID2Caltopo"
-            >
-              Explore the source <ArrowIcon />
-            </a>
-          </div>
           <p className="availability-note">
-            <span className="availability-label">Download:</span>
             <a
               className="store-badge"
               href={playStoreUrl}
@@ -237,8 +228,10 @@ export default function Home() {
             <p className="step">STEP 04</p>
             <h3>Squinters review video</h3>
             <p>
-              Stream video locally from a drone to a tablet to engage squinters
-              in reviewing the live feed.
+              Stream video locally from a drone to a tablet so squinters can
+              review the drone&rsquo;s video stream in real time. Squinters
+              coordinate clue placement and reporting with Incident Command
+              (IC).
             </p>
           </article>
         </div>
@@ -575,8 +568,8 @@ export default function Home() {
         <div className="footer-links">
           <div>
             <strong>PROJECT</strong>
-            <a href="https://github.com/UAS4SAR/RID2Caltopo">App source</a>
-            <a href="https://github.com/UAS4SAR/r2c-tracker">Tracker source</a>
+            <a href="https://github.com/UAS4SAR/RID2Caltopo">App source code</a>
+            <a href="https://github.com/UAS4SAR/r2c-tracker">Tracker source code</a>
             <Link href="/tips">Tips &amp; tricks</Link>
           </div>
           <div>

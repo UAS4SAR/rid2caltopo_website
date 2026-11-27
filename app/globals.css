@@ -299,13 +299,6 @@ h1 em {
   max-width: 650px;
 }
 
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 35px;
-}
-
 .button {
   align-items: center;
   border: 1px solid transparent;
@@ -354,7 +347,7 @@ h1 em {
   gap: 10px;
   letter-spacing: 0.04em;
   line-height: 1.5;
-  margin: 23px 0 0;
+  margin: 32px 0 0;
   text-transform: uppercase;
 }
 
@@ -388,10 +381,6 @@ h1 em {
   flex: 0 0 auto;
 }
 
-.availability-label {
-  color: var(--ink);
-  font-weight: 600;
-}
 
 .sr-only {
   border: 0;
@@ -2301,7 +2290,17 @@ footer {
 .receiver-option p { font-size: 16px; line-height: 1.55; margin-bottom: 16px; }
 .receiver-option .eyebrow { font-size: 12px; }
 .receiver-option .receiver-band { font-weight: 700; color: var(--forest); }
-.receiver-option .button { margin-top: auto; }
+.receiver-buy-links { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
+.receiver-option .button { margin-top: 0; }
+.receiver-options-callout {
+  background: rgba(24, 59, 43, 0.08);
+  border-left: 4px solid var(--forest);
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 8px 0 20px;
+  padding: 12px 16px;
+}
+.receiver-options-panel .receiver-options-sellers { font-size: 14px; margin-top: 12px; }
 .receiver-options-panel .receiver-options-note { font-size: 15px; }
 .receiver-options-panel .receiver-options-sources { font-size: 13px; margin-top: 16px; }
 .receiver-options-sources a { text-decoration: underline; text-underline-offset: 3px; }

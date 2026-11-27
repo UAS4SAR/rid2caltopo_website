@@ -32,6 +32,9 @@ export function ReceiverOptions() {
           <p className="eyebrow">DroneScout Bridge</p>
           <h2 id="receiver-options-title">Choose a receiver for your drones.</h2>
           <p>Both retail packages include an enclosure and external antenna, and use USB-C power. Choose based on your drones’ Remote ID broadcasts.</p>
+          <p className="receiver-options-callout" id="receiver-dji-note">
+            <strong>Note:</strong> A bridge is not required for DJI Enterprise drones running the DJI Pilot 2 app. Stream the controller&rsquo;s video to RID2Caltopo and the app takes the drone&rsquo;s position from the video.
+          </p>
           <div className="receiver-options-grid">
             <section className="receiver-option" aria-labelledby="ds100-title">
               <p className="eyebrow">For most 2.4 GHz drones</p>
@@ -39,9 +42,14 @@ export function ReceiverOptions() {
               <p className="receiver-band">2.4 GHz · Bluetooth + Wi-Fi</p>
               <p>A good fit for most drones: BlueMark says most Remote ID broadcasts use 2.4 GHz. DS100 receives Bluetooth and 2.4 GHz Wi-Fi Beacon and Wi-Fi NAN with updated firmware.</p>
               <p>Choose it when your drones use 2.4 GHz Remote ID. It does not receive 5 or 5.8 GHz broadcasts.</p>
-              <a className="button button-primary" href="https://dronescout.co/product/dronescout-bridge-ds100-retail/" target="_blank" rel="noreferrer">
-                Shop DS100 retail <span aria-hidden="true">↗</span>
-              </a>
+              <div className="receiver-buy-links">
+                <a className="button button-primary" href="https://dronescout.co/product/dronescout-bridge-ds100-retail/" target="_blank" rel="noreferrer">
+                  Buy DS100 from BlueMark <span aria-hidden="true">↗</span>
+                </a>
+                <a className="button button-secondary" href="https://gearfocus.com/products/drone-rid-detector-bluemark-ds100-dronescout-retail-bridge-f-79np1" target="_blank" rel="noreferrer">
+                  Buy DS100 from GearFocus <span aria-hidden="true">↗</span>
+                </a>
+              </div>
             </section>
             <section className="receiver-option" aria-labelledby="ds110-title">
               <p className="eyebrow">For Skydio X10 &amp; broader coverage</p>
@@ -49,12 +57,20 @@ export function ReceiverOptions() {
               <p className="receiver-band">Tri-band · 2.4, 5 &amp; 5.8 GHz</p>
               <p>Choose DS110 for Skydio X10, or other drones broadcasting Remote ID over Wi-Fi NAN at 5 or 5.8 GHz. Of these two receivers, DS110 is required for those higher-frequency signals.</p>
               <p>It also covers 2.4 GHz Bluetooth and Wi-Fi Remote ID, making it the more flexible choice for a mixed fleet.</p>
-              <a className="button button-primary" href="https://dronescout.co/product/dronescout-bridge-triple-band-ds110-retail-remoteid-receiver-for-ios-android-and-drone/" target="_blank" rel="noreferrer">
-                Shop DS110 retail <span aria-hidden="true">↗</span>
-              </a>
+              <div className="receiver-buy-links">
+                <a className="button button-primary" href="https://dronescout.co/product/dronescout-bridge-triple-band-ds110-retail-remoteid-receiver-for-ios-android-and-drone/" target="_blank" rel="noreferrer">
+                  Buy DS110 from BlueMark <span aria-hidden="true">↗</span>
+                </a>
+                <a className="button button-secondary" href="https://gearfocus.com/products/new-ds110-drone-rid-detector-triple-band-with-detection-buzz-PTLYC" target="_blank" rel="noreferrer">
+                  Buy DS110 from GearFocus <span aria-hidden="true">↗</span>
+                </a>
+              </div>
             </section>
           </div>
           <p className="receiver-options-note"><strong>Wi-Fi NAN alone does not require DS110.</strong> DS100 supports NAN at 2.4 GHz with updated firmware; the frequency band is what matters. Keep your bridge firmware current, especially for Skydio’s channel hopping.</p>
+          <p className="receiver-options-sellers">
+            Both receivers are sold by BlueMark (DroneScout) and by GearFocus, a retailer. Stock changes, so check each listing for current availability.
+          </p>
           <p className="receiver-options-sources">
             Manufacturer guidance: <a href="https://download.bluemark.io/ds_bridge.pdf" target="_blank" rel="noreferrer">receiver manual</a> · <a href="https://bluemark.io/2026/07/do-you-have-trouble-detecting-skydio-rid-signals/" target="_blank" rel="noreferrer">Skydio firmware update</a>
           </p>
