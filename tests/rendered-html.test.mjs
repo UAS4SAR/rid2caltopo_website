@@ -669,3 +669,9 @@ test("serves a styled 404 page inside the shared site shell", async () => {
   // vinext adds noindex to its 404 responses; keep that guarantee.
   assert.match(html, /<meta content="noindex" name="robots"\/>/);
 });
+
+test("README documents this site rather than the starter template", async () => {
+  const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
+  assert.match(readme, /^# RID2Caltopo website/m);
+  assert.doesNotMatch(readme, /vinext-starter|Drizzle|chatgpt-auth/i);
+});
