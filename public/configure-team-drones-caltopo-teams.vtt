@@ -1,0 +1,158 @@
+WEBVTT
+
+00:00:00.200 --> 00:00:04.300
+This guide shows an organization administrator how to configure team drones
+
+00:00:04.300 --> 00:00:08.500
+and connect RID2Caltopo to a CalTopo Teams account.
+
+00:00:10.400 --> 00:00:16.600
+First, identify each team drone with its exact Remote ID, pilot call sign, and model.
+
+00:00:16.800 --> 00:00:24.000
+Second, connect an authorized CalTopo Teams service account, add its tracking Connect Key, and choose the incident map.
+
+00:00:24.300 --> 00:00:30.100
+Together, these settings turn anonymous broadcasts into useful operational tracks and shared locations.
+
+00:00:31.600 --> 00:00:35.600
+A CalTopo team administrator starts in team admin and details.
+
+00:00:36.000 --> 00:00:41.600
+Create a service account with at least update permission for the team maps RID2Caltopo will use.
+
+00:00:41.800 --> 00:00:46.200
+Record the team ID, credential ID, and one-time credential secret.
+
+00:00:46.500 --> 00:00:52.100
+These three values authorize map browsing and track updates, but they do not create shared locations.
+
+00:01:01.600 --> 00:01:05.511
+Next, the CalTopo team administrator opens trackable devices.
+
+00:01:05.511 --> 00:01:09.102
+In the Access URL section, select Create New Access URL.
+
+00:01:09.102 --> 00:01:16.540
+CalTopo displays a default Connect Key. Keep that unique default unless the team has a specific reason to change it.
+
+00:01:16.540 --> 00:01:20.900
+Then select Create. The new key now appears in the Connect Key list.
+
+00:01:21.000 --> 00:01:26.800
+Select its information icon to view the Access URL details and the custom system reporting address.
+
+00:01:40.200 --> 00:01:45.500
+The credential secret appears only once when the CalTopo service account is created.
+
+00:01:45.800 --> 00:01:51.700
+Copy it immediately and store the complete team configuration in your organization's approved password manager.
+
+00:01:52.000 --> 00:01:56.200
+Treat both the credential secret and Connect Key as sensitive integration values.
+
+00:01:56.300 --> 00:02:00.900
+The Connect Key is separate from the service account tuple and does not replace it.
+
+00:02:04.700 --> 00:02:07.900
+Open Settings in your RID2Caltopo app.
+
+00:02:08.100 --> 00:02:13.400
+In Organization and RID Map, select the View or Edit RID map entries button.
+
+00:02:19.700 --> 00:02:22.100
+Enter the organization's designator.
+
+00:02:22.200 --> 00:02:28.200
+Add each team drone by specifying its exact Remote ID, pilot call sign, and drone description.
+
+00:02:28.500 --> 00:02:32.700
+The drone designator is created automatically from the call sign and drone description.
+
+00:02:33.100 --> 00:02:35.500
+When every entry validates, select Save.
+
+00:02:35.800 --> 00:02:38.300
+Then scroll down to CalTopo Teams Account.
+
+00:02:46.800 --> 00:02:56.400
+In CalTopo Teams Account, enter the Team ID, Credential ID, Credential Secret, and the exact Connect Key from CalTopo's Connect Key list.
+
+00:02:56.600 --> 00:03:02.300
+Copy only the key itself, without fleet, a device ID, or the surrounding Access URL.
+
+00:03:02.500 --> 00:03:10.200
+RID2Caltopo places this key in each position report address so CalTopo associates the drone with the team's shared locations.
+
+00:03:10.600 --> 00:03:14.400
+Leave the normal domain as caltopo.com, then select Save.
+
+00:03:22.000 --> 00:03:25.800
+Choose Connect to CalTopo Map. If the team map browser loads,
+
+00:03:25.800 --> 00:03:28.500
+the service account tuple was entered correctly.
+
+00:03:28.600 --> 00:03:32.900
+Browse the maps available to the service account, then select one of your team's maps.
+
+00:03:33.200 --> 00:03:36.300
+Confirm that the chosen map name and map ID are displayed.
+
+00:03:36.600 --> 00:03:40.200
+The Connect Key is verified separately by the live position test.
+
+00:03:46.900 --> 00:03:50.000
+Before a mission, enable the shared locations layer
+
+00:03:50.100 --> 00:03:53.100
+and power on a known team aircraft in a safe test area.
+
+00:03:53.300 --> 00:03:57.600
+Confirm that RID2Caltopo shows the expected call sign and model.
+
+00:03:57.900 --> 00:04:00.200
+The position and timestamp continue updating.
+
+00:04:00.500 --> 00:04:02.900
+A shared location appears through the Connect Key,
+
+00:04:02.900 --> 00:04:06.700
+and a test track reaches the correct incident map and track folder.
+
+00:04:07.000 --> 00:04:11.300
+If any identity is wrong, stop and correct the mapping before operations.
+
+00:04:21.800 --> 00:04:25.100
+Your setup is ready when the team drones are identified.
+
+00:04:25.400 --> 00:04:27.300
+The credential secret is protected.
+
+00:04:27.600 --> 00:04:29.900
+The Connect Key produces a shared location.
+
+00:04:30.200 --> 00:04:34.400
+The correct incident map is selected, and a known aircraft test has passed.
+
+00:04:34.700 --> 00:04:38.100
+Re-check the selected map at the start of every operational period.
+
+00:04:43.900 --> 00:04:49.300
+Before installing an organization configuration, enable a secure screen lock on every
+
+00:04:49.800 --> 00:04:53.400
+authorized phone or tablet. Then open Settings, Developer Tools,
+
+00:04:53.700 --> 00:04:57.400
+and export ORG config. Share the generated QR code or token
+
+00:04:57.500 --> 00:05:01.500
+only through your organization's approved secure channel. After import,
+
+00:05:01.800 --> 00:05:05.400
+RID2Caltopo requires the device owner to authenticate
+
+00:05:05.500 --> 00:05:11.800
+with a biometric, passcode, PIN, pattern, or password whenever organization access is locked.
+

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { headers } from "next/headers";
 import {
   CalTopoLink,
   CalTopoText,
@@ -8,6 +7,7 @@ import {
 import { ReceiverOptions } from "./components/ReceiverOptions";
 import { EmailContact } from "./components/EmailContact";
 import { homeTitle, pageMetadata } from "./seo";
+import { tutorialTranscripts } from "./tutorialTranscripts";
 
 type SiteMode = "community" | "managed";
 
@@ -18,11 +18,7 @@ type PageProps = {
 const contactEmail = "info@uas4sar.com";
 const playStoreUrl =
   "https://play.google.com/store/apps/details?id=org.ncssar.rid2caltopo";
-const testFlightUrl = "https://testflight.apple.com/join/QhyVpGDh";
 const appStoreUrl = "https://apps.apple.com/us/app/rid2caltopo/id6792518823";
-
-const testerLink = (platform: "Android" | "Apple") =>
-  `/contact?topic=${platform.toLowerCase()}-testing`;
 
 export const metadata: Metadata = pageMetadata({
   title: homeTitle,
@@ -69,6 +65,7 @@ const tutorials = [
     title: "Connect your CalTopo account",
     copy: "Sign in with your personal CalTopo account to work with maps you can access. Teams credentials remain an option for organizations.",
     videoSrc: "/connect-personal-caltopo-account.mp4",
+    captionsSrc: "/connect-personal-caltopo-account.vtt",
     posterSrc: "/connect-personal-caltopo-account-poster.jpg",
   },
   {
@@ -76,6 +73,7 @@ const tutorials = [
     title: "Set up the DroneScout Bridge",
     copy: "Enable Relay ping, place the Bridge for useful line of sight, and verify power and live Remote ID reception before operations.",
     videoSrc: "/dronescout-bridge-setup.mp4?rev=20260804-relay-ping-on-audio",
+    captionsSrc: "/dronescout-bridge-setup.vtt",
     posterSrc: "/dronescout-bridge-setup-poster.jpg",
   },
   {
@@ -83,6 +81,7 @@ const tutorials = [
     title: "Configure team drones and organization access",
     copy: "Create a CalTopo tracking Access URL and Connect Key, add your organization’s drones and API tuple, verify Shared Locations and a team map, and protect ORG access with the device screen lock.",
     videoSrc: "/configure-team-drones-caltopo-teams.mp4?rev=20260901-connect-key-walkthrough",
+    captionsSrc: "/configure-team-drones-caltopo-teams.vtt",
     posterSrc: "/configure-team-drones-caltopo-teams-poster.jpg",
   },
   {
@@ -90,13 +89,15 @@ const tutorials = [
     title: "Stream drone video to RID2Caltopo",
     copy: "Give a squinter a larger live view, bind video to Remote ID telemetry with the drone designator, and submit picture waypoints to the incident map.",
     videoSrc: "/stream-drone-video-to-rid2caltopo.mp4",
+    captionsSrc: "/stream-drone-video-to-rid2caltopo.vtt",
     posterSrc: "/stream-drone-video-to-rid2caltopo-poster.jpg",
   },
   {
     duration: "Offline maps",
     title: "Download and share maps before the mission",
-    copy: "Download USGS and USFS basemaps for offline use, then share available cached maps, terrain, and mapping layers in a map package. Sharing USGS and USFS basemaps requires version 2.6.1 or later.",
+    copy: "Download USGS and USFS basemaps for offline use, then share available cached maps, terrain, and mapping layers in a map package. Sharing the USGS and USFS basemaps themselves is coming in an upcoming release (2.6.1).",
     videoSrc: "/download-share-offline-maps.mp4",
+    captionsSrc: "/download-share-offline-maps.vtt",
     posterSrc: "/download-share-offline-maps-poster.jpg",
   },
   {
@@ -104,6 +105,7 @@ const tutorials = [
     title: "Administer an organization site",
     copy: "Activate a new site administrator, set privacy and retention, monitor service status, delegate member roles, enroll field devices, and manage flight records.",
     videoSrc: "/organization-site-administration.mp4",
+    captionsSrc: "/organization-site-administration.vtt",
     posterSrc: "/organization-site-administration-poster.jpg",
   },
 ];
@@ -127,21 +129,13 @@ function ArrowIcon() {
 
 export default async function Home({ searchParams }: PageProps) {
   const params = (await searchParams) ?? {};
-  const requestHeaders = await headers();
-  const host = (
-    requestHeaders.get("x-forwarded-host") ??
-    requestHeaders.get("host") ??
-    ""
-  ).toLowerCase();
-
   const forcedMode =
     params.view === "managed"
       ? "managed"
       : params.view === "community"
         ? "community"
         : null;
-  const mode: SiteMode =
-    forcedMode ?? (host.includes("rid2caltopo.com") ? "managed" : "community");
+  const mode: SiteMode = forcedMode ?? "managed";
   const isManaged = mode === "managed";
 
   return (
@@ -182,7 +176,7 @@ export default async function Home({ searchParams }: PageProps) {
             operations from Android, iPhone, and iPad.
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#testing">
+            <a className="button button-primary" href="#download">
               Download the app <ArrowIcon />
             </a>
             {isManaged ? (
@@ -354,8 +348,8 @@ export default async function Home({ searchParams }: PageProps) {
               <span className="cap-adds">STARTER</span>
             </div>
             <p className="cap-summary">
-              During beta testing, each organization receives a generous
-              platform-funded usage allowance. An expanding list of features
+              Each organization receives a platform-funded usage allowance
+              during the managed pilot. An expanding list of features
               includes:
             </p>
             <ol className="managed-feature-list">
@@ -420,7 +414,7 @@ export default async function Home({ searchParams }: PageProps) {
           <article className={isManaged ? "featured managed-plan" : "managed-plan"}>
             <div className="choice-top">
               <span className="choice-label">MANAGED PILOT</span>
-              <span className="price">Generous usage allowance <small>platform-funded during beta testing</small></span>
+              <span className="price">Usage allowance included <small>platform-funded during the pilot</small></span>
             </div>
             <h3>Let us handle the tracker.</h3>
             <p>
@@ -440,8 +434,8 @@ export default async function Home({ searchParams }: PageProps) {
               Request a managed pilot <ArrowIcon />
             </a>
             <p className="fine-print">
-              The managed service is an open-ended beta with no fixed end date,
-              and R2C Tracker does not accept payments. Site administrators can
+              The managed pilot has no fixed end date, and R2C Tracker does not
+              currently accept payments. Site administrators can
               monitor their team&apos;s attributed usage and decide who may request
               streams and when, based on the organization&apos;s priorities.
             </p>
@@ -476,11 +470,8 @@ export default async function Home({ searchParams }: PageProps) {
                   aria-label={`${tutorial.title} video`}
                 >
                   <source src={tutorial.videoSrc} type="video/mp4" />
-                  {tutorial.videoSrc === "/connect-personal-caltopo-account.mp4" && (
-                    <track kind="captions" src="/connect-personal-caltopo-account.vtt" srcLang="en" label="English" default />
-                  )}
-                  {tutorial.videoSrc === "/download-share-offline-maps.mp4" && (
-                    <track kind="captions" src="/download-share-offline-maps.vtt" srcLang="en" label="English" default />
+                  {tutorial.captionsSrc && (
+                    <track kind="captions" src={tutorial.captionsSrc} srcLang="en" label="English" default />
                   )}
                   Your browser does not support embedded video. You can download
                   the tutorial from the video controls instead.
@@ -510,6 +501,7 @@ export default async function Home({ searchParams }: PageProps) {
               {tutorial.videoSrc === "/download-share-offline-maps.mp4" && (
                 <details className="tutorial-transcript">
                   <summary>Read the tutorial</summary>
+                  <p>Sharing USGS and USFS basemaps in a map package is coming in an upcoming release (2.6.1); the video and steps below include that workflow.</p>
                   <ol>
                     <li>While connected to the internet, open the operational map and frame the area you need. Open the map settings gear and choose Download Map.</li>
                     <li>Choose Current Visible Map or an available boundary. Select USGS Scanned Topo or USFS Topo and the zoom levels you need. You can also select Contours, DEM elevation data, and AOL obstacle tiles.</li>
@@ -519,6 +511,14 @@ export default async function Home({ searchParams }: PageProps) {
                     <li>On Android, connect both devices to the same Wi-Fi or hotspot, keep the package QR panel open, and scan it from Import Config on the receiving device. On Apple, use Share Map Package to send the ZIP; the receiver chooses the file in Import Config. Wait for the import to complete.</li>
                     <li>Before departure, select the downloaded map layer and verify the area and required detail offline. On each receiving device, confirm the imported map and terrain data are present.</li>
                   </ol>
+                </details>
+              )}
+              {tutorial.captionsSrc && tutorialTranscripts[tutorial.captionsSrc] && (
+                <details className="tutorial-transcript">
+                  <summary>Read the tutorial</summary>
+                  {tutorialTranscripts[tutorial.captionsSrc].map((paragraph) => (
+                    <p key={paragraph}><CalTopoText text={paragraph} /></p>
+                  ))}
                 </details>
               )}
               {tutorial.videoSrc ? (
@@ -533,12 +533,12 @@ export default async function Home({ searchParams }: PageProps) {
         </div>
       </section>
 
-      <section className="test-cta section" id="testing">
+      <section className="download-cta section" id="download">
         <div>
           <h2>Download the app</h2>
           <p>Choose your platform to get RID2Caltopo.</p>
         </div>
-        <div className="tester-actions">
+        <div className="download-actions">
           <article className="store-option">
             <div>
               <p className="store-platform">Android • Google Play</p>
@@ -575,8 +575,7 @@ export default async function Home({ searchParams }: PageProps) {
                 Download on the App Store <ArrowIcon />
               </a>
               <p className="store-note">
-                Requires iOS or iPadOS 17 or later. To test upcoming releases,{" "}
-                <a href={testFlightUrl} target="_blank" rel="noreferrer">join the TestFlight beta</a>.
+                Requires iOS or iPadOS 17 or later.
               </p>
             </div>
             <img
@@ -589,8 +588,8 @@ export default async function Home({ searchParams }: PageProps) {
             />
           </article>
           <span>
-            Questions about joining?{" "}
-            <a href={testerLink("Apple")}>Contact the test team</a> or email {contactEmail}.
+            Questions?{" "}
+            <Link href="/contact">Contact us</Link> or email {contactEmail}.
           </span>
         </div>
       </section>
@@ -640,7 +639,7 @@ export default async function Home({ searchParams }: PageProps) {
             <a href="https://rid2caltopo.discourse.group/">Community forum</a>
             <EmailContact email={contactEmail} />
             <Link href="/managed-pilot">Managed pilot</Link>
-            <a href="#testing">Download the app</a>
+            <a href="#download">Download the app</a>
           </div>
         </div>
         <div className="footer-bottom">

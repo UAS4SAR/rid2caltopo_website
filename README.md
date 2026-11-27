@@ -1,6 +1,6 @@
 # RID2Caltopo website
 
-Source for the public site at **rid2caltopo.com** (and rid2caltopo.org): product
+Source for the public site at **rid2caltopo.com**: product
 pages for RID2Caltopo, a Remote ID → CalTopo tool for search-and-rescue drone
 teams, plus the managed-pilot request flow.
 
@@ -51,12 +51,16 @@ rules). Run it before opening a PR.
 | `public/` | Static assets copied as-is, including `_headers` (cache rules) |
 | `tests/` | Rendered-HTML tests |
 
-### Two hosts, two homepage modes
+### One canonical host
 
-`rid2caltopo.com` shows the managed-pilot view by default and `rid2caltopo.org`
-shows the community (free app) view. Both hosts are served by the same Worker; the
-host is read per request in `app/layout.tsx`/`app/page.tsx`, and `metadataBase` is
-set per host. Visitors can flip between the two with `/?view=community` and `/?view=managed`.
+`https://rid2caltopo.com` is the only canonical origin. The Worker answers
+`rid2caltopo.org`, `www.rid2caltopo.org` and `www.rid2caltopo.com` with a `301` to the
+same path and query on `rid2caltopo.com` (see `canonicalRedirect()` in
+`worker/index.ts`; the custom domains are listed in `vite.config.ts`). Canonical URLs,
+Open Graph tags, the sitemap and `robots.txt` all use that origin.
+
+The homepage defaults to the managed-pilot view for everyone. `/?view=community`
+shows the free-app view and is linked from the page footer.
 
 ### Secrets and bindings
 
@@ -73,9 +77,10 @@ Set these in Cloudflare; never commit their values.
   Icons are `favicon.ico`, `icon-32.png`, `icon-64.png`, `apple-touch-icon.png`.
   Responsive hero images come in `-480/-800/-1200` widths – add all sizes when
   replacing one.
-- **Videos** in `public/*.mp4` have a matching `-poster.jpg`; only
-  `connect-personal-caltopo-account` and `download-share-offline-maps`
-  have caption tracks (`.vtt`). Videos load with `preload="none"`.
+- **Videos** in `public/*.mp4` have a matching `-poster.jpg` and an English WebVTT
+  caption track (`.vtt`, wired through `captionsSrc` in `app/page.tsx`) plus a "Read the
+  tutorial/transcript" panel. Videos load with `preload="none"`. When you replace a video,
+  update its `.vtt` and transcript too (`app/tutorialTranscripts.ts`).
 - **Caching**: hashed `/assets/*` files are immutable (vinext default); `public/_headers`
   sets longer cache lifetimes for the static media in `public/`.
 - **Sitemap `lastmod`** is derived from git history at build time, so build from a

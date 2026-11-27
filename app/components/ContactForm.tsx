@@ -1,12 +1,4 @@
-type ContactFormProps = {
-  defaultMessage?: string;
-  defaultSubject?: string;
-};
-
-export default function ContactForm({
-  defaultMessage = "",
-  defaultSubject = "",
-}: ContactFormProps) {
+export default function ContactForm() {
   return (
     <form className="request-form" action="/api/contact" method="post">
       <p>All fields are required.</p>
@@ -38,7 +30,6 @@ export default function ContactForm({
           id="contact-subject"
           name="subject"
           type="text"
-          defaultValue={defaultSubject}
           maxLength={140}
           required
         />
@@ -48,7 +39,6 @@ export default function ContactForm({
         <textarea
           id="contact-message"
           name="message"
-          defaultValue={defaultMessage}
           maxLength={4000}
           rows={9}
           required
@@ -68,6 +58,10 @@ export default function ContactForm({
         Your message is emailed to the RID2Caltopo project contact only so we
         can respond. Do not include passwords, API keys, or active-incident
         details.
+      </p>
+      <p className="form-privacy">
+        We use your name and email only to respond to your message. Your
+        information is never shared with any external organization.
       </p>
       <button className="button button-primary" type="submit">
         Send message <span aria-hidden="true">→</span>

@@ -1,0 +1,128 @@
+WEBVTT
+
+00:00:00.200 --> 00:00:05.800
+This guide shows how to stream real-time drone video to an RID2Caltopo device,
+
+00:00:06.000 --> 00:00:12.100
+pair it automatically with Remote ID telemetry, and submit picture waypoints to the CalTopo incident map.
+
+00:00:13.600 --> 00:00:19.700
+The pilot keeps flying from the controller while a squinter follows the real-time camera on a larger phone or tablet.
+
+00:00:20.000 --> 00:00:27.400
+The squinter can watch for clues, compare video with the map, and create a picture waypoint without crowding the pilot's controller display.
+
+00:00:35.500 --> 00:00:41.300
+Connect the drone controller and the RID2Caltopo device to the same local Wi-Fi network.
+
+00:00:41.600 --> 00:00:45.000
+The controller must be able to reach the tablet's displayed address.
+
+00:00:45.300 --> 00:00:49.200
+Avoid guest networks or access points that isolate connected devices.
+
+00:00:49.500 --> 00:00:52.200
+Keep the network local and operationally controlled.
+
+00:00:59.400 --> 00:01:04.500
+On the RID2Caltopo device, open the main menu and select Live View.
+
+00:01:04.800 --> 00:01:10.900
+Before a stream arrives, the video pane shows the RTMP ingest address and the current Wi-Fi network.
+
+00:01:11.100 --> 00:01:13.800
+Use the exact address displayed on that device.
+
+00:01:21.300 --> 00:01:24.500
+The address ends with a drone designator placeholder.
+
+00:01:24.800 --> 00:01:29.800
+Replace that placeholder with the exact drone designator created in the previous tutorial.
+
+00:01:30.200 --> 00:01:37.100
+For example, the configured designator 1SAR7MIND4P becomes the final path in the RTMP address.
+
+00:01:37.400 --> 00:01:40.700
+Spelling matters, although matching is not case-sensitive.
+
+00:01:48.500 --> 00:01:53.600
+In the drone controller, open its video streaming or custom RTMP settings.
+
+00:01:53.900 --> 00:01:56.000
+Menu names vary by manufacturer.
+
+00:01:56.200 --> 00:01:59.400
+Enter the complete address from RID2Caltopo,
+
+00:01:59.500 --> 00:02:02.000
+including the drone designator at the end.
+
+00:02:02.100 --> 00:02:05.800
+Start the controller's video stream after the aircraft and tablet are ready.
+
+00:02:13.600 --> 00:02:16.900
+The controller publishes video under that designator.
+
+00:02:17.100 --> 00:02:22.000
+Separately, RID2Caltopo receives the aircraft's Remote ID telemetry.
+
+00:02:22.200 --> 00:02:25.500
+Because the designator matches the configured team drone entry,
+
+00:02:25.700 --> 00:02:32.200
+the app automatically associates position, heading, altitude, and identity with the correct video tile.
+
+00:02:39.900 --> 00:02:46.300
+Confirm that the video tile turns healthy, shows the expected drone label, and displays updating telemetry.
+
+00:02:46.600 --> 00:02:51.100
+If the designator does not match, the app may ask you to pair the stream manually.
+
+00:02:51.400 --> 00:02:57.700
+Correcting the controller address is preferred because the configured designator then works on every authorized team device.
+
+00:03:07.900 --> 00:03:10.600
+The squinter can use the split video and map view,
+
+00:03:11.000 --> 00:03:14.800
+focus one stream, or select enter full screen for a larger image.
+
+00:03:15.200 --> 00:03:19.700
+The incident map displayed in RID2Caltopo also shows search assignments,
+
+00:03:19.900 --> 00:03:23.900
+allowing the squinter to keep track of where the drone is relative to its assignment.
+
+00:03:24.000 --> 00:03:27.500
+The pilot remains responsible for flight safety and control.
+
+00:03:27.900 --> 00:03:31.500
+The squinter concentrates on the video, communicates observations,
+
+00:03:31.900 --> 00:03:35.000
+and avoids distracting the pilot during critical maneuvers.
+
+00:03:40.100 --> 00:03:45.000
+When the stream is paired with telemetry, double-tap the video to capture the current frame.
+
+00:03:45.000 --> 00:03:50.500
+In Submit Clue, enter a useful title and description, and confirm the camera gimbal angle.
+
+00:03:50.900 --> 00:03:58.200
+RID2Caltopo combines the frame with the drone position, heading, altitude, and gimbal angle to estimate the clue location.
+
+00:03:58.800 --> 00:04:03.300
+Select submit to publish the picture waypoint to the chosen CalTopo incident map.
+
+00:04:17.100 --> 00:04:21.900
+Before launch, verify the shared network, the exact RTMP address,
+
+00:04:22.000 --> 00:04:28.400
+the drone designator, streaming video, paired telemetry, and the selected CalTopo incident map.
+
+00:04:28.600 --> 00:04:30.800
+Test one picture waypoint in a safe area
+
+00:04:30.900 --> 00:04:35.300
+so the pilot and squinter both understand the workflow before an operational surge.
+

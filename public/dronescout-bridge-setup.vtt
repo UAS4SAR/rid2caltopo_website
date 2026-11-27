@@ -1,0 +1,107 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.300
+This is a quick field guide to setting up a DroneScout Bridge with RID2Caltopo.
+
+00:00:08.500 --> 00:00:14.100
+The bridge receives Remote ID broadcasts that a phone or tablet may not reliably receive on its own.
+
+00:00:14.400 --> 00:00:17.585
+It then relays those observations over Bluetooth,
+
+00:00:17.585 --> 00:00:20.900
+so RID2Caltopo can display and record the aircraft.
+
+00:00:26.300 --> 00:00:33.755
+For a typical field deployment, bring a DS-100 bridge and antenna, a USB-C cable, a charged battery bank,
+
+00:00:33.755 --> 00:00:40.500
+a phone or tablet running RID2Caltopo, and a known Remote ID aircraft for the pre-flight check.
+
+00:00:44.400 --> 00:00:49.400
+Before field use, check for current firmware and confirm wireless relay mode.
+
+00:00:49.500 --> 00:00:54.873
+Our RID2Caltopo field profile uses WLAN reception, balanced scanning,
+
+00:00:54.873 --> 00:00:59.700
+US channels 1 through 11, inserted self-ID, and relay ping on.
+
+00:01:00.000 --> 00:01:04.700
+Relay ping lets RID2Caltopo confirm that the bridge is powered before flight.
+
+00:01:04.700 --> 00:01:07.900
+Save the settings and return the bridge to normal operation.
+
+00:01:09.100 --> 00:01:11.500
+Line of sight matters more than a mast.
+
+00:01:11.800 --> 00:01:16.000
+Part 107 pilots normally keep the aircraft in visual line of sight,
+
+00:01:16.200 --> 00:01:19.300
+so placing the bridge near the controller is usually enough.
+
+00:01:19.600 --> 00:01:22.500
+In authorized beyond-visual-line-of-sight operations,
+
+00:01:22.600 --> 00:01:29.477
+the controller still needs a reliable command and telemetry path, even when the aircraft may operate up to a mile away.
+
+00:01:29.477 --> 00:01:34.100
+Use a mast or tripod only when a little elevation helps clear local obstruction.
+
+00:01:40.300 --> 00:01:42.800
+Do not pair the bridge in the tablet's Bluetooth settings.
+
+00:01:43.600 --> 00:01:46.700
+Just power the bridge and open RID2Caltopo.
+
+00:01:47.000 --> 00:01:52.700
+In wireless relay mode, the bridge automatically rebroadcasts observations in a format the app can receive.
+
+00:01:52.800 --> 00:01:56.100
+Keep the app device within about 10 meters of its bridge.
+
+00:01:57.500 --> 00:02:00.200
+Confirm that Remote ID monitoring is active.
+
+00:02:00.500 --> 00:02:02.800
+Launch a known Remote ID aircraft safely.
+
+00:02:03.100 --> 00:02:05.700
+The bridge light should flash when it detects an aircraft.
+
+00:02:06.100 --> 00:02:09.500
+In RID2Caltopo, confirm the aircraft appears.
+
+00:02:09.600 --> 00:02:12.400
+Its position and timestamp continue updating.
+
+00:02:12.800 --> 00:02:16.400
+And, when configured, its track reaches the incident map.
+
+00:02:21.600 --> 00:02:24.200
+A taller mast cannot see through a mountain ridge.
+
+00:02:24.400 --> 00:02:32.000
+For rough or mountainous terrain, deploy multiple R2C stations, where each station has a bridge and the RID2Caltopo app.
+
+00:02:32.200 --> 00:02:37.800
+Network the stations through R2C Tracker so observations can be coordinated across the incident.
+
+00:02:38.100 --> 00:02:42.300
+Place each station where it has a useful radio view of its assigned flight area.
+
+00:02:49.600 --> 00:02:56.500
+Before operations begin, confirm power, the antenna is vertical, useful line of sight, scanner status,
+
+00:02:56.900 --> 00:03:00.600
+live aircraft updates, and tracker or map publishing.
+
+00:03:00.800 --> 00:03:03.500
+RID2Caltopo supports situational awareness,
+
+00:03:03.800 --> 00:03:08.500
+but always visually verify that a received track corresponds to the aircraft in the field.
+

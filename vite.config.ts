@@ -54,6 +54,7 @@ const localBindingConfig = {
   workers_dev: false,
   routes: [
     { pattern: "rid2caltopo.org", custom_domain: true },
+    { pattern: "www.rid2caltopo.org", custom_domain: true },
     { pattern: "rid2caltopo.com", custom_domain: true },
     { pattern: "www.rid2caltopo.com", custom_domain: true },
   ],

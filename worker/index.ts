@@ -47,14 +47,26 @@ function lastmodFor(path: string): string | undefined {
     : __SITEMAP_LASTMOD__[path];
 }
 
-function publicOrigin(url: URL): string {
-  return url.hostname === "rid2caltopo.org"
-    ? "https://rid2caltopo.org"
-    : "https://rid2caltopo.com";
+/** rid2caltopo.com is the only canonical origin. */
+const canonicalOrigin = "https://rid2caltopo.com";
+
+/** Hosts served by this Worker that must 301 to the same path on the canonical origin. */
+const redirectHosts = new Set([
+  "www.rid2caltopo.com",
+  "rid2caltopo.org",
+  "www.rid2caltopo.org",
+]);
+
+function canonicalRedirect(url: URL): Response | null {
+  if (!redirectHosts.has(url.hostname.toLowerCase())) return null;
+  return Response.redirect(
+    `${canonicalOrigin}${url.pathname}${url.search}`,
+    301,
+  );
 }
 
-function robotsResponse(url: URL): Response {
-  const origin = publicOrigin(url);
+function robotsResponse(): Response {
+  const origin = canonicalOrigin;
   return new Response(
     [
       "User-agent: *",
@@ -78,8 +90,8 @@ function robotsResponse(url: URL): Response {
   );
 }
 
-function sitemapResponse(url: URL): Response {
-  const origin = publicOrigin(url);
+function sitemapResponse(): Response {
+  const origin = canonicalOrigin;
   const entries = indexablePaths
     .map((path) => {
       const lastmod = lastmodFor(path);
@@ -137,10 +149,6 @@ async function handleRequestForm(request: Request, env: Env): Promise<Response> 
   const termsVersion = cleanField(form.get("termsVersion"), 32);
   const termsAcknowledged = cleanField(form.get("termsAcknowledged"), 8);
   const honeypot = cleanField(form.get("website"), 200);
-  if (requestType === "early-access") {
-    return Response.redirect(new URL("/#testing", request.url), 303);
-  }
-
   if (honeypot) {
     return Response.redirect(
       new URL(`/request-received?type=${encodeURIComponent(requestType)}`, request.url),
@@ -262,17 +270,15 @@ const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
-    if (url.hostname === "www.rid2caltopo.com") {
-      url.hostname = "rid2caltopo.com";
-      return Response.redirect(url, 301);
-    }
+    const redirect = canonicalRedirect(url);
+    if (redirect) return redirect;
 
     if (url.pathname === "/robots.txt") {
-      return robotsResponse(url);
+      return robotsResponse();
     }
 
     if (url.pathname === "/sitemap.xml") {
-      return sitemapResponse(url);
+      return sitemapResponse();
     }
 
     if (url.pathname === "/_vinext/image") {

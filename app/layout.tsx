@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Barlow, IBM_Plex_Mono } from "next/font/google";
-import { headers } from "next/headers";
 import {
   CalTopoDisclosurePanel,
   CalTopoLink,
@@ -8,16 +7,8 @@ import {
 import { SiteHeader } from "./components/SiteHeader";
 import "./globals.css";
 
-function canonicalHost(requestHeaders: Headers): string {
-  const candidate = (
-    requestHeaders.get("x-forwarded-host") ??
-    requestHeaders.get("host") ??
-    ""
-  ).toLowerCase();
-  return candidate === "rid2caltopo.com" || candidate === "www.rid2caltopo.com"
-    ? "rid2caltopo.com"
-    : "rid2caltopo.org";
-}
+/** rid2caltopo.com is the only canonical origin; the Worker 301s every other host to it. */
+const origin = "https://rid2caltopo.com";
 
 const barlow = Barlow({
   variable: "--font-barlow",
@@ -32,9 +23,6 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const requestHeaders = await headers();
-  const host = canonicalHost(requestHeaders);
-  const origin = `https://${host}`;
   const socialImage = new URL("/og-image.jpg", origin).toString();
 
   return {
@@ -88,13 +76,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const requestHeaders = await headers();
-  const origin = `https://${canonicalHost(requestHeaders)}`;
   const structuredData = {
     "@context": "https://schema.org",
     "@graph": [

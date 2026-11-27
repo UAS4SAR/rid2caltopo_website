@@ -3,23 +3,6 @@ import Link from "next/link";
 import ContactForm from "../components/ContactForm";
 import { pageMetadata } from "../seo";
 
-type PageProps = {
-  searchParams?: Promise<{ topic?: string }>;
-};
-
-const testerDefaults = {
-  "android-testing": {
-    subject: "RID2Caltopo Android tester request",
-    message:
-      "I'd like to help test RID2Caltopo on Android.\n\nOrganization:\nDevice model:\nHow we use drones:\n",
-  },
-  "apple-testing": {
-    subject: "RID2Caltopo Apple tester request",
-    message:
-      "I'd like to help test RID2Caltopo on Apple.\n\nOrganization:\nDevice model:\nHow we use drones:\n",
-  },
-} as const;
-
 export const metadata: Metadata = pageMetadata({
   title: "Contact RID2Caltopo",
   description:
@@ -27,13 +10,7 @@ export const metadata: Metadata = pageMetadata({
   path: "/contact",
 });
 
-export default async function ContactPage({ searchParams }: PageProps) {
-  const params = (await searchParams) ?? {};
-  const defaults =
-    params.topic && params.topic in testerDefaults
-      ? testerDefaults[params.topic as keyof typeof testerDefaults]
-      : undefined;
-
+export default function ContactPage() {
   return (
     <main id="main" tabIndex={-1} className="request-shell">
       <div className="request-layout">
@@ -44,14 +21,10 @@ export default async function ContactPage({ searchParams }: PageProps) {
           <p className="eyebrow">Contact the project</p>
           <h1>Send us a message.</h1>
           <p>
-            Ask a question, request test access, or tell us what happened in
-            the field. You can also email us directly at info@uas4sar.com.
+            Ask a question or tell us what happened in the field. You can also email us directly at info@uas4sar.com.
           </p>
         </section>
-        <ContactForm
-          defaultSubject={defaults?.subject}
-          defaultMessage={defaults?.message}
-        />
+        <ContactForm />
       </div>
     </main>
   );
