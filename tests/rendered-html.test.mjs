@@ -82,7 +82,8 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   assert.match(html, /Buy DS110 from GearFocus/);
   // Stock status changes; the page must not state it as fact.
   assert.doesNotMatch(html, /out of stock|back in stock|sold out|in stock now/i);
-  assert.match(html, /A bridge is not required for DJI Enterprise 2 drones running the DJI Pilot 2 app\./);
+  assert.match(html, /A bridge is not required for DJI Enterprise drones running the DJI Pilot 2 app\. Stream the controller(?:&rsquo;|&#x27;|’)s video to RID2Caltopo and the app takes the drone(?:&rsquo;|&#x27;|’)s position from the video\./);
+  assert.doesNotMatch(html, /Enterprise 2/);
   assert.match(
     html,
     /class="caltopo-disclosure-link"[^>]+aria-haspopup="dialog"[^>]*>CalTopo<\/button>/,

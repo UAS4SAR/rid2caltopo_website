@@ -33,7 +33,7 @@ export function ReceiverOptions() {
           <h2 id="receiver-options-title">Choose a receiver for your drones.</h2>
           <p>Both retail packages include an enclosure and external antenna, and use USB-C power. Choose based on your drones’ Remote ID broadcasts.</p>
           <p className="receiver-options-callout" id="receiver-dji-note">
-            <strong>Note:</strong> A bridge is not required for DJI Enterprise 2 drones running the DJI Pilot 2 app.
+            <strong>Note:</strong> A bridge is not required for DJI Enterprise drones running the DJI Pilot 2 app. Stream the controller&rsquo;s video to RID2Caltopo and the app takes the drone&rsquo;s position from the video.
           </p>
           <div className="receiver-options-grid">
             <section className="receiver-option" aria-labelledby="ds100-title">
