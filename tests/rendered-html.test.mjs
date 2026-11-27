@@ -475,3 +475,24 @@ test("renders the same site header with Download and a mobile menu on every page
     }
   }
 });
+
+test("leads with Download and linked store badges in the hero on both editions", async () => {
+  for (const path of ["/", "/?view=community", "/?view=managed"]) {
+    const response = await render("rid2caltopo.com", path);
+    const html = await response.text();
+    const hero = html.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0] ?? "";
+    assert.match(
+      hero,
+      /<a class="button button-primary" href="#testing">Download the app/,
+      path,
+    );
+    assert.match(
+      hero,
+      /<p class="availability-note">[\s\S]*href="https:\/\/play\.google\.com\/store\/apps\/details\?id=org\.ncssar\.rid2caltopo"[\s\S]*href="https:\/\/apps\.apple\.com\/us\/app\/rid2caltopo\/id6792518823"/,
+      path,
+    );
+    assert.match(hero, />Free app<\/a>/, path);
+    assert.match(hero, />Managed pilot<\/a>/, path);
+    assert.doesNotMatch(hero, />Community<\/a>/, path);
+  }
+});

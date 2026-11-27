@@ -144,20 +144,23 @@ export default async function Home({ searchParams }: PageProps) {
     <main className={`site-shell mode-${mode}`}>
       <section className="hero" id="top">
         <div className="hero-copy">
-          <div className="edition-switch" aria-label="Website edition">
+          <div className="edition-switch" role="group" aria-label="Choose homepage view">
+            <span className="edition-switch-label" aria-hidden="true">
+              View
+            </span>
             <Link
               className={!isManaged ? "active" : ""}
               href="/?view=community"
               aria-current={!isManaged ? "page" : undefined}
             >
-              Community
+              Free app
             </Link>
             <Link
               className={isManaged ? "active" : ""}
               href="/?view=managed"
               aria-current={isManaged ? "page" : undefined}
             >
-              Managed
+              Managed pilot
             </Link>
           </div>
 
@@ -175,32 +178,45 @@ export default async function Home({ searchParams }: PageProps) {
             operations from Android, iPhone, and iPad.
           </p>
           <div className="hero-actions">
+            <a className="button button-primary" href="#testing">
+              Download the app <ArrowIcon />
+            </a>
             {isManaged ? (
-              <>
-                <a className="button button-primary" href="/capabilities">
-                  See what&apos;s available <ArrowIcon />
-                </a>
-                <a className="button button-secondary" href="/tracker">
-                  Understand the tracker
-                </a>
-              </>
+              <a className="button button-secondary" href="/capabilities">
+                See what&apos;s available
+              </a>
             ) : (
-              <>
-                <a
-                  className="button button-primary"
-                  href="https://github.com/kjtsar/RID2Caltopo"
-                >
-                  Explore the source <ArrowIcon />
-                </a>
-                <a className="button button-secondary" href="#testing">
-                  Download the app
-                </a>
-              </>
+              <a
+                className="button button-secondary"
+                href="https://github.com/kjtsar/RID2Caltopo"
+              >
+                Explore the source <ArrowIcon />
+              </a>
             )}
           </div>
           <p className="availability-note">
-            <span aria-hidden="true" />
-            Get RID2Caltopo on Google Play for Android or the App Store for iPhone and iPad.
+            <span className="availability-dot" aria-hidden="true" />
+            <span>Free on</span>
+            <a
+              className="store-badge"
+              href={playStoreUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Get RID2Caltopo on Google Play for Android"
+            >
+              <small>Android</small>
+              Google Play
+            </a>
+            <a
+              className="store-badge"
+              href={appStoreUrl}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Download RID2Caltopo on the App Store for iPhone and iPad"
+            >
+              <small>iPhone &amp; iPad</small>
+              App Store
+            </a>
           </p>
         </div>
 
@@ -603,7 +619,7 @@ export default async function Home({ searchParams }: PageProps) {
             <a href="https://github.com/kjtsar/RID2Caltopo">App source</a>
             <a href="https://github.com/kjtsar/r2c-tracker">Tracker source</a>
             <Link href="/tips">Tips &amp; tricks</Link>
-            <Link href="/?view=community">Community edition</Link>
+            <Link href="/?view=community">Free app view</Link>
           </div>
           <div>
             <strong>CONNECT</strong>

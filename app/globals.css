@@ -217,6 +217,17 @@ a:focus-visible {
   width: fit-content;
 }
 
+.edition-switch-label {
+  align-self: center;
+  color: var(--muted);
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 0 10px 0 9px;
+  text-transform: uppercase;
+}
+
 .edition-switch a {
   border-radius: 3px;
   color: var(--muted);
@@ -356,25 +367,57 @@ h1 em {
 }
 
 .availability-note {
-  align-items: flex-start;
+  align-items: center;
   color: var(--muted);
   display: flex;
+  flex-wrap: wrap;
   font-family: var(--font-plex-mono), monospace;
-  font-size: 10px;
-  gap: 9px;
+  font-size: 11px;
+  gap: 10px;
+  letter-spacing: 0.04em;
   line-height: 1.5;
   margin: 23px 0 0;
-  max-width: 520px;
   text-transform: uppercase;
 }
 
-.availability-note > span {
+.availability-dot {
   background: #50a85f;
   border-radius: 50%;
   flex: 0 0 auto;
   height: 7px;
-  margin-top: 4px;
   width: 7px;
+}
+
+.store-badge {
+  background: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  color: white;
+  display: inline-flex;
+  flex-direction: column;
+  font-family: var(--font-barlow), Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.15;
+  min-height: 44px;
+  padding: 6px 16px;
+  text-transform: none;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.store-badge small {
+  color: #d7e1d8;
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.store-badge:hover {
+  background: var(--forest);
+  transform: translateY(-2px);
 }
 
 .hero-visual {
