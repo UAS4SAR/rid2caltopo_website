@@ -5,6 +5,7 @@ import {
   CalTopoDisclosurePanel,
   CalTopoLink,
 } from "./components/CalTopoTeamsLink";
+import { SiteHeader } from "./components/SiteHeader";
 import "./globals.css";
 
 function canonicalHost(requestHeaders: Headers): string {
@@ -114,6 +115,7 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+        <SiteHeader />
         {children}
         <aside className="site-affiliation-notice" aria-label="CalTopo relationship">
           <strong>Independent project.</strong>{" "}

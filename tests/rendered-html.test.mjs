@@ -436,3 +436,42 @@ test("keeps public copy drone-specific and ships correctly sized artwork", async
     /QR code: https:\/\/play\.google\.com\/store\/apps\/details\?id=org\.ncssar\.rid2caltopo</,
   );
 });
+
+test("renders the same site header with Download and a mobile menu on every page", async () => {
+  const paths = [
+    "/",
+    "/capabilities",
+    "/contact",
+    "/contact-error",
+    "/contact-received",
+    "/donations",
+    "/managed-pilot",
+    "/request-error",
+    "/request-received",
+    "/tips",
+    "/tracker",
+  ];
+  const destinations = [
+    'href="/capabilities"',
+    'href="/tracker"',
+    'href="/tips"',
+    'href="/#tutorials"',
+    'href="https://rid2caltopo.discourse.group/"',
+    'href="/contact"',
+  ];
+
+  for (const path of paths) {
+    const response = await render("rid2caltopo.com", path);
+    const html = await response.text();
+    const header = html.match(/<header class="site-header"[\s\S]*?<\/header>/)?.[0];
+    assert.ok(header, `${path} has the shared header`);
+    assert.equal(html.match(/<header/g)?.length, 1, `${path} has a single header`);
+    assert.match(header, /class="brand-mark" src="\/app-icon-orange\.png"/, path);
+    assert.match(header, /href="\/#testing"[^>]*>Download<\/a>/, path);
+    assert.match(header, /<button[^>]*class="menu-toggle"[^>]*aria-expanded="false"[^>]*aria-controls="site-nav"/, path);
+    assert.match(header, /<nav[^>]*id="site-nav"[^>]*aria-label="Primary navigation"/, path);
+    for (const destination of destinations) {
+      assert.ok(header.includes(destination), `${path} header links ${destination}`);
+    }
+  }
+});

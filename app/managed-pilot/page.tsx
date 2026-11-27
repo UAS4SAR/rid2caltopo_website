@@ -11,14 +11,9 @@ export const metadata: Metadata = {
 export default function ManagedPilotPage() {
   return (
     <main className="request-shell managed-request-shell">
-      <header className="info-header">
-        <Link className="brand" href="/" aria-label="RID2Caltopo home">
-          <span>RID<span className="brand-two">2</span>CalTopo</span>
-        </Link>
-        <Link className="request-back-link" href="/tracker">← r2c-tracker</Link>
-      </header>
       <section className="request-layout">
         <div className="request-intro">
+          <Link className="request-back-link" href="/tracker">← r2c-tracker</Link>
           <p className="eyebrow">Managed pilot • Platform-funded beta allowance</p>
           <h1>Bring managed coordination<br /><em>to your team.</em></h1>
           <p>

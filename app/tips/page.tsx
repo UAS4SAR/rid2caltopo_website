@@ -62,18 +62,6 @@ const tips = [
 export default function TipsPage() {
   return (
     <main className="info-shell tips-shell">
-      <header className="info-header">
-        <Link className="brand" href="/" aria-label="RID2Caltopo home">
-          <span>RID<span className="brand-two">2</span>CalTopo</span>
-        </Link>
-        <nav aria-label="Information pages">
-          <Link href="/capabilities">Capabilities</Link>
-          <Link href="/tracker">r2c-tracker</Link>
-          <Link aria-current="page" href="/tips">Tips &amp; tricks</Link>
-          <Link href="/#tutorials">Tutorials</Link>
-        </nav>
-      </header>
-
       <section className="info-hero tips-hero">
         <p className="eyebrow">Tips &amp; tricks</p>
         <h1>Small controls.<br /><em>Faster field work.</em></h1>

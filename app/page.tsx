@@ -142,38 +142,25 @@ export default async function Home({ searchParams }: PageProps) {
 
   return (
     <main className={`site-shell mode-${mode}`}>
-      <header className="site-header">
-        <a className="brand" href="#top" aria-label="RID2Caltopo home">
-          <BrandMark />
-          <span>RID<span className="brand-two">2</span>CalTopo</span>
-        </a>
-        <nav className="main-nav" aria-label="Primary navigation">
-          <a href="#capabilities">Capabilities</a>
-          <a href="#tutorials">Tutorials</a>
-          <Link href="/tips">Tips &amp; tricks</Link>
-          <a href="https://rid2caltopo.discourse.group/">Community</a>
-          <a href="#get-started">Get started</a>
-        </nav>
-        <div className="edition-switch" aria-label="Website edition">
-          <Link
-            className={!isManaged ? "active" : ""}
-            href="/?view=community"
-            aria-current={!isManaged ? "page" : undefined}
-          >
-            Community
-          </Link>
-          <Link
-            className={isManaged ? "active" : ""}
-            href="/?view=managed"
-            aria-current={isManaged ? "page" : undefined}
-          >
-            Managed
-          </Link>
-        </div>
-      </header>
-
       <section className="hero" id="top">
         <div className="hero-copy">
+          <div className="edition-switch" aria-label="Website edition">
+            <Link
+              className={!isManaged ? "active" : ""}
+              href="/?view=community"
+              aria-current={!isManaged ? "page" : undefined}
+            >
+              Community
+            </Link>
+            <Link
+              className={isManaged ? "active" : ""}
+              href="/?view=managed"
+              aria-current={isManaged ? "page" : undefined}
+            >
+              Managed
+            </Link>
+          </div>
+
           <p className="eyebrow">
             {isManaged
               ? "Managed coordination for SAR organizations"
