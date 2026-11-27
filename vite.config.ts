@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import vinext from "vinext";
 import { defineConfig } from "vite";
 import hostingConfig from "./.openai/hosting.json";
@@ -7,6 +8,40 @@ const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
   "00000000-0000-4000-8000-000000000000";
 
 const { d1, r2 } = hostingConfig;
+
+// Sitemap <lastmod>: the date of the last commit touching each route's source
+// (plus shared components/styles for the homepage), falling back to the build
+// date when git history is unavailable (for example a tarball checkout).
+const sitemapSources: Record<string, string[]> = {
+  "/": ["app/page.tsx", "app/components", "app/globals.css", "app/layout.tsx"],
+  "/capabilities": ["app/capabilities/page.tsx"],
+  "/contact": ["app/contact/page.tsx", "app/components/ContactForm.tsx"],
+  "/tracker": ["app/tracker/page.tsx"],
+  "/tips": ["app/tips/page.tsx"],
+  "/managed-pilot": [
+    "app/managed-pilot/page.tsx",
+    "app/components/RequestForm.tsx",
+    "app/managedAccessTerms.ts",
+  ],
+};
+
+function sitemapLastmod(): Record<string, string> {
+  const today = new Date().toISOString().slice(0, 10);
+  const result: Record<string, string> = {};
+  for (const [route, sources] of Object.entries(sitemapSources)) {
+    try {
+      const stamp = execFileSync(
+        "git",
+        ["log", "-1", "--format=%cs", "--", ...sources],
+        { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] },
+      ).trim();
+      result[route] = /^\d{4}-\d{2}-\d{2}$/.test(stamp) ? stamp : today;
+    } catch {
+      result[route] = today;
+    }
+  }
+  return result;
+}
 
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
@@ -63,6 +98,9 @@ export default defineConfig(async () => {
     server: isCodexSeatbeltSandbox
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,
+    define: {
+      __SITEMAP_LASTMOD__: JSON.stringify(sitemapLastmod()),
+    },
     plugins: [
       vinext(),
       sites(),

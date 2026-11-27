@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "../seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Tips & Tricks",
   description:
     "Quick RID2Caltopo field tips for track colors, bearing lines, and map/video picture-in-picture controls.",
-  alternates: { canonical: "/tips" },
-};
+  path: "/tips",
+});
 
 const tips = [
   {

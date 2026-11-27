@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import RequestForm from "../components/RequestForm";
+import { pageMetadata } from "../seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Request the managed pilot",
-  description: "Request access to the managed r2c-tracker pilot.",
-  alternates: { canonical: "/managed-pilot" },
-};
+  description:
+    "Request access to the managed r2c-tracker pilot.",
+  path: "/managed-pilot",
+});
 
 export default function ManagedPilotPage() {
   return (

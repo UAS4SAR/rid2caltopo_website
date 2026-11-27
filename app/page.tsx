@@ -7,6 +7,7 @@ import {
 } from "./components/CalTopoTeamsLink";
 import { ReceiverOptions } from "./components/ReceiverOptions";
 import { EmailContact } from "./components/EmailContact";
+import { homeTitle, pageMetadata } from "./seo";
 
 type SiteMode = "community" | "managed";
 
@@ -23,12 +24,13 @@ const appStoreUrl = "https://apps.apple.com/us/app/rid2caltopo/id6792518823";
 const testerLink = (platform: "Android" | "Apple") =>
   `/contact?topic=${platform.toLowerCase()}-testing`;
 
-export const metadata: Metadata = {
-  title: "RID2Caltopo — Track drone assignments and search coverage in real time",
+export const metadata: Metadata = pageMetadata({
+  title: homeTitle,
+  absoluteTitle: true,
   description:
     "Free and managed tools that turn Remote ID observations into useful field awareness for search-and-rescue teams.",
-  alternates: { canonical: "/" },
-};
+  path: "/",
+});
 
 const freeCapabilities = [
   "Receive and display ASTM F3411 Remote ID broadcasts",

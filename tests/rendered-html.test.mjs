@@ -590,3 +590,56 @@ test("keeps palette tokens at WCAG AA and avoids sub-12px type", async () => {
   assert.doesNotMatch(css, /font-size:\s*(?:[0-9]|1[01])px/, "no type below 12px");
   assert.match(css, /:focus-visible \{\s*outline: 3px solid var\(--focus-ring\)/);
 });
+
+test("publishes per-page social cards with og:url and an absolute homepage title", async () => {
+  const pages = {
+    "/": { title: "RID2Caltopo — Track drone assignments and search coverage in real time" },
+    "/tips": { title: "Tips &amp; Tricks | RID2Caltopo" },
+    "/capabilities": { title: "Capabilities | RID2Caltopo" },
+    "/tracker": { title: "r2c-tracker service | RID2Caltopo" },
+    "/managed-pilot": { title: "Request the managed pilot | RID2Caltopo" },
+    "/contact": { title: "Contact RID2Caltopo | RID2Caltopo" },
+    "/donations": { title: "Project support | RID2Caltopo" },
+  };
+  const seenDescriptions = new Set();
+
+  for (const host of ["rid2caltopo.com", "rid2caltopo.org"]) {
+    for (const [path, { title }] of Object.entries(pages)) {
+      const html = await (await render(host, path)).text();
+      const origin = `https://${host}`;
+      const url = path === "/" ? `${origin}/` : `${origin}${path}`;
+      assert.ok(html.includes(`<title>${title}</title>`), `${host}${path} <title>`);
+      assert.ok(html.includes(`property="og:url" content="${url}"`), `${host}${path} og:url`);
+      assert.ok(html.includes(`rel="canonical" href="${url}"`), `${host}${path} canonical`);
+      assert.ok(html.includes(`property="og:title" content="${title}"`), `${host}${path} og:title`);
+      assert.ok(html.includes(`name="twitter:title" content="${title}"`), `${host}${path} twitter:title`);
+      assert.ok(html.includes(`property="og:image" content="${origin}/og-image.jpg"`), `${host}${path} og:image`);
+      assert.match(html, /property="og:site_name" content="RID2Caltopo"/, path);
+      const description = html.match(/property="og:description" content="([^"]+)"/)?.[1];
+      assert.ok(description, `${path} og:description`);
+      if (host === "rid2caltopo.com") seenDescriptions.add(description);
+    }
+  }
+  assert.equal(seenDescriptions.size, Object.keys(pages).length, "one social description per page");
+
+  // Pages that are noindex keep inheriting the site defaults.
+  const received = await (await render("rid2caltopo.com", "/contact-received")).text();
+  assert.match(received, /name="robots" content="noindex, nofollow"/);
+});
+
+test("adds lastmod to the sitemap and hides transient pages from robots", async () => {
+  const robots = await (await render("rid2caltopo.com", "/robots.txt")).text();
+  for (const path of ["/api/", "/request-error", "/request-received", "/contact-error", "/contact-received", "/early-access", "/_vinext/"]) {
+    assert.ok(robots.includes(`Disallow: ${path}\n`), `robots disallows ${path}`);
+  }
+  assert.match(robots, /Allow: \//);
+  assert.doesNotMatch(robots, /Disallow: \/assets/);
+
+  const xml = await (await render("rid2caltopo.com", "/sitemap.xml")).text();
+  const entries = [...xml.matchAll(/<url><loc>([^<]+)<\/loc><lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod><\/url>/g)];
+  assert.equal(entries.length, 6);
+  for (const [, , lastmod] of entries) {
+    assert.ok(!Number.isNaN(Date.parse(lastmod)));
+    assert.ok(Date.parse(lastmod) <= Date.now() + 86_400_000, "lastmod is not in the future");
+  }
+});

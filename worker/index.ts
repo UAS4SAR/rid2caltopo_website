@@ -38,6 +38,15 @@ const indexablePaths = [
   "/managed-pilot",
 ];
 
+// Injected at build time by vite.config.ts (route -> YYYY-MM-DD).
+declare const __SITEMAP_LASTMOD__: Record<string, string> | undefined;
+
+function lastmodFor(path: string): string | undefined {
+  return typeof __SITEMAP_LASTMOD__ === "undefined"
+    ? undefined
+    : __SITEMAP_LASTMOD__[path];
+}
+
 function publicOrigin(url: URL): string {
   return url.hostname === "rid2caltopo.org"
     ? "https://rid2caltopo.org"
@@ -53,6 +62,10 @@ function robotsResponse(url: URL): Response {
       "Disallow: /api/",
       "Disallow: /request-error",
       "Disallow: /request-received",
+      "Disallow: /contact-error",
+      "Disallow: /contact-received",
+      "Disallow: /early-access",
+      "Disallow: /_vinext/",
       `Sitemap: ${origin}/sitemap.xml`,
       "",
     ].join("\n"),
@@ -68,7 +81,12 @@ function robotsResponse(url: URL): Response {
 function sitemapResponse(url: URL): Response {
   const origin = publicOrigin(url);
   const entries = indexablePaths
-    .map((path) => `  <url><loc>${origin}${path}</loc></url>`)
+    .map((path) => {
+      const lastmod = lastmodFor(path);
+      return `  <url><loc>${origin}${path}</loc>${
+        lastmod ? `<lastmod>${lastmod}</lastmod>` : ""
+      }</url>`;
+    })
     .join("\n");
   return new Response(
     [
