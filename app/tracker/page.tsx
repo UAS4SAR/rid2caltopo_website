@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { EmailContact } from "../components/EmailContact";
+import { pageMetadata } from "../seo";
 
 const contactEmail = "info@uas4sar.com";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "r2c-tracker service",
   description:
     "Understand r2c-tracker incident coordination and compare self-hosted software with the managed pilot.",
-  alternates: { canonical: "/tracker" },
-};
+  path: "/tracker",
+});
 
 export default function TrackerPage() {
   return (

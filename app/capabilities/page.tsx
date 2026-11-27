@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CalTopoLink, CalTopoText } from "../components/CalTopoTeamsLink";
+import { pageMetadata } from "../seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Capabilities",
   description:
     "Compare RID2Caltopo field capabilities with self-hosted and managed r2c-tracker coordination.",
-  alternates: { canonical: "/capabilities" },
-};
+  path: "/capabilities",
+});
 
 const fieldCapabilities = [
   "Reliable ASTM F3411 Remote ID reception through a DroneScout Bridge",

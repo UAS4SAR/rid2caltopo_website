@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CalTopoLink } from "../components/CalTopoTeamsLink";
+import { pageMetadata } from "../seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Project support",
   description:
     "Learn how RID2Caltopo grew, the principles guiding its development, and the current project-support policy.",
-  alternates: { canonical: "/donations" },
-};
+  path: "/donations",
+});
 
 const directives = [
   {

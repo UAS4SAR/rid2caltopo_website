@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import ContactForm from "../components/ContactForm";
+import { pageMetadata } from "../seo";
 
 type PageProps = {
   searchParams?: Promise<{ topic?: string }>;
@@ -19,11 +20,12 @@ const testerDefaults = {
   },
 } as const;
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact RID2Caltopo",
-  description: "Send a message to the RID2Caltopo project team.",
-  alternates: { canonical: "/contact" },
-};
+  description:
+    "Send a message to the RID2Caltopo project team.",
+  path: "/contact",
+});
 
 export default async function ContactPage({ searchParams }: PageProps) {
   const params = (await searchParams) ?? {};
