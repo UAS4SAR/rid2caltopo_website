@@ -1,98 +1,99 @@
-# vinext-starter
+# RID2Caltopo website
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+Source for the public site at **rid2caltopo.com** (and rid2caltopo.org): product
+pages for RID2Caltopo, a Remote ID → CalTopo tool for search-and-rescue drone
+teams, plus the managed-pilot request flow.
 
-## Prerequisites
+Related repositories:
 
-- Node.js `>=22.13.0`
+- [UAS4SAR/RID2Caltopo](https://github.com/UAS4SAR/RID2Caltopo) – the free, open-source app
+- [UAS4SAR/r2c-tracker](https://github.com/UAS4SAR/r2c-tracker) – the tracker
 
-## Quick Start
+## Stack
+
+- Next.js 16 / React 19 app routes in `app/`, run on
+  [vinext](https://github.com/cloudflare/vinext) (Vite) rather than the Next.js server
+- Tailwind 4 is installed, but nearly all styling is plain CSS in `app/globals.css`
+- Deployed as a single Cloudflare Worker (`worker/index.ts`) that serves the
+  rendered app, static assets from `dist/client`, `/robots.txt`, `/sitemap.xml`
+  and the form endpoints `POST /api/request` and `POST /api/contact`
+- Worker and domain configuration (name, custom domains, email binding) is defined
+  in `vite.config.ts`; there is no `wrangler.jsonc`
+
+## Getting started
+
+Requires Node.js `>=22.13.0`.
 
 ```bash
 npm install
-npm run dev
-npm run build
+npm run dev     # local dev server
+npm run build   # production build into dist/
+npm start       # serve the production build locally
+npm test        # build, then run tests/rendered-html.test.mjs
+npm run lint
 ```
 
-This starter does not use `wrangler.jsonc`.
+`npm test` renders pages through the built worker with different `Host` headers
+and asserts on the HTML (headers, metadata, sitemap, assets, accessibility
+rules). Run it before opening a PR.
 
-## Included Shape
+## How the site is organised
 
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
+| Path | What it is |
+| --- | --- |
+| `app/layout.tsx` | Global metadata, JSON-LD, skip link and the shared `SiteHeader` |
+| `app/page.tsx` | Homepage; its mode depends on the host (see below) |
+| `app/seo.ts` | `pageMetadata()` helper so every page gets canonical + Open Graph + Twitter tags |
+| `app/components/SiteHeader.tsx` | The one header used on every page, including the mobile menu |
+| `app/not-found.tsx` | 404 page |
+| `app/globals.css` | All styles and design tokens (colors, focus ring, type sizes) |
+| `worker/index.ts` | Worker entry: sitemap, robots, form handlers, email sending |
+| `public/` | Static assets copied as-is, including `_headers` (cache rules) |
+| `tests/` | Rendered-HTML tests |
 
-## Workspace Auth Headers
+### Two hosts, two homepage modes
 
-OpenAI workspace sites can read the current user's email from
-`oai-authenticated-user-email`.
+`rid2caltopo.com` shows the managed-pilot view by default and `rid2caltopo.org`
+shows the community (free app) view. Both hosts are served by the same Worker; the
+host is read per request in `app/layout.tsx`/`app/page.tsx`, and `metadataBase` is
+set per host. Visitors can flip between the two with `/?view=community` and `/?view=managed`.
 
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
+### Secrets and bindings
 
-Treat the full name as optional and fall back to email when it is absent:
+- `MANAGED_REQUEST_INGEST_KEY` (secret) – bearer token used when the Worker forwards
+  managed-pilot requests to `https://r2c-tracker.com/managed-access-requests`
+- `EMAIL` (Cloudflare Email send binding) – sends contact/request mail to
+  `info@uas4sar.com` from `requests@rid2caltopo.com`
 
-```tsx
-import { headers } from "next/headers";
+Set these in Cloudflare; never commit their values.
 
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
+## Content conventions
 
-  const displayName = fullName ?? email;
-  // ...
-}
-```
+- **Images**: Open Graph card is `public/og-image.jpg` (1200×630, under 300 KB).
+  Icons are `favicon.ico`, `icon-32.png`, `icon-64.png`, `apple-touch-icon.png`.
+  Responsive hero images come in `-480/-800/-1200` widths – add all sizes when
+  replacing one.
+- **Videos** in `public/*.mp4` have a matching `-poster.jpg`; only
+  `connect-personal-caltopo-account` and `download-share-offline-maps`
+  have caption tracks (`.vtt`). Videos load with `preload="none"`.
+- **Caching**: hashed `/assets/*` files are immutable (vinext default); `public/_headers`
+  sets longer cache lifetimes for the static media in `public/`.
+- **Sitemap `lastmod`** is derived from git history at build time, so build from a
+  full clone (not a shallow one) for accurate dates.
+- **Accessibility**: keep text at 12 px or larger, use the `--muted` / `--accent-text`
+  tokens instead of ad-hoc light greys/oranges, and give interactive elements the
+  global `:focus-visible` ring. Tests enforce the palette and the minimum size.
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+## Deploying
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+`npm run deploy:cloudflare` builds and runs `wrangler deploy` with the generated
+`dist/server/wrangler.json`. It publishes straight to the production custom domains,
+so run it deliberately and only from an account that owns those zones.
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+`.openai/hosting.json` and `build/sites-vite-plugin.ts` come from the original
+site-creator starter; the build plugin is still wired into `vite.config.ts`.
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
+## Open items for the maintainers
 
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
-
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
-
-## Useful Commands
-
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
-
-## Learn More
-
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+There is no standalone privacy policy or terms-of-service page. `app/managedAccessTerms.ts`
+holds only the acknowledgment text shown in the managed-pilot request flow.

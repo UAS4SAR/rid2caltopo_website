@@ -643,3 +643,35 @@ test("adds lastmod to the sitemap and hides transient pages from robots", async 
     assert.ok(Date.parse(lastmod) <= Date.now() + 86_400_000, "lastmod is not in the future");
   }
 });
+
+test("links to the UAS4SAR GitHub organization for source repositories", async () => {
+  const html = await (await render("rid2caltopo.com")).text();
+  assert.match(html, /href="https:\/\/github\.com\/UAS4SAR\/RID2Caltopo"/);
+  assert.match(html, /href="https:\/\/github\.com\/UAS4SAR\/r2c-tracker"/);
+  assert.match(html, /"codeRepository":"https:\/\/github\.com\/UAS4SAR\/RID2Caltopo"/);
+  assert.doesNotMatch(html, /github\.com\/kjtsar\//);
+  const tracker = await (await render("rid2caltopo.com", "/tracker")).text();
+  assert.match(tracker, /href="https:\/\/github\.com\/UAS4SAR\/r2c-tracker"/);
+  assert.doesNotMatch(tracker, /github\.com\/kjtsar\//);
+  const pkg = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
+  assert.equal(pkg.name, "rid2caltopo-website");
+});
+
+test("serves a styled 404 page inside the shared site shell", async () => {
+  const response = await render("rid2caltopo.com", "/this-page-does-not-exist");
+  assert.equal(response.status, 404);
+  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
+  const html = await response.text();
+  assert.match(html, /<header class="site-header"/);
+  assert.match(html, /<main[^>]*id="main"[^>]*class="response-shell not-found-shell"/);
+  assert.match(html, /That page isn(?:'|&#x27;)t here\./);
+  assert.match(html, /href="\/#testing"[^>]*>Download the app/);
+  // vinext adds noindex to its 404 responses; keep that guarantee.
+  assert.match(html, /<meta content="noindex" name="robots"\/>/);
+});
+
+test("README documents this site rather than the starter template", async () => {
+  const readme = await readFile(new URL("../README.md", import.meta.url), "utf8");
+  assert.match(readme, /^# RID2Caltopo website/m);
+  assert.doesNotMatch(readme, /vinext-starter|Drizzle|chatgpt-auth/i);
+});

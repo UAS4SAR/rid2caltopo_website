@@ -112,7 +112,7 @@ export default async function RootLayout({
         applicationCategory: "UtilitiesApplication",
         operatingSystem: "Android, iOS",
         isAccessibleForFree: true,
-        codeRepository: "https://github.com/kjtsar/RID2Caltopo",
+        codeRepository: "https://github.com/UAS4SAR/RID2Caltopo",
         description:
           "Remote ID field awareness, incident-map publishing, and drone search coordination for search-and-rescue teams.",
       },
