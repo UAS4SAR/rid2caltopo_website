@@ -34,7 +34,7 @@ const directives = [
 
 export default function DonationsPage() {
   return (
-    <main className="info-shell donations-shell">
+    <main id="main" tabIndex={-1} className="info-shell donations-shell">
       <section className="info-hero donations-hero">
         <p className="eyebrow">Project support</p>
         <h1>Built for the search.<br /><em>Structured for the public good.</em></h1>

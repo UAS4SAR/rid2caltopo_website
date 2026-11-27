@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function ManagedPilotPage() {
   return (
-    <main className="request-shell managed-request-shell">
+    <main id="main" tabIndex={-1} className="request-shell managed-request-shell">
       <section className="request-layout">
         <div className="request-intro">
           <Link className="request-back-link" href="/tracker">← r2c-tracker</Link>

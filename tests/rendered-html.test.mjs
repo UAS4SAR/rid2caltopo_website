@@ -548,3 +548,45 @@ test("declares long-lived cache headers for static assets", async () => {
     assert.match(headers, new RegExp(`\\/\\*\\.${extension}\\n\\s+Cache-Control: public, max-age=604800`));
   }
 });
+
+test("offers a skip link and a main landmark target on every page", async () => {
+  const paths = [
+    "/",
+    "/capabilities",
+    "/contact",
+    "/contact-error",
+    "/contact-received",
+    "/donations",
+    "/managed-pilot",
+    "/request-error",
+    "/request-received",
+    "/tips",
+    "/tracker",
+  ];
+  for (const path of paths) {
+    const html = await (await render("rid2caltopo.com", path)).text();
+    assert.match(html, /<a class="skip-link" href="#main">Skip to main content<\/a><header/, path);
+    assert.equal(html.match(/<main[^>]*id="main"[^>]*tabindex="-1"/gi)?.length, 1, path);
+  }
+});
+
+test("keeps palette tokens at WCAG AA and avoids sub-12px type", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  const token = (name) => css.match(new RegExp(`--${name}:\\s*(#[0-9a-f]{6})`, "i"))[1];
+  const lum = (hex) => {
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+      .map((c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const ratio = (a, b) => {
+    const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+  for (const background of ["paper", "cream", "sage"]) {
+    assert.ok(ratio(token("muted"), token(background)) >= 4.5, `muted on ${background}`);
+    assert.ok(ratio(token("accent-text"), token(background)) >= 4.5, `accent-text on ${background}`);
+  }
+  assert.ok(ratio("#ffffff", token("orange-deep")) >= 4.5, "white on orange-deep");
+  assert.doesNotMatch(css, /font-size:\s*(?:[0-9]|1[01])px/, "no type below 12px");
+  assert.match(css, /:focus-visible \{\s*outline: 3px solid var\(--focus-ring\)/);
+});

@@ -14,7 +14,7 @@ export default async function RequestReceivedPage({ searchParams }: PageProps) {
   const managed = params.type === "managed-pilot";
 
   return (
-    <main className="response-shell">
+    <main id="main" tabIndex={-1} className="response-shell">
       <p className="eyebrow">Request received</p>
       <h1>Thank you.</h1>
       <p>

@@ -125,6 +125,9 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+        <a className="skip-link" href="#main">
+          Skip to main content
+        </a>
         <SiteHeader />
         {children}
         <aside className="site-affiliation-notice" aria-label="CalTopo relationship">

@@ -33,7 +33,7 @@ export default async function ContactPage({ searchParams }: PageProps) {
       : undefined;
 
   return (
-    <main className="request-shell">
+    <main id="main" tabIndex={-1} className="request-shell">
       <div className="request-layout">
         <section className="request-intro">
           <Link className="request-back-link" href="/">
