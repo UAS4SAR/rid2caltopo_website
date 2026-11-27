@@ -643,3 +643,16 @@ test("adds lastmod to the sitemap and hides transient pages from robots", async 
     assert.ok(Date.parse(lastmod) <= Date.now() + 86_400_000, "lastmod is not in the future");
   }
 });
+
+test("links to the UAS4SAR GitHub organization for source repositories", async () => {
+  const html = await (await render("rid2caltopo.com")).text();
+  assert.match(html, /href="https:\/\/github\.com\/UAS4SAR\/RID2Caltopo"/);
+  assert.match(html, /href="https:\/\/github\.com\/UAS4SAR\/r2c-tracker"/);
+  assert.match(html, /"codeRepository":"https:\/\/github\.com\/UAS4SAR\/RID2Caltopo"/);
+  assert.doesNotMatch(html, /github\.com\/kjtsar\//);
+  const tracker = await (await render("rid2caltopo.com", "/tracker")).text();
+  assert.match(tracker, /href="https:\/\/github\.com\/UAS4SAR\/r2c-tracker"/);
+  assert.doesNotMatch(tracker, /github\.com\/kjtsar\//);
+  const pkg = JSON.parse(await readFile(new URL("../package.json", import.meta.url), "utf8"));
+  assert.equal(pkg.name, "rid2caltopo-website");
+});

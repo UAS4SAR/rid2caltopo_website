@@ -48,7 +48,7 @@ export default function TrackerPage() {
             <p className="tracker-price">$0 <small>software</small></p>
             <h3>Self-host r2c-tracker.</h3>
             <p>Deploy the open-source service in your own cloud account and retain responsibility for hosting, updates, access control, backups, and administration.</p>
-            <a className="button button-card" href="https://github.com/kjtsar/r2c-tracker">Open the source repository <span aria-hidden="true">↗</span></a>
+            <a className="button button-card" href="https://github.com/UAS4SAR/r2c-tracker">Open the source repository <span aria-hidden="true">↗</span></a>
           </article>
           <article className="featured-price">
             <span className="choice-label">MANAGED PILOT</span>

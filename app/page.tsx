@@ -192,7 +192,7 @@ export default async function Home({ searchParams }: PageProps) {
             ) : (
               <a
                 className="button button-secondary"
-                href="https://github.com/kjtsar/RID2Caltopo"
+                href="https://github.com/UAS4SAR/RID2Caltopo"
               >
                 Explore the source <ArrowIcon />
               </a>
@@ -411,7 +411,7 @@ export default async function Home({ searchParams }: PageProps) {
             </ul>
             <a
               className="button button-card"
-              href="https://github.com/kjtsar/r2c-tracker"
+              href="https://github.com/UAS4SAR/r2c-tracker"
             >
               Self-host the tracker <ArrowIcon />
             </a>
@@ -630,8 +630,8 @@ export default async function Home({ searchParams }: PageProps) {
         <div className="footer-links">
           <div>
             <strong>PROJECT</strong>
-            <a href="https://github.com/kjtsar/RID2Caltopo">App source</a>
-            <a href="https://github.com/kjtsar/r2c-tracker">Tracker source</a>
+            <a href="https://github.com/UAS4SAR/RID2Caltopo">App source</a>
+            <a href="https://github.com/UAS4SAR/r2c-tracker">Tracker source</a>
             <Link href="/tips">Tips &amp; tricks</Link>
             <Link href="/?view=community">Free app view</Link>
           </div>
