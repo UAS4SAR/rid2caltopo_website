@@ -61,7 +61,7 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   );
   assert.match(
     html,
-    /class="brand-mark" src="\/app-icon-orange\.png"/,
+    /class="brand-mark" src="\/icon-64\.png"/,
   );
   assert.match(html, /src="\/dronescout-ds100-anker-field\.jpg"/);
   assert.match(html, /aria-haspopup="dialog" aria-controls="receiver-options"/);
@@ -104,8 +104,9 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   assert.doesNotMatch(html, /Support the project/);
   assert.doesNotMatch(html, /href="https:\/\/paypal\.me\/kjtgv"/);
   assert.doesNotMatch(html, /tax[- ]deductible/i);
-  assert.match(html, /rel="icon" href="https:\/\/rid2caltopo\.org\/app-icon-orange\.png"/);
-  assert.match(html, /rel="apple-touch-icon" href="https:\/\/rid2caltopo\.org\/app-icon-orange\.png"/);
+  assert.match(html, /rel="icon" href="https:\/\/rid2caltopo\.org\/favicon\.ico"/);
+  assert.match(html, /rel="icon" href="https:\/\/rid2caltopo\.org\/icon-32\.png"[^>]*sizes="32x32"/);
+  assert.match(html, /rel="apple-touch-icon" href="https:\/\/rid2caltopo\.org\/apple-touch-icon\.png"[^>]*sizes="180x180"/);
   assert.match(html, /rel="canonical" href="https:\/\/rid2caltopo\.org\/"/);
   assert.match(html, /"@type":"WebSite","name":"RID2Caltopo"/);
   assert.match(html, /"@type":"SoftwareApplication","name":"RID2Caltopo"/);
@@ -415,14 +416,14 @@ test("keeps public copy drone-specific and ships correctly sized artwork", async
     /Real-time tracking of Drone search assignments and what has been searched/i,
   );
 
-  const [icon, socialCard] = await Promise.all([
-    readFile(new URL("../public/app-icon-orange.png", import.meta.url)),
-    readFile(new URL("../public/og-assignment-coverage.png", import.meta.url)),
+  const [icon, touchIcon] = await Promise.all([
+    readFile(new URL("../public/icon-32.png", import.meta.url)),
+    readFile(new URL("../public/apple-touch-icon.png", import.meta.url)),
   ]);
-  assert.equal(icon.readUInt32BE(16), 1024);
-  assert.equal(icon.readUInt32BE(20), 1024);
-  assert.equal(socialCard.readUInt32BE(16), 1792);
-  assert.equal(socialCard.readUInt32BE(20), 907);
+  assert.equal(icon.readUInt32BE(16), 32);
+  assert.equal(icon.readUInt32BE(20), 32);
+  assert.equal(touchIcon.readUInt32BE(16), 180);
+  assert.equal(touchIcon.readUInt32BE(20), 180);
 
   const [appStoreQr, playQr] = await Promise.all([
     readFile(new URL("../public/qr-app-store.svg", import.meta.url), "utf8"),
@@ -466,7 +467,7 @@ test("renders the same site header with Download and a mobile menu on every page
     const header = html.match(/<header class="site-header"[\s\S]*?<\/header>/)?.[0];
     assert.ok(header, `${path} has the shared header`);
     assert.equal(html.match(/<header/g)?.length, 1, `${path} has a single header`);
-    assert.match(header, /class="brand-mark" src="\/app-icon-orange\.png"/, path);
+    assert.match(header, /class="brand-mark" src="\/icon-64\.png"/, path);
     assert.match(header, /href="\/#testing"[^>]*>Download<\/a>/, path);
     assert.match(header, /<button[^>]*class="menu-toggle"[^>]*aria-expanded="false"[^>]*aria-controls="site-nav"/, path);
     assert.match(header, /<nav[^>]*id="site-nav"[^>]*aria-label="Primary navigation"/, path);
@@ -494,5 +495,56 @@ test("leads with Download and linked store badges in the hero on both editions",
     assert.match(hero, />Free app<\/a>/, path);
     assert.match(hero, />Managed pilot<\/a>/, path);
     assert.doesNotMatch(hero, />Community<\/a>/, path);
+  }
+});
+
+test("ships a small 1200x630 social card, favicon set and responsive hero artwork", async () => {
+  const [card, ico] = await Promise.all([
+    readFile(new URL("../public/og-image.jpg", import.meta.url)),
+    readFile(new URL("../public/favicon.ico", import.meta.url)),
+  ]);
+  // JPEG: find the SOF0/SOF2 marker for dimensions.
+  assert.equal(card[0], 0xff);
+  assert.equal(card[1], 0xd8);
+  let offset = 2;
+  let size;
+  while (offset < card.length) {
+    assert.equal(card[offset], 0xff);
+    const marker = card[offset + 1];
+    const length = card.readUInt16BE(offset + 2);
+    if (marker === 0xc0 || marker === 0xc2) {
+      size = [card.readUInt16BE(offset + 7), card.readUInt16BE(offset + 5)];
+      break;
+    }
+    offset += 2 + length;
+  }
+  assert.deepEqual(size, [1200, 630]);
+  assert.ok(card.length < 300 * 1024, `OG card is ${card.length} bytes`);
+  // ICO header: reserved 0, type 1, at least one image.
+  assert.equal(ico.readUInt16LE(0), 0);
+  assert.equal(ico.readUInt16LE(2), 1);
+  assert.ok(ico.readUInt16LE(4) >= 1);
+
+  const html = await (await render("rid2caltopo.com")).text();
+  assert.match(html, /property="og:image" content="https:\/\/rid2caltopo\.com\/og-image\.jpg"/);
+  assert.match(html, /property="og:image:width" content="1200"/);
+  assert.match(html, /property="og:image:height" content="630"/);
+  assert.match(html, /name="twitter:image" content="https:\/\/rid2caltopo\.com\/og-image\.jpg"/);
+  const hero = html.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.match(hero, /src="\/app-live-map-800\.webp"/);
+  assert.match(hero, /srcSet="[^"]*app-live-map-480\.webp 480w[^"]*app-live-map-1200\.webp 1200w"/i);
+  assert.match(hero, /<img[^>]*width="800"[^>]*height="1067"/);
+  assert.doesNotMatch(html, /og-assignment-coverage/);
+  // Below-the-fold photo is lazy and responsive; tutorial videos do not preload.
+  assert.match(html, /<img[^>]*dronescout-ds100-anker-field-480\.jpg 480w[^>]*loading="lazy"/i);
+  assert.equal((html.match(/<video[^>]*preload="none"/g) ?? []).length, 6);
+  assert.doesNotMatch(html, /preload="metadata"/);
+});
+
+test("declares long-lived cache headers for static assets", async () => {
+  const headers = await readFile(new URL("../public/_headers", import.meta.url), "utf8");
+  assert.match(headers, /\/assets\/\*\n\s+Cache-Control: public, max-age=31536000, immutable/);
+  for (const extension of ["mp4", "jpg", "png", "webp", "svg", "ico", "vtt"]) {
+    assert.match(headers, new RegExp(`\\/\\*\\.${extension}\\n\\s+Cache-Control: public, max-age=604800`));
   }
 });

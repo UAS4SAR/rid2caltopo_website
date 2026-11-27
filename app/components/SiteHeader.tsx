@@ -45,7 +45,9 @@ export function SiteHeader() {
       <Link className="brand" href="/" aria-label="RID2Caltopo home">
         <img
           className="brand-mark"
-          src="/app-icon-orange.png"
+          src="/icon-64.png"
+          width={28}
+          height={28}
           alt=""
           aria-hidden="true"
         />

@@ -35,7 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
   const host = canonicalHost(requestHeaders);
   const origin = `https://${host}`;
-  const socialImage = new URL("/og-assignment-coverage.png", origin).toString();
+  const socialImage = new URL("/og-image.jpg", origin).toString();
 
   return {
     metadataBase: new URL(origin),
@@ -55,9 +55,12 @@ export async function generateMetadata(): Promise<Metadata> {
       googleBot: { index: true, follow: true },
     },
     icons: {
-      icon: "/app-icon-orange.png",
-      shortcut: "/app-icon-orange.png",
-      apple: "/app-icon-orange.png",
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/icon-32.png", sizes: "32x32", type: "image/png" },
+      ],
+      shortcut: "/favicon.ico",
+      apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
     },
     openGraph: {
       type: "website",
@@ -65,7 +68,14 @@ export async function generateMetadata(): Promise<Metadata> {
         "RID2Caltopo — Track drone assignments and search coverage in real time",
       description:
         "Open tools for Remote ID awareness, incident-map tracks, and coordinated SAR drone operations.",
-      images: [{ url: socialImage, width: 1792, height: 907 }],
+      images: [
+        {
+          url: socialImage,
+          width: 1200,
+          height: 630,
+          alt: "RID2Caltopo: track drone assignments and search coverage in real time",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
