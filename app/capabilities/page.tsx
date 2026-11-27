@@ -14,7 +14,7 @@ const fieldCapabilities = [
   "Reliable ASTM F3411 Remote ID reception through a DroneScout Bridge",
   "Android or iOS devices",
   "Direct track publishing to CalTopo maps you can edit",
-  "Local controller-video streaming for squinter review",
+  "Real-time controller-video review by squinters, who coordinate clue placement and reporting with Incident Command (IC)",
   "Potential-clue capture and on-device anomaly assistance",
 ];
 

@@ -72,7 +72,17 @@ test("renders the RID2Caltopo landing page and app-icon metadata", async () => {
   assert.match(html, /Skydio X10/);
   assert.match(html, /Wi-Fi NAN alone does not require DS110/);
   assert.match(html, /DS100 supports NAN at 2.4 GHz with updated firmware/);
-  assert.doesNotMatch(html, /gearfocus\.com/);
+  const gfDs100 = "https://gearfocus.com/products/drone-rid-detector-bluemark-ds100-dronescout-retail-bridge-f-79np1";
+  const gfDs110 = "https://gearfocus.com/products/new-ds110-drone-rid-detector-triple-band-with-detection-buzz-PTLYC";
+  assert.ok(html.includes(`href="${gfDs100}"`), "GearFocus DS100 link");
+  assert.ok(html.includes(`href="${gfDs110}"`), "GearFocus DS110 link");
+  assert.match(html, /Buy DS100 from BlueMark/);
+  assert.match(html, /Buy DS100 from GearFocus/);
+  assert.match(html, /Buy DS110 from BlueMark/);
+  assert.match(html, /Buy DS110 from GearFocus/);
+  // Stock status changes; the page must not state it as fact.
+  assert.doesNotMatch(html, /out of stock|back in stock|sold out|in stock now/i);
+  assert.match(html, /A bridge is not required for DJI Enterprise 2 drones running the DJI Pilot 2 app\./);
   assert.match(
     html,
     /class="caltopo-disclosure-link"[^>]+aria-haspopup="dialog"[^>]*>CalTopo<\/button>/,
@@ -517,15 +527,28 @@ test("renders the same site header with Download and a mobile menu on every page
   }
 });
 
-test("hero: headline and paragraph kept, one source button, 'Download:' store chips with icons", async () => {
+test("squinters review video in real time and coordinate with Incident Command (IC), defined on first use", async () => {
+  const html = await (await render("rid2caltopo.com")).text();
+  const text = html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<style[\s\S]*?<\/style>/g, "").replace(/<[^>]+>/g, " ").replace(/&rsquo;|&#x27;|&#39;|’/g, "'").replace(/\s+/g, " ");
+  assert.match(text, /squinters can review the drone's video stream in real time\. Squinters coordinate clue placement and reporting with Incident Command \(IC\)\./);
+  const firstIc = text.search(/\bIC\b/);
+  const defined = text.indexOf("Incident Command (IC)");
+  assert.ok(defined >= 0 && defined < firstIc, "IC is spelled out before its first bare use");
+  const caps = await (await render("rid2caltopo.com", "/capabilities")).text();
+  assert.match(caps.replace(/<[^>]+>/g, " "), /squinters, who coordinate clue placement and reporting with Incident Command \(IC\)/);
+});
+
+test("hero: headline and paragraph kept, source link moved to the footer, store chips with icons and no label", async () => {
   const html = await (await render("rid2caltopo.com")).text();
   const hero = html.match(/<section class="hero"[\s\S]*?<\/section>/)?.[0] ?? "";
   assert.match(hero, /<h1>Track <em>drone assignments and search coverage<\/em> in real time\.<\/h1>/);
   assert.match(hero, /RID2Caltopo turns broadcast Remote ID into shared field awareness/);
   assert.doesNotMatch(hero, /Download the app/);
   assert.doesNotMatch(hero, /href="#download"/);
-  assert.match(hero, /Explore the source/);
-  assert.match(hero, /<span class="availability-label">Download:<\/span>/);
+  assert.doesNotMatch(hero, /Explore the source|github\.com/);
+  assert.doesNotMatch(hero, /Download:|availability-label/);
+  const footer = html.match(/<footer[\s\S]*?<\/footer>/)?.[0] ?? "";
+  assert.match(footer, /href="https:\/\/github\.com\/UAS4SAR\/RID2Caltopo"[^>]*>App source code</);
   assert.doesNotMatch(hero, /Free on/i);
   const chips = [...hero.matchAll(/<a class="store-badge" href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
   assert.equal(chips.length, 2);
