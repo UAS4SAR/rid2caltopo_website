@@ -35,18 +35,6 @@ const directives = [
 export default function DonationsPage() {
   return (
     <main className="info-shell donations-shell">
-      <header className="info-header">
-        <Link className="brand" href="/" aria-label="RID2Caltopo home">
-          <span>RID<span className="brand-two">2</span>CalTopo</span>
-        </Link>
-        <nav aria-label="Information pages">
-          <Link href="/capabilities">Capabilities</Link>
-          <Link href="/tracker">r2c-tracker</Link>
-          <Link href="/tips">Tips &amp; tricks</Link>
-          <Link aria-current="page" href="/donations">Project support</Link>
-        </nav>
-      </header>
-
       <section className="info-hero donations-hero">
         <p className="eyebrow">Project support</p>
         <h1>Built for the search.<br /><em>Structured for the public good.</em></h1>

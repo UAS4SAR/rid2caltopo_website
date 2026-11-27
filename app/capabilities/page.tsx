@@ -28,18 +28,6 @@ const trackerCapabilities = [
 export default function CapabilitiesPage() {
   return (
     <main className="info-shell">
-      <header className="info-header">
-        <Link className="brand" href="/" aria-label="RID2Caltopo home">
-          <span>RID<span className="brand-two">2</span>CalTopo</span>
-        </Link>
-        <nav aria-label="Information pages">
-          <Link aria-current="page" href="/capabilities">Capabilities</Link>
-          <Link href="/tracker">r2c-tracker</Link>
-          <Link href="/tips">Tips &amp; tricks</Link>
-          <Link href="/#tutorials">Tutorials</Link>
-        </nav>
-      </header>
-
       <section className="info-hero">
         <p className="eyebrow">What&apos;s available</p>
         <h1>Field awareness first.<br /><em>Coordination when you need it.</em></h1>

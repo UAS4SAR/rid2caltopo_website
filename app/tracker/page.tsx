@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { EmailContact } from "../components/EmailContact";
 
 const contactEmail = "info@uas4sar.com";
@@ -14,18 +13,6 @@ export const metadata: Metadata = {
 export default function TrackerPage() {
   return (
     <main className="info-shell tracker-info-shell">
-      <header className="info-header">
-        <Link className="brand" href="/" aria-label="RID2Caltopo home">
-          <span>RID<span className="brand-two">2</span>CalTopo</span>
-        </Link>
-        <nav aria-label="Information pages">
-          <Link href="/capabilities">Capabilities</Link>
-          <Link aria-current="page" href="/tracker">r2c-tracker</Link>
-          <Link href="/tips">Tips &amp; tricks</Link>
-          <Link href="/#tutorials">Tutorials</Link>
-        </nav>
-      </header>
-
       <section className="info-hero tracker-info-hero">
         <p className="eyebrow">The coordination service</p>
         <h1>One incident.<br /><em>Multiple field teams.</em></h1>
